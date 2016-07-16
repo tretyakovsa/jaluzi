@@ -1,0 +1,122 @@
+<html>
+ <head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Страница управления</title>
+  <script>
+   var xmlHttp=createXmlHttpObject();
+   function createXmlHttpObject(){
+    if(window.XMLHttpRequest){
+     xmlHttp=new XMLHttpRequest();
+    }else{
+     xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    return xmlHttp;
+   }
+   function load(){
+    if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
+     xmlHttp.open('PUT','configxml',true);
+     xmlHttp.onreadystatechange=handleServerResponse;
+     xmlHttp.send(null);
+    }
+   }
+   function handleServerResponse(){
+    if(xmlHttp.readyState==4 && xmlHttp.status==200){
+     xmlResponse=xmlHttp.responseXML;
+     xmldoc = xmlResponse.getElementsByTagName('timeservo');
+     message = xmldoc[0].firstChild.nodeValue;
+     document.getElementById('MOTOR').value=message;
+
+     xmldoc = xmlResponse.getElementsByTagName('TimeUp');
+     message = xmldoc[0].firstChild.nodeValue;
+     h=message.substring(0,2);
+     m=message.substring(3,5);
+     s=message.substring(6,8);
+     document.getElementById('OPENH').value=h;
+     document.getElementById('OPENM').value=m;
+     document.getElementById('OPENS').value=s;
+
+     xmldoc = xmlResponse.getElementsByTagName('TimeDown');
+     message = xmldoc[0].firstChild.nodeValue;
+     h=message.substring(0,2);
+     m=message.substring(3,5);
+     s=message.substring(6,8);
+     document.getElementById('CLOSEH').value=h;
+     document.getElementById('CLOSEM').value=m;
+     document.getElementById('CLOSES').value=s;
+    }
+   }
+   function Motor(){
+    server = "/Motor";
+    request = new XMLHttpRequest();
+    request.open("GET", server, true);
+    request.send();
+   }
+   function set_time_servo(){
+    motor_time = document.getElementById('MOTOR').value;
+    server = "/Timeservo?t="+motor_time;
+    request = new XMLHttpRequest();
+    request.open("GET", server, true);
+    request.send();
+   }
+   function set_open(){
+    h = document.getElementById('OPENH').value;
+    m = document.getElementById('OPENM').value;
+    s = document.getElementById('OPENS').value;
+    server = "/TimeUp?open="+h+":"+m+":"+s;
+    request = new XMLHttpRequest();
+    request.open("GET", server, true);
+    request.send();
+   }
+   function set_close(ids){
+    h = document.getElementById('CLOSEH').value;
+    m = document.getElementById('CLOSEM').value;
+    s = document.getElementById('CLOSES').value;
+    server = "/TimeDown?close="+h+":"+m+":"+s;
+    request = new XMLHttpRequest();
+    request.open("GET", server, true);
+    request.send();
+    //if(request.status == 200) {
+    // ids.value = "OKKKKK";
+    //}
+   }
+  </script>
+  <style>
+    input:invalid {
+       border: 2px solid red !important;
+     }
+     input,input:valid {
+       border-color: #ccc;
+     }
+   </style>
+ </head>
+ <body onload="load();">
+  <div class="container">
+   <div class="row">
+    <div class="col-md-offset-2 col-md-8" style="text-align:center;">
+     <h1>Страница управления</h1>
+     <div class="alert alert-dismissible alert-info">Добро пожаловать на страницу управления</div>
+     <input class="btn btn-block btn-lg btn-primary" name="Motor" value="Открыть\закрыть жалюзи" onclick="Motor();" type="submit">
+     <hr>
+     <h2>Количество оборотов</h2>
+     <input id="MOTOR" value="10" class="form-control" pattern="[0-9.]{3,5}">
+     <input class="btn btn-block btn-lg btn-success" name="Save" value="Сохранить" onclick="set_time_servo();" type="submit">
+     <hr>
+     <h2>Время открытия</h2>
+     <div class="input-group" style="width:100%;">
+      <input id="OPENH" value="08" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="OPENM" value="00" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="OPENS" value="00" style="width:30%;" pattern="[0-9]{2}" class="form-control">
+     </div>
+     <input class="btn btn-block btn-lg btn-success" name="Save" value="Сохранить" onclick="set_open();" type="submit">
+     <h2>Время закрытия</h2>
+     <div class="input-group" style="width:100%;">
+      <input id="CLOSEH" value="08" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="CLOSEM" value="00" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="CLOSES" value="00" style="width:30%;" pattern="[0-9]{2}" class="form-control">
+     </div>
+     <input class="btn btn-block btn-lg btn-success" name="Save" value="Сохранить" onclick="set_close(this);" type="submit">
+     <hr>
+     <a class="btn btn-block btn-lg btn-default" style="margin-bottom:50px;" href="./setup.htm">Дополнительные настройки</a>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

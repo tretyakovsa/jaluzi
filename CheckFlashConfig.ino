@@ -1,0 +1,88 @@
+bool loadConfig() {
+  File configFile = SPIFFS.open("/config.json", "r");
+  if (!configFile) {
+    Serial.println("Failed to open config file");
+    return false;
+  }
+
+  size_t size = configFile.size();
+  if (size > 1024) {
+    Serial.println("Config file size is too large");
+    return false;
+  }
+
+  // Выделим буфер для хранения содержимого файла.
+  std::unique_ptr<char[]> buf(new char[size]);
+
+  // Мы не используем строку здесь, потому что библиотека Arduino Json требует ввода
+  // буфер, чтобы быть изменчивым. Если вы не используете ArduinoJson, вы можете также
+  // использование configFile.readString вместо этого.
+  configFile.readBytes(buf.get(), size);
+
+  StaticJsonBuffer<250> jsonBuffer;
+  JsonObject& json = jsonBuffer.parseObject(buf.get());
+
+  if (!json.success()) {
+    Serial.println("Failed to parse config file");
+    return false;
+  }
+  String ssidAP = json["ssidAPName"];
+  _ssidAP = ssidAP;
+  String passwordAP = json["ssidAPPassword"];
+  _passwordAP = passwordAP;
+  String SSDPName = json["SSDPName"];
+  SSDP_Name = SSDPName;
+  String ssid = json["ssidName"];
+  _ssid = ssid;
+  String password = json["ssidPassword"];
+  _password = password;
+  int setAP = json["setAP"];
+
+  String _TimeUp = json["TimeUp"];
+  TimeUp = _TimeUp;
+  String _TimeDown = json["TimeDown"];
+  TimeDown = _TimeDown;
+  return true;
+}
+
+bool saveConfig() {
+  StaticJsonBuffer<250> jsonBuffer;
+  JsonObject& json = jsonBuffer.createObject();
+  json["ssidAPName"] = _ssidAP;
+  json["ssidAPPassword"] = _passwordAP;
+  json["SSDPName"] = "Jaluzi";
+  json["ssidName"] = _ssid;
+  json["ssidPassword"] = _password;
+  json["timezone"] = timezone;
+  json["revolutions"] = revolutions;
+  json["TimeUp"] = TimeUp;
+  json["TimeDown"] = TimeDown;
+  File configFile = SPIFFS.open("/config.json", "w");
+  if (!configFile) {
+    Serial.println("Failed to open config file for writing");
+    return false;
+  }
+
+  json.printTo(configFile);
+  return true;
+}
+
+void CheckFlashConfig() {
+  uint32_t realSize = ESP.getFlashChipRealSize();
+  uint32_t ideSize = ESP.getFlashChipSize();
+  FlashMode_t ideMode = ESP.getFlashChipMode();
+
+  Serial.printf("Flash real id:   %08X\n", ESP.getFlashChipId());
+  Serial.printf("Flash real size: %u\n\n", realSize);
+
+  Serial.printf("Flash ide  size: %u\n", ideSize);
+  Serial.printf("Flash ide speed: %u\n", ESP.getFlashChipSpeed());
+  Serial.printf("Flash ide mode:  %s\n", (ideMode == FM_QIO ? "QIO" : ideMode == FM_QOUT ? "QOUT" : ideMode == FM_DIO ? "DIO" : ideMode == FM_DOUT ? "DOUT" : "UNKNOWN"));
+
+  if (ideSize != realSize) {
+    Serial.println("Flash Chip configuration wrong!\n");
+  } else {
+    Serial.println("Flash Chip configuration ok.\n");
+  }
+  delay(5000);
+}
