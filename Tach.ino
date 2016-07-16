@@ -34,7 +34,6 @@ void setUp(int state) {
   chaing = LOW;
   chaing1 = 0;
   myservo.write(90);
-  
 }
 void setDown(int state) {
   tickerSetLow.detach();
@@ -43,5 +42,4 @@ void setDown(int state) {
   chaing = LOW;
   chaing1 = 0;
   myservo.write(90);
-  
 }

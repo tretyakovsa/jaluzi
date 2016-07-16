@@ -27,13 +27,13 @@ Ticker tickerAlert;
 // Определяем переменные
 String _ssid     = ""; // Для хранения SSID
 String _password = ""; // Для хранения пароля сети
-String _ssidAP = "";   // SSID AP точки доступа
-String _passwordAP = ""; // пароль точки доступа
+String _ssidAP = "Zaluzi01";   // SSID AP точки доступа
+String _passwordAP = "zl1234567"; // пароль точки доступа
 String XML;              // формирование XML
-String SSDP_Name = "";      // SSDP
-String TimeUp = "";      // время открытия
-String TimeDown = "";    // время закрытия
-int timezone = 8;        // часовой пояс
+String SSDP_Name = "jalousie";      // SSDP
+String TimeUp = "08:00:00";      // время открытия
+String TimeDown = "21:00:00";    // время закрытия
+int timezone = 3;        // часовой пояс GTM
 int Led1 = 12;           // индикатор движения вверх
 int Led2 = 13;           // индикатор движения вниз
 float TimeServo = 10.0;  // Время вращения
