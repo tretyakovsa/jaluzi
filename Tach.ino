@@ -13,7 +13,7 @@ void MotorUp() {
   digitalWrite(Led2, LOW);
   tickerSetLow.attach(TimeServo, setUp, 0);
   Serial.println("Up");
-  myservo.write(90+revolutions);
+  myservo.write(kolibr+revolutions);
   chaing = LOW;
   chaing1 = 1;
 }
@@ -22,7 +22,7 @@ void MotorDown() {
   digitalWrite(Led1, LOW);
   tickerSetLow.attach(TimeServo, setDown, 0);
   Serial.println("Down");
-  myservo.write(90-revolutions);
+  myservo.write(kolibr-revolutions);
   chaing = LOW;
   chaing1 = 1;
 }
@@ -33,7 +33,7 @@ void setUp(int state) {
   state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
-  myservo.write(90);
+  myservo.write(kolibr);
 }
 void setDown(int state) {
   tickerSetLow.detach();
@@ -41,5 +41,5 @@ void setDown(int state) {
   state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
-  myservo.write(90);
+  myservo.write(kolibr);
 }

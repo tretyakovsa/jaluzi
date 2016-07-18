@@ -28,6 +28,10 @@ bool loadConfig() {
   }
   String ssidAP = json["ssidAPName"];
   _ssidAP = ssidAP;
+
+  String kolibr2 = json["kolibr"];
+  kolibr = kolibr2.toInt();
+
   String passwordAP = json["ssidAPPassword"];
   _passwordAP = passwordAP;
   String SSDPName = json["SSDPName"];
@@ -48,6 +52,7 @@ bool loadConfig() {
 bool saveConfig() {
   StaticJsonBuffer<250> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
+  json["kolibr"] = kolibr;
   json["ssidAPName"] = _ssidAP;
   json["ssidAPPassword"] = _passwordAP;
   json["SSDPName"] = "Jaluzi";

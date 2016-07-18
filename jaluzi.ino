@@ -38,6 +38,7 @@ int Led1 = 12;           // индикатор движения вверх
 int Led2 = 13;           // индикатор движения вниз
 float TimeServo = 10.0;  // Время вращения
 int revolutions = 90;    // Скорость вращения
+int kolibr = 90; // Колибруем серву
 
 volatile int chaing = LOW;
 volatile int chaing1 = LOW;

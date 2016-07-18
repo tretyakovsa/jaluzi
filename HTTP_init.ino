@@ -67,6 +67,13 @@ void handle_Time_Down() {
   saveConfig();
   HTTP.send(200, "text/plain", "OK");
 }
+//----------------------------------
+//Задать время закрытия
+void handlekolibr() {
+  kolibr = HTTP.arg("kolibr").toInt();
+  saveConfig();
+  HTTP.send(200, "text/plain", "OK");
+}
 
 void HTTP_init(void) {
 
@@ -88,6 +95,7 @@ void HTTP_init(void) {
   HTTP.on("/revolutions", handle_Revolutions); // Установить скорость вращения сервопривода
   HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
   HTTP.on("/configxml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
+  HTTP.on("/kolibr", handlekolibr);   // колибруем серву
   // Запускаем HTTP сервер
   HTTP.begin();
 }
@@ -161,6 +169,10 @@ void handleConfigXML() {
   XML += "<time>";
   XML += XmlTime();
   XML += "</time>";
+  // Колибруе серву
+  XML += "<kolibr>";
+  XML += kolibr;
+  XML += "</kolibr>";
   XML += "</Donnees>";
   HTTP.send(200, "text/xml", XML);
 }

@@ -48,10 +48,6 @@
      xmldoc = xmlResponse.getElementsByTagName('revolutions');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('ssidaprate').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('kolibr');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('kolibr').value=message;
     }
    }
    function Motor(){
@@ -140,7 +136,7 @@
      <input id="ssidaprate" value="90" pattern="[0-9]{1,2}" class="form-control">
      <input class="btn btn-block btn-lg btn-success" name="set_revolutions" value="Сохранить" onclick="set_revolutions();" type="submit">
      <hr>
-     <h2>Колибровка сервы</h2>
+     <h2>Время за которое жалюзи спуститься и подимется</h2>
      <input id="kolibr" value="90" pattern="[0-9]{1,2}" class="form-control">
      <input class="btn btn-block btn-lg btn-success" name="kolibr" value="Сохранить" onclick="kolibr();" type="submit">
      <hr>
