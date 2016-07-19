@@ -1,7 +1,7 @@
 <html>
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/lumen/bootstrap.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Дополнительные настройки</title>
   <script>
@@ -47,104 +47,116 @@
 
      xmldoc = xmlResponse.getElementsByTagName('revolutions');
      message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('ssidaprate').value=message;
+     document.getElementById('revolutions').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('kolibr');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('kolibr').value=message;
     }
    }
-   function Motor(){
-    server = "/Motor";
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
-   }
-   function load_time(){
+   function load_time(submit){
     server = "/Time";
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
+    send_request(submit,server);
    }
-   function Time_Zone(){
+   function Time_Zone(submit){
     timezone = document.getElementById('timezone').value;
     server = "/TimeZone?timezone="+timezone;
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
+    send_request(submit,server);
    }
-   function set_Ssid(){
+    function set_time_Zone(submit){
+    var set_date = new Date();
+    var gmtHours = -set_date.getTimezoneOffset()/60;
+    document.getElementById('timezone').value = gmtHours;
+    server = "/TimeZone?timezone="+gmtHours;
+    send_request(submit,server);
+   }
+   function set_Ssid(submit){
     ssid = document.getElementById('ssid').value;
     password = document.getElementById('password').value;
     server = "/ssid?ssid="+ssid+"&password="+password;
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
+    send_request(submit,server);
    }
-   function set_SsidAP(){
+   function set_SsidAP(submit){
     ssid = document.getElementById('ssidap').value;
     password = document.getElementById('passwordAp').value;
     server = "/ssidap?ssidAP="+ssid+"&passwordAP="+password;
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
+    send_request(submit,server);
    }
-   function set_revolutions(){
-    revolutions = document.getElementById('ssidaprate').value;
+   function set_revolutions(submit){
+    revolutions = document.getElementById('revolutions').value;
     server = "/revolutions?revolutions="+revolutions;
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
+    send_request(submit,server);
    }
-    function kolibr(){
+    function kolibr(submit){
     kolibr = document.getElementById('kolibr').value;
     server = "/kolibr?kolibr="+kolibr;
+    send_request(submit,server);
+   }
+   function send_request(submit,server){
     request = new XMLHttpRequest();
     request.open("GET", server, true);
     request.send();
+    save_status(submit,request);
+   }
+   function save_status(submit,request){
+    old_submit = submit.value;
+    request.onreadystatechange = function() {
+      if (request.readyState != 4) return;
+      submit.value = request.statusText;
+      setTimeout(function(){submit.value=old_submit}, 3000);
+    }
+    submit.value = 'Подождите...';
    }
   </script>
   <style>
     input:invalid {
-       border: 2px solid red !important;
-    }
+       border:2px solid red !important;
+     }
     input:invalid + input[type=submit] {
       pointer-events:none;
-      opacity: 0.5;
+      opacity:0.5;
      }
+    .col-sm-offset-2 {
+      background-color:#fff;
+      box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
+      padding:20px;
+    }
+    body, html {
+      background-color:#fff;
+    }
    </style>
  </head>
  <body onload="load();">
   <div class="container">
-   <div class="row">
-    <div class="col-md-offset-2 col-md-8" style="text-align:center;">
-     <h1>Дополнительные настройки</h1>
-     <div class="alert alert-dismissible alert-danger">Пожалуйста укажите ниже ваше GMT зону и подключитель к своему роутеру.
+   <div class="row" style="text-align:center;">
+    <h1 style="margin:40px;">Дополнительные настройки</h1>
+    <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+     <div class="alert alert-dismissible alert-warning">Пожалуйста укажите ниже вашу GMT зону и подключитель к своему роутеру.
       Это позволит унавать время, которое будит синхранизируется 1 раз в сутки по вашему роутеру.</div>
      <h2>Временная зона GMT</h2>
-     <input id="timezone" value="0" pattern="[0-9]{1,3}" class="form-control">
-     <input class="btn btn-block btn-lg btn-success" name="Set_Time_Zone" value="Сохранить" onclick="Time_Zone();" type="submit">
-     <h2>Подключиться к WiFi сети</h2>
+     <input id="timezone" value="" pattern="[0-9]{1,3}" class="form-control">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="Time_Zone(this);" type="submit">
+     <input class="btn btn-block btn-default" value="Авто определение и сохранение зоны" onclick="set_time_Zone(this);" type="submit">
+     <h2>Подключение к WiFi роутеру</h2>
      <input id="ssid" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
      <input id="password" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
-     <input class="btn btn-block btn-lg btn-success" name="Set_ssid" value="Сохранить" onclick="set_Ssid();" type="submit">
-     <input class="btn btn-block btn-lg btn-primary" name="Motor" value="Синхронизировать время" onclick="load_time();" type="submit">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_Ssid(this);" type="submit">
+     <input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit">
      <hr>
-     <div class="alert alert-dismissible alert-info">Ниже вы можете указать новое название Wi-Fi жалюзи, пароль и настроить скорость вращения двигателя.</div>
+     <div class="alert alert-dismissible alert-info">Ниже вы можете указать новое название Wi-Fi жалюзи и пароль. Необходимо перезагрузить ESP.</div>
      <h2>WiFi Жалюзи</h2>
      <input id="ssidap" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
      <input id="passwordAp" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
-     <input class="btn btn-block btn-lg btn-success" name="set_ssidAP" value="Сохранить" onclick="set_SsidAP();" type="submit">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_SsidAP(this);" type="submit">
      <hr>
-     <h2>Время за которое жалюзи спуститься и подимется</h2>
-     <input id="ssidaprate" value="90" pattern="[0-9]{1,2}" class="form-control">
-     <input class="btn btn-block btn-lg btn-success" name="set_revolutions" value="Сохранить" onclick="set_revolutions();" type="submit">
+     <h2>Скорость вращения мотора</h2>
+     <input id="revolutions" value="" pattern="[0-9]{1,2}" class="form-control">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_revolutions(this);" type="submit">
+     <h2>Колибровка мотора</h2>
+     <input id="kolibr" value="" pattern="[0-9]{1,2}" class="form-control">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="kolibr(this);" type="submit">
      <hr>
-     <h2>Колибровка сервы</h2>
-     <input id="kolibr" value="90" pattern="[0-9]{1,2}" class="form-control">
-     <input class="btn btn-block btn-lg btn-success" name="kolibr" value="Сохранить" onclick="kolibr();" type="submit">
-     <hr>
-     <a class="btn btn-block btn-lg btn-default" style="margin-bottom:50px;" href="./index.htm">Страница управления</a>
+     <a class="btn btn-block btn-default" href="./">Страница управления</a>
     </div>
    </div>
   </div>
