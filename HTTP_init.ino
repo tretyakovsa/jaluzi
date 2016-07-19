@@ -18,6 +18,13 @@ void handle_TimeServo() {
   HTTP.send(200, "text/plain", "OK");
 }
 //------------------------------------------
+// Время вращения сервопривода
+void handle_TimeServo2() {
+  TimeServo2 = HTTP.arg("t").toInt();
+  saveConfig();
+  HTTP.send(200, "text/plain", "OK");
+}
+//------------------------------------------
 // Установка времянной зоны
 void handle_TimeZone() {
   timezone = HTTP.arg("timezone").toInt();
@@ -46,7 +53,7 @@ void handle_Set_Ssidap() {
 void handle_Time() {
   Time_init(timezone);
   String Time=XmlTime();
-  HTTP.send(200, "text/plain", Time+" OK");
+  HTTP.send(200, "text/plain", "Время синхронизовано: "+Time);
 }
 // Установка скорости вращения
 void handle_Revolutions() {
@@ -83,10 +90,11 @@ void HTTP_init(void) {
     SSDP.schema(HTTP.client());
   });
   // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
-  //update();
+  update();
 
   HTTP.on("/Motor", MotorActiv);            // запуск мотора напровление храниться в переменной
   HTTP.on("/Timeservo", handle_TimeServo);  // установка времени вращения сервопривода
+  HTTP.on("/Timeservo2", handle_TimeServo2);  // установка времени вращения сервопривода
   HTTP.on("/TimeZone", handle_TimeZone);    // Установка времянной зоны
   HTTP.on("/Time", handle_Time);            // Синхронизировать время из сети
   HTTP.on("/TimeUp", handle_Time_Up);       // Установить время открытия
@@ -158,6 +166,10 @@ void handleConfigXML() {
   XML += "<timeservo>";
   XML += TimeServo;
   XML += "</timeservo>";
+  //  Время врашения
+  XML += "<timeservo2>";
+  XML += TimeServo2;
+  XML += "</timeservo2>";
   // Время открытия
   XML += "<TimeUp>";
   XML += TimeUp;

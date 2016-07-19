@@ -11,7 +11,7 @@ void Tach_0() {
 void MotorUp() {
   digitalWrite(Led1, HIGH);
   digitalWrite(Led2, LOW);
-  tickerSetLow.attach(TimeServo, setUp, 0);
+  tickerSetLow.attach(TimeServo2, setUp, 0);
   Serial.println("Up");
   myservo.write(kolibr+revolutions);
   chaing = LOW;

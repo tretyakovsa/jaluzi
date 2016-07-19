@@ -19,7 +19,7 @@ bool loadConfig() {
   // использование configFile.readString вместо этого.
   configFile.readBytes(buf.get(), size);
 
-  StaticJsonBuffer<250> jsonBuffer;
+  StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(buf.get());
 
   if (!json.success()) {
@@ -56,7 +56,7 @@ bool loadConfig() {
 }
 
 bool saveConfig() {
-  StaticJsonBuffer<250> jsonBuffer;
+  StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
   json["kolibr"] = kolibr;
   json["ssidAPName"] = _ssidAP;

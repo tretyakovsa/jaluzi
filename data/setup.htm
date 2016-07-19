@@ -45,10 +45,6 @@
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('passwordAp').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('revolutions');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('revolutions').value=message;
-
      xmldoc = xmlResponse.getElementsByTagName('kolibr');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('kolibr').value=message;
@@ -63,7 +59,7 @@
     server = "/TimeZone?timezone="+timezone;
     send_request(submit,server);
    }
-    function set_time_Zone(submit){
+   function set_time_Zone(submit){
     var set_date = new Date();
     var gmtHours = -set_date.getTimezoneOffset()/60;
     document.getElementById('timezone').value = gmtHours;
@@ -82,12 +78,7 @@
     server = "/ssidap?ssidAP="+ssid+"&passwordAP="+password;
     send_request(submit,server);
    }
-   function set_revolutions(submit){
-    revolutions = document.getElementById('revolutions').value;
-    server = "/revolutions?revolutions="+revolutions;
-    send_request(submit,server);
-   }
-    function kolibr(submit){
+   function kolibr(submit){
     kolibr = document.getElementById('kolibr').value;
     server = "/kolibr?kolibr="+kolibr;
     send_request(submit,server);
@@ -101,30 +92,30 @@
    function save_status(submit,request){
     old_submit = submit.value;
     request.onreadystatechange = function() {
-      if (request.readyState != 4) return;
-      submit.value = request.statusText;
-      setTimeout(function(){submit.value=old_submit}, 3000);
+     if (request.readyState != 4) return;
+     submit.value = request.responseText;
+     setTimeout(function(){submit.value=old_submit}, 3000);
     }
     submit.value = 'Подождите...';
    }
   </script>
   <style>
-    input:invalid {
-       border:2px solid red !important;
-     }
-    input:invalid + input[type=submit] {
-      pointer-events:none;
-      opacity:0.5;
-     }
-    .col-sm-offset-2 {
-      background-color:#fff;
-      box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
-      padding:20px;
-    }
-    body, html {
-      background-color:#fff;
-    }
-   </style>
+   input:invalid {
+    border:2px solid red !important;
+   }
+   input:invalid + input[type=submit] {
+    pointer-events:none;
+    opacity:0.5;
+   }
+   .col-sm-offset-2 {
+    background-color:#fff;
+    box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
+    padding:20px;
+   }
+   body, html {
+    background-color:#fff;
+   }
+  </style>
  </head>
  <body onload="load();">
   <div class="container">
@@ -132,29 +123,50 @@
     <h1 style="margin:40px;">Дополнительные настройки</h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <div class="alert alert-dismissible alert-warning">Пожалуйста укажите ниже вашу GMT зону и подключитель к своему роутеру.
-      Это позволит унавать время, которое будит синхранизируется 1 раз в сутки по вашему роутеру.</div>
+      Это позволит унавать время, которое будит синхранизируется 1 раз в сутки в 03:00 по вашему роутеру. Вы так же сможете управлять вашим устройством в локальной сети.</div>
+
+     <div class="alert alert-dismissible alert-info">
+      Здесь вы можете загрузить bin файл в ESP или <a href="./edit" target="_blank">редактировать HTML</a>:
+      <form method="POST" action="/update" enctype="multipart/form-data">
+       <div class="btn-group">
+        <input type="file" class="btn btn-primary btn-xs" name="update" style="height: 33px;">
+        <input type="submit" class="btn btn-default btn-sm" value="загрузить" style="height: 33px;">
+       </div>
+      </form>
+     </div>
+
      <h2>Временная зона GMT</h2>
      <input id="timezone" value="" pattern="[0-9]{1,3}" class="form-control">
      <input class="btn btn-block btn-success" value="Сохранить" onclick="Time_Zone(this);" type="submit">
-     <input class="btn btn-block btn-default" value="Авто определение и сохранение зоны" onclick="set_time_Zone(this);" type="submit">
+     <input class="btn btn-block btn-primary" value="Авто определение и сохранение зоны" onclick="set_time_Zone(this);" type="submit">
      <h2>Подключение к WiFi роутеру</h2>
      <input id="ssid" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
      <input id="password" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
      <input class="btn btn-block btn-success" value="Сохранить" onclick="set_Ssid(this);" type="submit">
      <input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit">
      <hr>
-     <div class="alert alert-dismissible alert-info">Ниже вы можете указать новое название Wi-Fi жалюзи и пароль. Необходимо перезагрузить ESP.</div>
      <h2>WiFi Жалюзи</h2>
-     <input id="ssidap" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
-     <input id="passwordAp" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
-     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_SsidAP(this);" type="submit">
+     <div class="row">
+      <div class="col-sm-6">
+       <input id="ssidap" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
+       <input id="passwordAp" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
+       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_SsidAP(this);" type="submit">
+      </div>
+      <div class="col-sm-6">
+       <div class="alert alert-dismissible alert-info">Здесь можете указать новое название Wi-Fi жалюзи и пароль. После этого необходимо перезагрузить ESP.</div>
+      </div>
+     </div>
      <hr>
-     <h2>Скорость вращения мотора</h2>
-     <input id="revolutions" value="" pattern="[0-9]{1,2}" class="form-control">
-     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_revolutions(this);" type="submit">
      <h2>Колибровка мотора</h2>
-     <input id="kolibr" value="" pattern="[0-9]{1,2}" class="form-control">
-     <input class="btn btn-block btn-success" value="Сохранить" onclick="kolibr(this);" type="submit">
+     <div class="row">
+      <div class="col-sm-8">
+       <div class="alert alert-dismissible alert-info">Если серво двигатель постоянно крутится его необходимо отколибровать. Поэксперементируйте здесь с цифрами. Как правило они калеблятся от 90 до 95.</div>
+      </div>
+      <div class="col-sm-4">
+       <input id="kolibr" value="" pattern="[0-9]{1,2}" class="form-control">
+       <input class="btn btn-block btn-success" value="Сохранить" onclick="kolibr(this);" type="submit">
+      </div>
+     </div>
      <hr>
      <a class="btn btn-block btn-default" href="./">Страница управления</a>
     </div>
