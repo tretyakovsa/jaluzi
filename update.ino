@@ -1,6 +1,13 @@
 void update(void) {
+
+
   //Обновление
-  HTTP.on("/update", HTTP_POST, []() {
+    HTTP.on("/flash", HTTP_GET, [](){
+    HTTP.sendHeader("Connection", "close");
+    HTTP.sendHeader("Access-Control-Allow-Origin", "*");
+    HTTP.send(200, "text/html", serverIndex);
+    }); //Веб страница на случай пустой файловой системы по адресу /flash обнавление будет доступно
+    HTTP.on("/update", HTTP_POST, []() {
     HTTP.sendHeader("Connection", "close");
     HTTP.sendHeader("Access-Control-Allow-Origin", "*");
     HTTP.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");

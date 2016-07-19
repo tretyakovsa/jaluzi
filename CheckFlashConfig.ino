@@ -28,12 +28,18 @@ bool loadConfig() {
   }
   String ssidAP = json["ssidAPName"];
   _ssidAP = ssidAP;
+  String passwordAP = json["ssidAPPassword"];
+  _passwordAP = passwordAP;
+
+  String _timezone = json["timezone"];
+  timezone = _timezone.toInt();
+
+  String _revolutions = json["revolutions"];
+  revolutions = _revolutions.toInt();
 
   String kolibr2 = json["kolibr"];
   kolibr = kolibr2.toInt();
 
-  String passwordAP = json["ssidAPPassword"];
-  _passwordAP = passwordAP;
   String SSDPName = json["SSDPName"];
   SSDP_Name = SSDPName;
   String ssid = json["ssidName"];

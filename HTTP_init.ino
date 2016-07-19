@@ -45,7 +45,8 @@ void handle_Set_Ssidap() {
 // Время из сети
 void handle_Time() {
   Time_init(timezone);
-  HTTP.send(200, "text/plain", "OK");
+  String Time=XmlTime();
+  HTTP.send(200, "text/plain", Time+" OK");
 }
 // Установка скорости вращения
 void handle_Revolutions() {
@@ -81,7 +82,7 @@ void HTTP_init(void) {
   HTTP.on("/description.xml", HTTP_GET, []() {
     SSDP.schema(HTTP.client());
   });
-  // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SSPI) и выше
+  // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
   //update();
 
   HTTP.on("/Motor", MotorActiv);            // запуск мотора напровление храниться в переменной
