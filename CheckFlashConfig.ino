@@ -34,11 +34,11 @@ bool loadConfig() {
   String _timezone = json["timezone"];
   timezone = _timezone.toInt();
 
-  String _revolutions = json["revolutions"];
-  revolutions = _revolutions.toInt();
+  String _speed = json["speed"];
+  speed = _speed.toInt();
 
-  String kolibr2 = json["kolibr"];
-  kolibr = kolibr2.toInt();
+  String _kolibr = json["kolibr"];
+  kolibr = _kolibr.toInt();
 
   String SSDPName = json["SSDPName"];
   SSDP_Name = SSDPName;
@@ -65,7 +65,7 @@ bool saveConfig() {
   json["ssidName"] = _ssid;
   json["ssidPassword"] = _password;
   json["timezone"] = timezone;
-  json["revolutions"] = revolutions;
+  json["speed"] = speed;
   json["TimeUp"] = TimeUp;
   json["TimeDown"] = TimeDown;
   File configFile = SPIFFS.open("/config.json", "w");

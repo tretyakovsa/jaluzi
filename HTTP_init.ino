@@ -56,8 +56,8 @@ void handle_Time() {
   HTTP.send(200, "text/plain", "Время синхронизовано: "+Time);
 }
 // Установка скорости вращения
-void handle_Revolutions() {
-  revolutions = HTTP.arg("revolutions").toInt();
+void handle_speed() {
+  speed = HTTP.arg("speed").toInt();
   saveConfig();
    HTTP.send(200, "text/plain", "OK");
 }
@@ -101,7 +101,7 @@ void HTTP_init(void) {
   HTTP.on("/TimeDown", handle_Time_Down);   // Установить время закрытия
   HTTP.on("/ssid", handle_Set_Ssid);        // Установить имя и пароль роутера
   HTTP.on("/ssidap", handle_Set_Ssidap);    // Установить имя и пароль для точки доступа
-  HTTP.on("/revolutions", handle_Revolutions); // Установить скорость вращения сервопривода
+  HTTP.on("/speed", handle_speed); // Установить скорость вращения сервопривода
   HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
   HTTP.on("/configxml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
   HTTP.on("/kolibr", handlekolibr);   // колибруем серву
@@ -159,9 +159,9 @@ void handleConfigXML() {
   XML += timezone;
   XML += "</timezone>";
   // Скорость вращения
-  XML += "<revolutions>";
-  XML += revolutions;
-  XML += "</revolutions>";
+  XML += "<speed>";
+  XML += speed;
+  XML += "</speed>";
   //  Время врашения
   XML += "<timeservo>";
   XML += TimeServo;

@@ -33,9 +33,9 @@
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('MOTOR2').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('revolutions');
+     xmldoc = xmlResponse.getElementsByTagName('speed');
      message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('revolutions').value=message;
+     document.getElementById('speed').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('TimeUp');
      message = xmldoc[0].firstChild.nodeValue;
@@ -84,9 +84,9 @@
     server = "/TimeDown?close="+h+":"+m+":"+s;
     send_request(submit,server);
    }
-   function set_revolutions(submit){
-    revolutions = document.getElementById('revolutions').value;
-    server = "/revolutions?revolutions="+revolutions;
+   function set_speed(submit){
+    speed = document.getElementById('speed').value;
+    server = "/speed?speed="+speed;
     send_request(submit,server);
    }
    function send_request(submit,server){
@@ -114,12 +114,12 @@
     opacity:0.5;
    }
    .col-sm-offset-2 {
-    background:white none repeat scroll 0 0;
+    background-color:#fff;
     box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
     padding:20px;
    }
    body, html {
-    background:#fafafa none repeat scroll 0 0;
+    background-color:#fafafa;
    }
   </style>
  </head>
@@ -162,8 +162,8 @@
        <div class="alert alert-dismissible alert-info">Как правило скорость мотора от 1 до 60. На больших скоростях ESP может некорректно работать.</div>
       </div>
       <div class="col-sm-4">
-     <input id="revolutions" value="" pattern="[0-9]{1,2}" class="form-control">
-     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_revolutions(this);" type="submit">
+     <input id="speed" value="" pattern="[0-9]{1,2}" class="form-control">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_speed(this);" type="submit">
       </div>
      </div>
 
