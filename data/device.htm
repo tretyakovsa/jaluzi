@@ -2,158 +2,37 @@
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/lumen/bootstrap.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Страница управления</title>
   <script>
-   var xmlHttp=createXmlHttpObject();
-   function createXmlHttpObject(){
-    if(window.XMLHttpRequest){
-     xmlHttp=new XMLHttpRequest();
-    }else{
-     xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');
-    }
-    return xmlHttp;
-   }
    function load(){
-    // if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
-    //  xmlHttp.open('PUT','configxml',true);
-    //  xmlHttp.onreadystatechange=handleServerResponse;
-    //  xmlHttp.send(null);
-    // }
+    // load xml file
+    if (window.XMLHttpRequest) {
+     xhttp = new XMLHttpRequest();
+    } else {
+     xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xhttp.open("GET", "iplocation.xml", false);
+    xhttp.send();
+    xmlDoc = xhttp.responseXML;
+    var count=xmlDoc.getElementsByTagName("ip").length;
+    for (i = 0; i < count ;i++) {
+     var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
+     console.log(ipval);
+     $.get("http://"+ipval+"/load.htm", function(data) {
+      $(data).prependTo("#content").fadeIn("slow");
+     });
+    }
 
     document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
 
    }
-   function handleServerResponse(){
-    if(xmlHttp.readyState==4 && xmlHttp.status==200){
-     xmlResponse=xmlHttp.responseXML;
-
-     xmldoc = xmlResponse.getElementsByTagName('timeservo');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('MOTOR').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('timeservo2');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('MOTOR2').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('speed');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('speed').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('TimeUp');
-     message = xmldoc[0].firstChild.nodeValue;
-     h=message.substring(0,2);
-     m=message.substring(3,5);
-     s=message.substring(6,8);
-     document.getElementById('OPENH').value=h;
-     document.getElementById('OPENM').value=m;
-     document.getElementById('OPENS').value=s;
-
-     xmldoc = xmlResponse.getElementsByTagName('TimeDown');
-     message = xmldoc[0].firstChild.nodeValue;
-     h=message.substring(0,2);
-     m=message.substring(3,5);
-     s=message.substring(6,8);
-     document.getElementById('CLOSEH').value=h;
-     document.getElementById('CLOSEM').value=m;
-     document.getElementById('CLOSES').value=s;
-    }
-   }
-   function Motor(submit){
-    server = "/Motor";
-    send_request(submit,server);
-   }
-   function set_time_servo(submit){
-    motor_time = document.getElementById('MOTOR').value;
-    server = "/Timeservo?t="+motor_time;
-    send_request(submit,server);
-   }
-   function set_time_servo2(submit){
-    motor_time = document.getElementById('MOTOR2').value;
-    server = "/Timeservo2?t="+motor_time;
-    send_request(submit,server);
-   }
-   function set_open(submit){
-    h = document.getElementById('OPENH').value;
-    m = document.getElementById('OPENM').value;
-    s = document.getElementById('OPENS').value;
-    server = "/TimeUp?open="+h+":"+m+":"+s;
-    send_request(submit,server);
-   }
-   function set_close(submit){
-    h = document.getElementById('CLOSEH').value;
-    m = document.getElementById('CLOSEM').value;
-    s = document.getElementById('CLOSES').value;
-    server = "/TimeDown?close="+h+":"+m+":"+s;
-    send_request(submit,server);
-   }
-   function set_speed(submit){
-    speed = document.getElementById('speed').value;
-    server = "/speed?speed="+speed;
-    send_request(submit,server);
-   }
-   function send_request(submit,server){
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
-    save_status(submit,request);
-   }
-   function save_status(submit,request){
-    old_submit = submit.value;
-    request.onreadystatechange = function() {
-     if (request.readyState != 4) return;
-     submit.value = request.statusText;
-     setTimeout(function(){submit.value=old_submit}, 3000);
-    }
-    submit.value = 'Подождите...';
-   }
   </script>
-  <style>
-   .block {
-    background-color:#fff;
-    box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
-    padding:20px;
-    margin: 20px;
-    float: left;
-   }
-   body, html {
-    background-color:#E9F0F0;
-   }
-   .header {
-    background-color: #fff;
-    box-shadow: 0 22px 22px -22px gray;
-    margin: 0 -15px 23px;
-    padding: 1px 50px 15px;
-    border-radius: 10px 10px 0 0;
-   }
-   .container {
-    background-color: #F5F5F5;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    margin-top: 5%;
-   }
-   h5 {
-    background-color: #4db6ac;
-    color: #fff;
-    margin-top: -40px;
-    padding: 10px 0;
-    width: 50%;
-    text-align:center;
-   }
-   .add {
-    background-color: #c0c7ca;
-    border-radius: 100px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
-    font-size: 50px;
-    padding: 0 20px;
-   }
-   #date {
-    text-transform: capitalize;
-   }
-  </style>
  </head>
  <body onload="load();">
-  <div class="container">
+  <div class="container device">
    <div class="header">
     <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="#">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="#">сюда</a>.</small></h4>
     <h1 id="date">28th Monday<br><small>December 2005</small></h1>
@@ -168,32 +47,7 @@
       <li>Скоро...</li>
      </ul>
     </div>
-    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;">
-     <div class="block col-md-5">
-      <h5>Zaluzi</h5>
-      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Перед один право в ячейках вы можете указать работу двигателя в секунах.</div>
-      <input class="btn btn-block btn-lg btn-primary" value="Включить\Выключить" onclick="Motor(this);" type="submit">
-      <hr>
-      <div class="alert alert-dismissible alert-info"><b>Обратите внимание</b> Перед один право в ячейках вы можете указать работу двигателя в секунах.</div>
-      <a class="btn btn-block btn-default" href="./">Страница управления</a>
-     </div>
-     <div class="block col-md-5">
-      <h5>Zaluzi</h5>
-      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Перед одиночными цифрами пишите 0. Пример: 03:09:10, с право в ячейках вы можете указать работу двигателя в секунах.</div>
-      <input class="btn btn-block btn-lg btn-primary" value="Включить\Выключить" onclick="Motor(this);" type="submit">
-      <hr>
-      <h3>Настройки времи</h3>
-      <hr>
-      <a class="btn btn-block btn-default" href="./">Страница управления</a>
-     </div>
-     <div class="block col-md-5">
-      <h5>Zaluzi</h5>
-      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Перед один право в ячейках вы можете указать работу двигателя в секунах.</div>
-      <input class="btn btn-block btn-lg btn-primary" value="Включить\Выключить" onclick="Motor(this);" type="submit">
-      <hr>
-      <div class="alert alert-dismissible alert-info"><b>Обратите внимание</b> Перед один право в ячейках вы можете указать работу двигателя в секунах.</div>
-      <a class="btn btn-block btn-default" href="./">Страница управления</a>
-     </div>
+    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content">
     </div>
    </div>
   </div>
