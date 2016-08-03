@@ -186,6 +186,10 @@ void handleConfigXML() {
   XML += "<kolibr>";
   XML += kolibr;
   XML += "</kolibr>";
+ // Статус жалюзи
+  XML += "<state>";
+  XML += state0;
+  XML += "</state>";
   XML += "</Donnees>";
   HTTP.send(200, "text/xml", XML);
 }
