@@ -105,6 +105,7 @@ void HTTP_init(void) {
   HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
   HTTP.on("/configxml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
   HTTP.on("/kolibr", handlekolibr);   // колибруем серву
+  HTTP.sendHeader("Cache-Control"," max-age=2592000");
   // Запускаем HTTP сервер
   HTTP.begin();
 }
