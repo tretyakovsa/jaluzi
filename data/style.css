@@ -1,5 +1,8 @@
-/* Setup */
+body, html {
+ background-color:#E9F0F0;
+}
 
+/* Setup */
 input:invalid {
  border:2px solid red !important;
 }
@@ -12,21 +15,14 @@ input:invalid + input[type=submit] {
  box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
  padding:20px;
 }
-body, html {
- background-color:#fafafa;
-}
 
 /* device */
-
 .block {
  background-color:#fff;
  box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
  padding:20px;
  margin: 20px;
  float: left;
-}
-body, html {
- background-color:#E9F0F0;
 }
 .header {
  background-color: #fff;

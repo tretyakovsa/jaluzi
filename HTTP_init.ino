@@ -59,7 +59,7 @@ void handle_Time() {
 void handle_speed() {
   speed = HTTP.arg("speed").toInt();
   saveConfig();
-   HTTP.send(200, "text/plain", "OK");
+  HTTP.send(200, "text/plain", "OK");
 }
 //------------------------------------------
 //Задать время открытия
@@ -101,11 +101,12 @@ void HTTP_init(void) {
   HTTP.on("/TimeDown", handle_Time_Down);   // Установить время закрытия
   HTTP.on("/ssid", handle_Set_Ssid);        // Установить имя и пароль роутера
   HTTP.on("/ssidap", handle_Set_Ssidap);    // Установить имя и пароль для точки доступа
-  HTTP.on("/speed", handle_speed); // Установить скорость вращения сервопривода
+  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
   HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
-  HTTP.on("/configxml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
-  HTTP.on("/kolibr", handlekolibr);   // колибруем серву
-  HTTP.sendHeader("Cache-Control"," max-age=2592000");
+  HTTP.on("/config.xml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
+  HTTP.on("/kolibr", handlekolibr);         // колибруем серву
+  HTTP.on("/block", block);                 // Блок для device.htm
+  // HTTP.sendHeader("Cache-Control"," max-age=2592000");
   // Запускаем HTTP сервер
   HTTP.begin();
 }
@@ -135,10 +136,9 @@ void handleConfigXML() {
   XML += "</ssid>";
   // Пароль сети
   XML += "<password>";
-   if (_password == NULL) {
+  if (_password == NULL) {
     XML += " ";
-      }
-  else {
+  } else {
     XML += _password;
   }
   XML += "</password>";
@@ -150,8 +150,7 @@ void handleConfigXML() {
   XML += "<passwordAP>";
   if (_passwordAP == NULL) {
     XML += " ";
-      }
-  else {
+  } else {
     XML += _passwordAP;
   }
   XML += "</passwordAP>";
@@ -187,7 +186,7 @@ void handleConfigXML() {
   XML += "<kolibr>";
   XML += kolibr;
   XML += "</kolibr>";
- // Статус жалюзи
+  // Статус жалюзи
   XML += "<state>";
   XML += state0;
   XML += "</state>";
@@ -195,5 +194,26 @@ void handleConfigXML() {
   HTTP.send(200, "text/xml", XML);
 }
 
-
+void block() {
+  XML = "<div class=\"block col-md-5\">";
+  XML += "<h5>";
+  XML += SSDP_Name;
+  XML += "</h5>";
+  XML += " <div class=\"alert alert-dismissible alert-warning\"><b>Обратите внимание</b>";
+  XML += "  <br>Время закрытия: ";
+  XML += TimeUp;
+  XML += "  <br>Время открытия: ";
+  XML += TimeDown;
+  XML += " </div>";
+  XML += " <a class=\"btn btn-block btn-lg btn-primary ajax\" href=\"http://";
+  XML += WiFi.localIP().toString();
+  XML += "/motor\">Открыть/закрыть жалюзи</a>";
+  XML += " <hr>";
+  XML += " <div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
+  XML += " <a class=\"btn btn-block btn-default\" href=\"http://";
+  XML += WiFi.localIP().toString();
+  XML += " \">Страница управления</a>";
+  XML += "</div>";
+  HTTP.send(200, "text/plain", XML);
+}
 

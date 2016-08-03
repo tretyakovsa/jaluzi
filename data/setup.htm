@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/lumen/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Настройки</title>
+  <title>Доп. настройки</title>
   <script>
    var xmlHttp=createXmlHttpObject();
    function createXmlHttpObject(){
@@ -17,7 +17,7 @@
    }
    function load(){
     if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
-     xmlHttp.open('PUT','configxml',true);
+     xmlHttp.open('PUT','config.xml',true);
      xmlHttp.onreadystatechange=handleServerResponse;
      xmlHttp.send(null);
     }
@@ -108,7 +108,7 @@
  <body onload="load();">
   <div class="container">
    <div class="row" style="text-align:center;">
-    <h1 style="margin:40px;">Дополнительные настройки</h1>
+    <h1 style="margin:40px;">Доп. настройки</h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <div class="alert alert-dismissible alert-warning">Пожалуйста подключитесь к своему роутеру и укажите ниже вашу GMT зону.
       Это позволит унавать время, которое будит синхранизируется 1 раз в сутки в 03:00 используя ваш роутер. Вы так же сможете управлять вашим устройством в локальной сети.</div>
@@ -156,6 +156,7 @@
       </div>
      </div>
      <hr>
+     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
      <a class="btn btn-block btn-default" href="./">Страница управления</a>
     </div>
    </div>
