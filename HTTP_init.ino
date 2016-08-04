@@ -106,7 +106,6 @@ void HTTP_init(void) {
   HTTP.on("/config.xml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
   HTTP.on("/kolibr", handlekolibr);         // колибруем серву
   HTTP.on("/block", block);                 // Блок для device.htm
-  // HTTP.sendHeader("Cache-Control"," max-age=2592000");
   // Запускаем HTTP сервер
   HTTP.begin();
 }
@@ -199,20 +198,20 @@ void block() {
   XML += "<h5>";
   XML += SSDP_Name;
   XML += "</h5>";
-  XML += " <div class=\"alert alert-dismissible alert-warning\"><b>Обратите внимание</b>";
-  XML += "  <br>Время закрытия: ";
+  XML += "<div class=\"alert alert-dismissible alert-warning\"><b>Обратите внимание</b>";
+  XML += "<br>Время закрытия: ";
   XML += TimeUp;
-  XML += "  <br>Время открытия: ";
+  XML += "<br>Время открытия: ";
   XML += TimeDown;
-  XML += " </div>";
-  XML += " <a class=\"btn btn-block btn-lg btn-primary ajax\" href=\"http://";
+  XML += "</div>";
+  XML += "<input class=\"btn btn-block btn-lg btn-primary\" value=\"Открыть/закрыть жалюзи\" onclick=\"ajax('";
   XML += WiFi.localIP().toString();
-  XML += "/motor\">Открыть/закрыть жалюзи</a>";
-  XML += " <hr>";
-  XML += " <div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
-  XML += " <a class=\"btn btn-block btn-default\" href=\"http://";
+  XML += "/Motor', this);\" type=\"submit\">";
+  XML += "<hr>";
+  XML += "<div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
+  XML += "<a class=\"btn btn-block btn-default\" href=\"http://";
   XML += WiFi.localIP().toString();
-  XML += " \">Страница управления</a>";
+  XML += "\">Страница управления</a>";
   XML += "</div>";
   HTTP.send(200, "text/plain", XML);
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list>
  <location>
-  <ip>192.168.1.233</ip>
   <ip>192.168.1.243</ip>
+  <ip>192.168.1.233</ip>
   <ip>333</ip>
  </location>
 </list>

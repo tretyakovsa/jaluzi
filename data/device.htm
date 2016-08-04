@@ -27,13 +27,20 @@
     }
     document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
    }
+   function ajax(pagename, submit) {
+    old_submit = submit.value;
+    submit.value = 'Подождите...';
+    $.get("http://"+pagename, function(data) {
+     submit.value=old_submit;
+    });
+   }
   </script>
  </head>
  <body onload="load();">
   <div class="container device">
    <div class="header">
-    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="#">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="#">сюда</a>.</small></h4>
-    <h1 id="date">28th Monday<br><small>December 2005</small></h1>
+    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="https://github.com/tretyakovsa/jaluzi">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new">сюда</a>.</small></h4>
+    <h1 id="date"><br><small></small></h1>
    </div>
    <div class="row">
     <!-- <a href="#" class="add">+</a> -->
