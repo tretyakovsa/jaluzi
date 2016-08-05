@@ -5,6 +5,7 @@
 #include <time.h>               //Содержится в пакете
 #include <Servo.h>              //Содержится в пакете
 #include <Ticker.h>             //Содержится в пакете
+#include <WiFiUdp.h>            //Содержится в пакете
 #include <ArduinoJson.h>
 
 
@@ -34,6 +35,8 @@ String XML;              // формирование XML
 String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия
 String TimeDown = "21:00:00";    // время закрытия
+String Devices = "";    // IP адреса устройств в сети
+String IplocationXML="";
 int timezone = 3;        // часовой пояс GTM
 int Led1 = 12;           // индикатор движения вверх
 int Led2 = 13;           // индикатор движения вниз
@@ -46,6 +49,12 @@ volatile int chaingtime = LOW;
 volatile int chaing = LOW;
 volatile int chaing1 = LOW;
 int state0 = 0;
+unsigned int localPort = 2390;
+unsigned int ssdpPort = 1900;
+const char* ssdpAdress = "192.168.1.255";
+
+// A UDP instance to let us send and receive packets over UDP
+WiFiUDP udp;
 
 void setup()
 {
@@ -67,6 +76,11 @@ void setup()
   attachInterrupt(Tach0, Tach_0, FALLING);
   //Запускаем WIFI
   WIFIAP_Client();
+  // Закускаем UDP
+   udp.begin(localPort);
+   //udp.beginMulticast(WiFi.localIP(), ssdpAdress1, ssdpPort);
+  Serial.print("Local port: ");
+  Serial.println(udp.localPort());
   //настраиваем HTTP интерфейс
   HTTP_init();
   Serial.println("HTTP Ready!");
@@ -83,6 +97,7 @@ void loop()
 {
   HTTP.handleClient();
   delay(1);
+  handleUDP();
   if (chaing && !chaing1) {
     noInterrupts();
     switch (state0) {
