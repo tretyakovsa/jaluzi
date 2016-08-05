@@ -46,8 +46,8 @@ bool loadConfig() {
   _ssid = ssid;
   String password = json["ssidPassword"];
   _password = password;
-  int setAP = json["setAP"];
-
+  int setAP = json["onOffAP"];
+  _setAP=setAP;
   String _TimeUp = json["TimeUp"];
   TimeUp = _TimeUp;
   String _TimeDown = json["TimeDown"];
@@ -58,6 +58,7 @@ bool loadConfig() {
 bool saveConfig() {
   StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
+  json["onOffAP"] = _setAP;
   json["SSDPName"] = SSDP_Name;
   json["kolibr"] = kolibr;
   json["ssidAPName"] = _ssidAP;
