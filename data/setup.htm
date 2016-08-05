@@ -50,6 +50,10 @@
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('passwordAp').value=message;
 
+     xmldoc = xmlResponse.getElementsByTagName('onOffAP');
+     message = xmldoc[0].firstChild.nodeValue;
+     document.getElementById('onOffAP').checked=message;
+
      xmldoc = xmlResponse.getElementsByTagName('SSDP');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('ssdp').value=message;
@@ -84,7 +88,8 @@
    function set_SsidAP(submit){
     ssid = document.getElementById('ssidap').value;
     password = document.getElementById('passwordAp').value;
-    server = "/ssidap?ssidAP="+ssid+"&passwordAP="+password;
+    onoff = document.getElementById('onOffAP').checked;
+    server = "/ssidap?ssidAP="+ssid+"&passwordAP="+password+"&onOffAP="+onoff;
     send_request(submit,server);
    }
    function kolibr(submit){
@@ -152,6 +157,7 @@
      <h2>WiFi Жалюзи</h2>
      <div class="row">
       <div class="col-sm-6">
+       <label class="form-control"><input type="checkbox" id="onOffAP"> <b>Включить\выключить WiFi</b></label>
        <input id="ssidap" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
        <input id="passwordAp" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_SsidAP(this);" type="submit">
