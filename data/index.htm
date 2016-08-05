@@ -28,19 +28,16 @@
 
      xmldoc = xmlResponse.getElementsByTagName('state');
      message = xmldoc[0].firstChild.nodeValue;
-     if (message=='1') {
-     document.getElementById('off-on').value='Закрыть жалюзи';
-     } else {
-     document.getElementById('off-on').value='Открыть жалюзи';
-     }
+     if (message=='1') {message='Закрыть жалюзи';} else {message='Открыть жалюзи';}
+     document.getElementById('off-on').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('timeservo');
      message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('MOTOR').value=message;
+     document.getElementById('motor').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('timeservo2');
      message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('MOTOR2').value=message;
+     document.getElementById('motor2').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('speed');
      message = xmldoc[0].firstChild.nodeValue;
@@ -52,49 +49,35 @@
 
      xmldoc = xmlResponse.getElementsByTagName('TimeUp');
      message = xmldoc[0].firstChild.nodeValue;
-     h=message.substring(0,2);
-     m=message.substring(3,5);
-     s=message.substring(6,8);
-     document.getElementById('OPENH').value=h;
-     document.getElementById('OPENM').value=m;
-     document.getElementById('OPENS').value=s;
+     document.getElementById('open').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('TimeDown');
      message = xmldoc[0].firstChild.nodeValue;
-     h=message.substring(0,2);
-     m=message.substring(3,5);
-     s=message.substring(6,8);
-     document.getElementById('CLOSEH').value=h;
-     document.getElementById('CLOSEM').value=m;
-     document.getElementById('CLOSES').value=s;
+     document.getElementById('close').value=message;
     }
    }
-   function Motor(submit){
-    server = "/Motor";
+   function motor(submit){
+    server = "/motor";
     send_request(submit,server);
    }
    function set_time_servo(submit){
-    motor_time = document.getElementById('MOTOR').value;
+    motor_time = document.getElementById('motor').value;
     server = "/Timeservo?t="+motor_time;
     send_request(submit,server);
    }
    function set_time_servo2(submit){
-    motor_time = document.getElementById('MOTOR2').value;
+    motor_time = document.getElementById('motor2').value;
     server = "/Timeservo2?t="+motor_time;
     send_request(submit,server);
    }
    function set_open(submit){
-    h = document.getElementById('OPENH').value;
-    m = document.getElementById('OPENM').value;
-    s = document.getElementById('OPENS').value;
-    server = "/TimeUp?open="+h+":"+m+":"+s;
+    open_time = document.getElementById('open').value;
+    server = "/TimeUp?open="+open_time;
     send_request(submit,server);
    }
    function set_close(submit){
-    h = document.getElementById('CLOSEH').value;
-    m = document.getElementById('CLOSEM').value;
-    s = document.getElementById('CLOSES').value;
-    server = "/TimeDown?close="+h+":"+m+":"+s;
+    close_time = document.getElementById('close').value;
+    server = "/TimeDown?close="+close_time;
     send_request(submit,server);
    }
    function set_speed(submit){
@@ -125,29 +108,25 @@
     <h1 style="margin:40px;" id="ssdp"></h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
-     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="открыть/закрыть жалюзи" onclick="Motor(this);" type="submit">
+     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="открыть/закрыть жалюзи" onclick="motor(this);" type="submit">
      <hr>
      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Настраивая время перед одиночными цифрами пишите 0. Пример: 03:09:10, с право в ячейках вы можете указать работу двигателя в секунах.</div>
      <h2>Настройки времи</h2>
      <div class="row">
       <div class="col-sm-7">
        <h4>Время закрытия:</h4>
-       <div class="input-group" style="width:100%;">
-        <input id="OPENH" value="" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="OPENM" value="" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="OPENS" value="" style="width:30%;" pattern="[0-9]{2}" class="form-control">
-       </div>
+       <input id="open" value="" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" class="form-control">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_open(this);" type="submit">
        <h4>Время открытия:</h4>
-       <div class="input-group" style="width:100%;">
-        <input id="CLOSEH" value="" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="CLOSEM" value="" style="width:35%;" pattern="[0-9]{2}" class="form-control"><input id="CLOSES" value="" style="width:30%;" pattern="[0-9]{2}" class="form-control">
-       </div>
+       <input id="close" value="" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" class="form-control">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_close(this);" type="submit">
       </div>
       <div class="col-sm-5">
        <h4>Время работы дв.:</h4>
-       <input id="MOTOR2" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
+       <input id="motor2" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo2(this);" type="submit">
        <h4>Время работы дв.:</h4>
-       <input id="MOTOR" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
+       <input id="motor" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo(this);" type="submit">
       </div>
      </div>

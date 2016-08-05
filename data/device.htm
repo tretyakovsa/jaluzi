@@ -19,7 +19,7 @@
 
    function finddevice() {
     $("#content").html('<div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div>');
-    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
+    $.get("./devices?"+Math.floor(Math.random()*10000), function(data) {
      setTimeout(function(){iplocation()}, 7000);
     });
    }
@@ -47,7 +47,7 @@
     submit.value = 'Подождите...';
     $.get("http://"+pagename, function(data) {
      submit.value=data;
-     setTimeout(function(){submit.value=old_submit;}, 2000);
+     setTimeout(function(){submit.value=old_submit;iplocation();}, 2000);
     });
    }
   </script>

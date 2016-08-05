@@ -52,6 +52,7 @@
 
      xmldoc = xmlResponse.getElementsByTagName('onOffAP');
      message = xmldoc[0].firstChild.nodeValue;
+     if (message=='0') {message=false;} else {message=true;}
      document.getElementById('onOffAP').checked=message;
 
      xmldoc = xmlResponse.getElementsByTagName('SSDP');
@@ -113,7 +114,7 @@
     request.onreadystatechange = function() {
      if (request.readyState != 4) return;
      submit.value = request.responseText;
-     setTimeout(function(){submit.value=old_submit}, 3000);
+     setTimeout(function(){submit.value=old_submit}, 2000);
     }
     submit.value = 'Подождите...';
    }
@@ -141,7 +142,6 @@
      <input id="ssdp" value="" class="form-control" pattern="[0-9a-zA-Zа-яА-Я. ]{1,20}" placeholder="Имя устройства">
      <input class="btn btn-block btn-success" value="Сохранить" onclick="set_ssdp(this);" type="submit">
      <hr>
-
      <h2>Подключение к WiFi роутеру</h2>
      <input id="ssid" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
      <input id="password" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
@@ -154,10 +154,10 @@
      <h2>На устройстве сейчас <strong id="time">00:00:00</strong></h2>
      <input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit">
      <hr>
-     <h2>WiFi Жалюзи</h2>
+     <h2>Точка доступа</h2>
      <div class="row">
       <div class="col-sm-6">
-       <label class="form-control"><input type="checkbox" id="onOffAP"> <b>Включить\выключить WiFi</b></label>
+       <label class="form-control"><input type="checkbox" id="onOffAP"> <b>Включить <abbr title="Точка доступа">AP</abbr></b></label>
        <input id="ssidap" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
        <input id="passwordAp" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_SsidAP(this);" type="submit">
