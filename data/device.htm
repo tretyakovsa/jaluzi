@@ -8,29 +8,32 @@
   <title>Страница устройств</title>
   <script>
    function load(){
-    // load xml file
     if (window.XMLHttpRequest) {
      xhttp = new XMLHttpRequest();
     } else {
      xhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xhttp.open("GET", "iplocation.xml", false);
+    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
+     setTimeout(function(){iplocation()}, 2000);
+    });
+    document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
+   }
+
+   function iplocation() {
+    $("#content").html("");
+    xhttp.open("GET", "./iplocation.xml?"+Math.floor(Math.random()*10000), false);
     xhttp.send();
     xmlDoc = xhttp.responseXML;
     var count=xmlDoc.getElementsByTagName("ip").length;
-
-    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
-     for (i = 0; i < count ;i++) {
-      var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
-      console.log(ipval);
-      $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
-       $(data).prependTo("#content").fadeIn("slow");
-      });
-     }
-    });
-
-    document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
+    for (i = 0; i < count ;i++) {
+     var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
+     console.log(ipval);
+     $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
+      $(data).prependTo("#content").fadeIn("slow");
+     });
+    }
    }
+
    function ajax(pagename, submit) {
     old_submit = submit.value;
     submit.value = 'Подождите...';
@@ -56,7 +59,7 @@
       <li>Скоро...</li>
      </ul>
     </div>
-    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"></div>
+    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"><div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div></div>
    </div>
   </div>
  </body>
