@@ -32,6 +32,7 @@ String _password = "Pass"; // Для хранения пароля сети
 String _ssidAP = "Zaluzi02";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
 String XML;              // формирование XML
+String _setAP ="1";           // AP включен
 String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия
 String TimeDown = "21:00:00";    // время закрытия

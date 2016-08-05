@@ -52,15 +52,21 @@ void handle_Set_Ssdp() {
 void handle_Set_Ssidap() {
   _ssidAP = HTTP.arg("ssidAP");
   _passwordAP = HTTP.arg("passwordAP");
-  saveConfig();
-  HTTP.send(200, "text/plain", "OK");
+  if (HTTP.arg("onOffAP") == "true") {
+  _setAP = "1";
+}
+else {
+  _setAP = "0";
+}
+saveConfig();
+HTTP.send(200, "text/plain", "OK");
 }
 //------------------------------------------
 // Время из сети
 void handle_Time() {
   Time_init(timezone);
-  String Time=XmlTime();
-  HTTP.send(200, "text/plain", "Время синхронизовано: "+Time);
+  String Time = XmlTime();
+  HTTP.send(200, "text/plain", "Время синхронизовано: " + Time);
 }
 // Установка скорости вращения
 void handle_speed() {
@@ -117,7 +123,7 @@ void HTTP_init(void) {
   // Запускаем HTTP сервер
   // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
   HTTP.on("/Devices", inquirySSDP);                 // Блок для
- // Запускаем HTTP сервер
+  // Запускаем HTTP сервер
   HTTP.begin();
 }
 
@@ -136,10 +142,14 @@ String XmlTime(void) {
 void handleConfigXML() {
   XML = "<?xml version='1.0'?>";
   XML += "<Donnees>";
-  // Имы SSDP
+  // Имя SSDP
   XML += "<SSDP>";
   XML += SSDP_Name;
   XML += "</SSDP>";
+  // Статус AP
+  XML += "<onOffAP>";
+  XML += _setAP;
+  XML += "</onOffAP>";
   // Имя сети
   XML += "<ssid>";
   XML += _ssid;

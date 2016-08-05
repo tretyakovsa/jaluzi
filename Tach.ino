@@ -32,7 +32,7 @@ void MotorDown() {
 void setUp(int state) {
   tickerSetLow.detach();
   digitalWrite(Led1, state);
-  state0 = !state0;
+  //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
   myservo.write(kolibr);
@@ -40,7 +40,7 @@ void setUp(int state) {
 void setDown(int state) {
   tickerSetLow.detach();
   digitalWrite(Led2, state);
-  state0 = !state0;
+  //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
   myservo.write(kolibr);
