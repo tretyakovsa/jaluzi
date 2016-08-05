@@ -21,8 +21,15 @@ input:invalid + input[type=submit] {
  background-color:#fff;
  box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
  padding:20px;
- margin: 20px;
- float: left;
+ margin:20px;
+ float:left;
+}
+.history {
+ background-color:#fff;
+ box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);
+ padding:10px;
+ margin:10px 0;
+ display:block;
 }
 .header {
  background-color: #fff;

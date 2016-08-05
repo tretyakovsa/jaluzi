@@ -41,6 +41,9 @@
 
    function ajax(pagename, submit) {
     old_submit = submit.value;
+    var d = new Date(); // for now
+    datetext = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    $("#history").prepend('<li>'+datetext+'<span class="history">'+old_submit+'</span></li>');
     submit.value = 'Подождите...';
     $.get("http://"+pagename, function(data) {
      submit.value=old_submit;
@@ -58,9 +61,6 @@
     <div class="col-sm-3">
      <h5 style="background-color:#C0C7CA">История</h5>
      <ul id="history">
-      <li>Скоро...</li>
-      <li>Скоро...</li>
-      <li>Скоро...</li>
      </ul>
     </div>
     <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"></div>
