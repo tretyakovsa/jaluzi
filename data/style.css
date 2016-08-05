@@ -45,12 +45,14 @@ h5 {
  width: 50%;
  text-align:center;
 }
-.add {
+.add span {
  background-color: #c0c7ca;
  border-radius: 100px;
  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
- font-size: 50px;
  padding: 0 20px;
+}
+.add {
+ font-size: 40px;
 }
 #date {
  text-transform: capitalize;

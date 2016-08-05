@@ -13,10 +13,15 @@
     } else {
      xhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
-     setTimeout(function(){iplocation()}, 2000);
-    });
+    iplocation();
     document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
+   }
+
+   function finddevice() {
+    $("#content").html('<div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div>');
+    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
+     setTimeout(function(){iplocation()}, 5000);
+    });
    }
 
    function iplocation() {
@@ -50,7 +55,6 @@
     <h1 id="date"><br><small></small></h1>
    </div>
    <div class="row">
-    <!-- <a href="#" class="add">+</a> -->
     <div class="col-sm-3">
      <h5 style="background-color:#C0C7CA">История</h5>
      <ul id="history">
@@ -58,8 +62,10 @@
       <li>Скоро...</li>
       <li>Скоро...</li>
      </ul>
+     <hr>
+     <a href="#" class="btn btn-success btn-sm align-right" onclick="finddevice();">Найти новые устройсва</a>
     </div>
-    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"><div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div></div>
+    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"></div>
    </div>
   </div>
  </body>
