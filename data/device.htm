@@ -21,7 +21,7 @@
     for (i = 0; i < count ;i++) {
      var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
      console.log(ipval);
-     $.get("http://"+ipval+"/block", function(data) {
+     $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
       $(data).prependTo("#content").fadeIn("slow");
      });
     }
@@ -39,7 +39,7 @@
  <body onload="load();">
   <div class="container device">
    <div class="header">
-    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="https://github.com/tretyakovsa/jaluzi">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new">сюда</a>.</small></h4>
+    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
     <h1 id="date"><br><small></small></h1>
    </div>
    <div class="row">

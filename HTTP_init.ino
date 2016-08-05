@@ -107,6 +107,7 @@ void HTTP_init(void) {
   HTTP.on("/kolibr", handlekolibr);         // колибруем серву
   HTTP.on("/block", block);                 // Блок для device.htm
   // Запускаем HTTP сервер
+  // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
   HTTP.begin();
 }
 
