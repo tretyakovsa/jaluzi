@@ -50,6 +50,10 @@
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('passwordAp').value=message;
 
+     xmldoc = xmlResponse.getElementsByTagName('SSDP');
+     message = xmldoc[0].firstChild.nodeValue;
+     document.getElementById('ssdp').value=message;
+
      xmldoc = xmlResponse.getElementsByTagName('kolibr');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('kolibr').value=message;
@@ -88,6 +92,11 @@
     server = "/kolibr?kolibr="+kolibr;
     send_request(submit,server);
    }
+   function set_ssdp(submit){
+    ssdp = document.getElementById('ssdp').value;
+    server = "/ssdp?ssdp="+ssdp;
+    send_request(submit,server);
+   }
    function send_request(submit,server){
     request = new XMLHttpRequest();
     request.open("GET", server, true);
@@ -110,6 +119,8 @@
    <div class="row" style="text-align:center;">
     <h1 style="margin:40px;">Доп. настройки</h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
+     <hr>
      <div class="alert alert-dismissible alert-warning">Пожалуйста подключитесь к своему роутеру и укажите ниже вашу GMT зону.
       Это позволит унавать время, которое будит синхранизируется 1 раз в сутки в 03:00 используя ваш роутер. Вы так же сможете управлять вашим устройством в локальной сети.</div>
      <div class="alert alert-dismissible alert-info">
@@ -121,6 +132,11 @@
        </div>
       </form>
      </div>
+     <h2>Имя устройсва</h2>
+     <input id="ssdp" value="" class="form-control" pattern="[0-9a-zA-Zа-яА-Я. ]{1,20}" placeholder="Имя устройсва">
+     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_ssdp(this);" type="submit">
+     <hr>
+
      <h2>Подключение к WiFi роутеру</h2>
      <input id="ssid" value="" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети">
      <input id="password" value="" pattern="[0-9a-zA-Z.]{8,15}" class="form-control" placeholder="Пароль">
@@ -156,7 +172,6 @@
       </div>
      </div>
      <hr>
-     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
      <a class="btn btn-block btn-default" href="./">Страница управления</a>
     </div>
    </div>

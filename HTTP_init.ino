@@ -41,6 +41,13 @@ void handle_Set_Ssid() {
   HTTP.send(200, "text/plain", "OK");
 }
 //------------------------------------------
+// Установка параметров сети
+void handle_Set_Ssdp() {
+  SSDP_Name = HTTP.arg("ssdp");
+  saveConfig();
+  HTTP.send(200, "text/plain", "OK");
+}
+//------------------------------------------
 // Установка параметров точки доступа
 void handle_Set_Ssidap() {
   _ssidAP = HTTP.arg("ssidAP");
@@ -84,7 +91,6 @@ void handlekolibr() {
 }
 
 void HTTP_init(void) {
-
   // SSDP дескриптор
   HTTP.on("/description.xml", HTTP_GET, []() {
     SSDP.schema(HTTP.client());
@@ -99,15 +105,19 @@ void HTTP_init(void) {
   HTTP.on("/Time", handle_Time);            // Синхронизировать время из сети
   HTTP.on("/TimeUp", handle_Time_Up);       // Установить время открытия
   HTTP.on("/TimeDown", handle_Time_Down);   // Установить время закрытия
+  HTTP.on("/ssdp", handle_Set_Ssdp);        // Установить имя устройства
   HTTP.on("/ssid", handle_Set_Ssid);        // Установить имя и пароль роутера
   HTTP.on("/ssidap", handle_Set_Ssidap);    // Установить имя и пароль для точки доступа
   HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
   HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
   HTTP.on("/config.xml", handleConfigXML);   // формирование config_xml страницы для передачи данных в web интерфейс
+  HTTP.on("/iplocation.xml", handleIplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
   HTTP.on("/kolibr", handlekolibr);         // колибруем серву
   HTTP.on("/block", block);                 // Блок для device.htm
   // Запускаем HTTP сервер
   // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
+  HTTP.on("/Devices", inquirySSDP);                 // Блок для
+ // Запускаем HTTP сервер
   HTTP.begin();
 }
 
@@ -195,6 +205,7 @@ void handleConfigXML() {
 }
 
 void block() {
+
   XML = "<div class=\"block col-md-5\">";
   XML += "<h5>";
   XML += SSDP_Name;
@@ -216,4 +227,18 @@ void block() {
   XML += "</div>";
   HTTP.send(200, "text/plain", XML);
 }
+
+void handleIplocationXML() {
+  IplocationXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  IplocationXML += "<List>";
+  IplocationXML += "<location>";
+  IplocationXML += "<ip>";
+  IplocationXML += WiFi.localIP().toString();
+  IplocationXML += "</ip>";
+  IplocationXML += Devices;
+  IplocationXML += "</location>";
+  IplocationXML += "</List>";
+  HTTP.send(200, "text/xml", IplocationXML);
+}
+
 

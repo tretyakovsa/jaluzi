@@ -58,10 +58,10 @@ bool loadConfig() {
 bool saveConfig() {
   StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
+  json["SSDPName"] = SSDP_Name;
   json["kolibr"] = kolibr;
   json["ssidAPName"] = _ssidAP;
   json["ssidAPPassword"] = _passwordAP;
-  json["SSDPName"] = "Jaluzi";
   json["ssidName"] = _ssid;
   json["ssidPassword"] = _password;
   json["timezone"] = timezone;

@@ -38,6 +38,10 @@
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('speed').value=message;
 
+     xmldoc = xmlResponse.getElementsByTagName('SSDP');
+     message = xmldoc[0].firstChild.nodeValue;
+     document.getElementById('ssdp').innerHTML=message;
+
      xmldoc = xmlResponse.getElementsByTagName('TimeUp');
      message = xmldoc[0].firstChild.nodeValue;
      h=message.substring(0,2);
@@ -110,8 +114,9 @@
  <body onload="load();">
   <div class="container">
    <div class="row" style="text-align:center;">
-    <h1 style="margin:40px;">Страница управления</h1>
+    <h1 style="margin:40px;" id="ssdp"></h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
      <input class="btn btn-block btn-lg btn-primary" value="открыть/закрыть жалюзи" onclick="Motor(this);" type="submit">
      <hr>
      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Настраивая время перед одиночными цифрами пишите 0. Пример: 03:09:10, с право в ячейках вы можете указать работу двигателя в секунах.</div>
@@ -150,7 +155,6 @@
       </div>
      </div>
      <hr>
-     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
      <a class="btn btn-block btn-default" href="./setup.htm">Доп. настройки</a>
     </div>
    </div>

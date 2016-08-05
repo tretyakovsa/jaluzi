@@ -18,13 +18,17 @@
     xhttp.send();
     xmlDoc = xhttp.responseXML;
     var count=xmlDoc.getElementsByTagName("ip").length;
-    for (i = 0; i < count ;i++) {
-     var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
-     console.log(ipval);
-     $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
-      $(data).prependTo("#content").fadeIn("slow");
-     });
-    }
+
+    $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
+     for (i = 0; i < count ;i++) {
+      var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
+      console.log(ipval);
+      $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
+       $(data).prependTo("#content").fadeIn("slow");
+      });
+     }
+    });
+
     document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
    }
    function ajax(pagename, submit) {

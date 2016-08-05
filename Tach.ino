@@ -14,6 +14,7 @@ void MotorUp() {
   tickerSetLow.attach(TimeServo2, setUp, 0);
   Serial.println("Up");
   myservo.write(kolibr+speed);
+  state0 = !state0;
   chaing = LOW;
   chaing1 = 1;
 }
@@ -23,6 +24,7 @@ void MotorDown() {
   tickerSetLow.attach(TimeServo, setDown, 0);
   Serial.println("Down");
   myservo.write(kolibr-speed);
+  state0 = !state0;
   chaing = LOW;
   chaing1 = 1;
 }
