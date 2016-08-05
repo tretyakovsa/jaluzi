@@ -26,6 +26,14 @@
     if(xmlHttp.readyState==4 && xmlHttp.status==200){
      xmlResponse=xmlHttp.responseXML;
 
+     xmldoc = xmlResponse.getElementsByTagName('state');
+     message = xmldoc[0].firstChild.nodeValue;
+     if (message=='1') {
+     document.getElementById('off-on').value='Закрыть жалюзи';
+     } else {
+     document.getElementById('off-on').value='Открыть жалюзи';
+     }
+
      xmldoc = xmlResponse.getElementsByTagName('timeservo');
      message = xmldoc[0].firstChild.nodeValue;
      document.getElementById('MOTOR').value=message;
@@ -105,7 +113,7 @@
     request.onreadystatechange = function() {
      if (request.readyState != 4) return;
      submit.value = request.statusText;
-     setTimeout(function(){submit.value=old_submit}, 3000);
+     setTimeout(function(){submit.value=old_submit;load();}, 2000);
     }
     submit.value = 'Подождите...';
    }
@@ -117,7 +125,7 @@
     <h1 style="margin:40px;" id="ssdp"></h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
-     <input class="btn btn-block btn-lg btn-primary" value="открыть/закрыть жалюзи" onclick="Motor(this);" type="submit">
+     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="открыть/закрыть жалюзи" onclick="Motor(this);" type="submit">
      <hr>
      <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Настраивая время перед одиночными цифрами пишите 0. Пример: 03:09:10, с право в ячейках вы можете указать работу двигателя в секунах.</div>
      <h2>Настройки времи</h2>

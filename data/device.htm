@@ -46,7 +46,8 @@
     $("#history").prepend('<li>'+datetext+'<span class="history">'+old_submit+'</span></li>');
     submit.value = 'Подождите...';
     $.get("http://"+pagename, function(data) {
-     submit.value=old_submit;
+     submit.value=data;
+     setTimeout(function(){submit.value=old_submit;}, 2000);
     });
    }
   </script>
@@ -54,7 +55,7 @@
  <body onload="load();">
   <div class="container device">
    <div class="header">
-    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства, скачать прошивки для ESP8266 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте нажать <a href="#" onclick="finddevice();">Найти устройсва</a>. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
+    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства, скачать прошивки для ESP8266 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте нажать <b><a href="#" onclick="finddevice();">Найти устройсва</a></b>. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
     <h1 id="date"><br><small></small></h1>
    </div>
    <div class="row">
