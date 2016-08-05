@@ -20,7 +20,7 @@
    function finddevice() {
     $("#content").html('<div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div>');
     $.get("./Devices?"+Math.floor(Math.random()*10000), function(data) {
-     setTimeout(function(){iplocation()}, 5000);
+     setTimeout(function(){iplocation()}, 7000);
     });
    }
 
@@ -51,7 +51,7 @@
  <body onload="load();">
   <div class="container device">
    <div class="header">
-    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства умного дома, скачать прошивки для ESP 01 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте <a href="./device.htm">обновить</a> страницу. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
+    <h4><small class="pull-right col-md-4" style="padding:15px 0;">Здесь видны все ваши устройства, скачать прошивки для ESP8266 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте нажать <a href="#" onclick="finddevice();">Найти устройсва</a>. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
     <h1 id="date"><br><small></small></h1>
    </div>
    <div class="row">
@@ -62,8 +62,6 @@
       <li>Скоро...</li>
       <li>Скоро...</li>
      </ul>
-     <hr>
-     <a href="#" class="btn btn-success btn-sm align-right" onclick="finddevice();">Найти новые устройсва</a>
     </div>
     <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"></div>
    </div>
