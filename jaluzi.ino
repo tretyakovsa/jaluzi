@@ -50,7 +50,6 @@ volatile int chaing1 = LOW;
 int state0 = 0;
 unsigned int localPort = 2390;
 unsigned int ssdpPort = 1900;
-const char* ssdpAdress = "192.168.1.255";
 
 // A UDP instance to let us send and receive packets over UDP
 WiFiUDP udp;
