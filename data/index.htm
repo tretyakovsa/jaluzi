@@ -28,7 +28,7 @@
 
      xmldoc = xmlResponse.getElementsByTagName('state');
      message = xmldoc[0].firstChild.nodeValue;
-     if (message=='1') {message='Закрыть жалюзи';} else {message='Открыть жалюзи';}
+     if (message=='0') {message='Закрыть жалюзи';} else {message='Открыть жалюзи';}
      document.getElementById('off-on').value=message;
 
      xmldoc = xmlResponse.getElementsByTagName('timeservo');
@@ -96,7 +96,7 @@
     request.onreadystatechange = function() {
      if (request.readyState != 4) return;
      submit.value = request.statusText;
-     setTimeout(function(){submit.value=old_submit;load();}, 2000);
+     setTimeout(function(){submit.value=old_submit;load();}, 1000);
     }
     submit.value = 'Подождите...';
    }

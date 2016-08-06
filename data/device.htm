@@ -47,7 +47,7 @@
     submit.value = 'Подождите...';
     $.get("http://"+pagename, function(data) {
      submit.value=data;
-     setTimeout(function(){submit.value=old_submit;iplocation();}, 2000);
+     setTimeout(function(){submit.value=old_submit;iplocation();}, 1000);
     });
    }
   </script>

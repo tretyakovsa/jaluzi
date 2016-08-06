@@ -114,7 +114,7 @@
     request.onreadystatechange = function() {
      if (request.readyState != 4) return;
      submit.value = request.responseText;
-     setTimeout(function(){submit.value=old_submit}, 2000);
+     setTimeout(function(){submit.value=old_submit}, 1000);
     }
     submit.value = 'Подождите...';
    }
