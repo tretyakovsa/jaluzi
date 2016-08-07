@@ -223,7 +223,7 @@ void handle_Block() {
  XML += TimeDown;
  XML += "</div>";
  XML += "<input class=\"btn btn-block btn-lg btn-primary\" value=\"";
- if (state0 == '0') {
+ if (state0 == 0) {
   XML += "Закрыть";
  } else {
   XML += "Открыть";
