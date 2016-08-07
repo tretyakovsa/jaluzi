@@ -101,8 +101,7 @@ void HTTP_init(void) {
   SSDP.schema(HTTP.client());
  });
  // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
- update();
-
+  httpUpdater.setup(&HTTP);
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
  HTTP.on("/Timeservo", handle_TimeServo);  // установка времени вращения сервопривода
  HTTP.on("/Timeservo2", handle_TimeServo2);// установка времени вращения сервопривода

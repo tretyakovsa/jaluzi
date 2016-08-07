@@ -6,10 +6,12 @@
 #include <Servo.h>              //Содержится в пакете
 #include <Ticker.h>             //Содержится в пакете
 #include <WiFiUdp.h>            //Содержится в пакете
+#include <ESP8266HTTPUpdateServer.h> //Содержится в пакете
 #include <ArduinoJson.h>
 
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
+ESP8266HTTPUpdateServer httpUpdater;
 // Для файловой системы
 File fsUploadFile;
 // Для сервопривода
