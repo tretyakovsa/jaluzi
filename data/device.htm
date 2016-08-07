@@ -39,15 +39,21 @@
     }
    }
 
-   function ajax(pagename, submit) {
+   function ajax(blockid, pagename, submit) {
     old_submit = submit.value;
     var d = new Date(); // for now
     datetext = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
     $("#history").prepend('<li>'+datetext+'<span class="history">'+old_submit+'</span></li>');
     submit.value = 'Подождите...';
-    $.get("http://"+pagename, function(data) {
+    $.get("http://"+blockid+"/"+pagename, function(data) {
      submit.value=data;
-     setTimeout(function(){submit.value=old_submit;iplocation();}, 1000);
+     setTimeout(function(){
+      submit.value=old_submit;
+      $.get("http://"+blockid+"/block?"+Math.floor(Math.random()*10000), function(data2) {
+       $($(submit).parent()).remove();
+       $(data2).prependTo("#content").fadeIn("slow");
+      });
+     }, 1000);
     });
    }
   </script>

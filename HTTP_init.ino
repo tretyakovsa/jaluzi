@@ -230,7 +230,7 @@ void handle_Block() {
  }
  XML += " жалюзи\" onclick=\"ajax('";
  XML += WiFi.localIP().toString();
- XML += "/motor', this);\" type=\"submit\">";
+ XML += "', 'motor', this);\" type=\"submit\">";
  XML += "<hr>";
  XML += "<div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
  XML += "<a class=\"btn btn-block btn-default\" href=\"http://";
