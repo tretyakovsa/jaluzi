@@ -3,50 +3,21 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
+  <script type="text/javascript" src="/function.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Страница управления</title>
   <script>
-   var xmlHttp=createXmlHttpObject();
-   function createXmlHttpObject(){
-    if(window.XMLHttpRequest){
-     xmlHttp=new XMLHttpRequest();
-    }else{
-     xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');
-    }
-    return xmlHttp;
-   }
-   function load(){
-    if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
-     xmlHttp.open('PUT','config.xml',true);
-     xmlHttp.onreadystatechange=handleServerResponse;
-     xmlHttp.send(null);
-    }
-   }
    function handleServerResponse(){
     if(xmlHttp.readyState==4 && xmlHttp.status==200){
-     xmlResponse=xmlHttp.responseXML;
-
-     message = xmlResponse.getElementsByTagName('state')[0].firstChild.nodeValue;
-     if (message=='0') {message='Закрыть жалюзи';} else {message='Открыть жалюзи';}
-     document.getElementById('off-on').value=message;
-
-     message = xmlResponse.getElementsByTagName('timeservo')[0].firstChild.nodeValue;
-     document.getElementById('motor').value=message;
-
-     message = xmlResponse.getElementsByTagName('timeservo2')[0].firstChild.nodeValue;
-     document.getElementById('motor2').value=message;
-
-     message = xmlResponse.getElementsByTagName('speed')[0].firstChild.nodeValue;
-     document.getElementById('speed').value=message;
-
-     message = xmlResponse.getElementsByTagName('SSDP')[0].firstChild.nodeValue;
-     document.getElementById('ssdp').innerHTML=message;
-
-     message = xmlResponse.getElementsByTagName('TimeUp')[0].firstChild.nodeValue;
-     document.getElementById('open').value=message;
-
-     message = xmlResponse.getElementsByTagName('TimeDown')[0].firstChild.nodeValue;
-     document.getElementById('close').value=message;
+     // XML, ID
+     xml_to_val('timeservo','motor');
+     xml_to_val('timeservo2','motor2');
+     xml_to_val('speed','speed');
+     xml_to_val('TimeUp' ,'open');
+     xml_to_val('TimeDown','close');
+     if (xml('state')=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
+     document.getElementById('off-on').value = blockval;
+     document.getElementById('ssdp').innerHTML=xml('SSDP');
     }
    }
    function motor(submit){
@@ -54,44 +25,24 @@
     send_request(submit,server);
    }
    function set_time_servo(submit){
-    motor_time = document.getElementById('motor').value;
-    server = "/Timeservo?t="+motor_time;
+    server = "/Timeservo?t="+val('motor');
     send_request(submit,server);
    }
    function set_time_servo2(submit){
-    motor_time = document.getElementById('motor2').value;
-    server = "/Timeservo2?t="+motor_time;
+    server = "/Timeservo2?t="+val('motor2');
     send_request(submit,server);
    }
    function set_open(submit){
-    open_time = document.getElementById('open').value;
-    server = "/TimeUp?open="+open_time;
+    server = "/TimeUp?open="+val('open');
     send_request(submit,server);
    }
    function set_close(submit){
-    close_time = document.getElementById('close').value;
-    server = "/TimeDown?close="+close_time;
+    server = "/TimeDown?close="+val('close');
     send_request(submit,server);
    }
    function set_speed(submit){
-    speed = document.getElementById('speed').value;
-    server = "/speed?speed="+speed;
+    server = "/speed?speed="+val('speed');
     send_request(submit,server);
-   }
-   function send_request(submit,server){
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
-    save_status(submit,request);
-   }
-   function save_status(submit,request){
-    old_submit = submit.value;
-    request.onreadystatechange = function() {
-     if (request.readyState != 4) return;
-     submit.value = request.statusText;
-     setTimeout(function(){submit.value=old_submit;load();}, 1000);
-    }
-    submit.value = 'Подождите...';
    }
   </script>
  </head>

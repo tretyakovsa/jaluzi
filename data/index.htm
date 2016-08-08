@@ -19,20 +19,25 @@
 
    function finddevice() {
     $("#content").html('<div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div>');
-    $.get("./devices?"+Math.floor(Math.random()*10000), function(data) {
+    $.get("/devices?"+Math.floor(Math.random()*10000), function(data) {
      setTimeout(function(){iplocation()}, 7000);
     });
    }
 
    function iplocation() {
     $("#content").html("");
-    xhttp.open("GET", "./iplocation.xml?"+Math.floor(Math.random()*10000), false);
+    xhttp.open("GET", "/iplocation.xml?"+Math.floor(Math.random()*10000), false);
     xhttp.send();
     xmlDoc = xhttp.responseXML;
     var count=xmlDoc.getElementsByTagName("ip").length;
     for (i = 0; i < count ;i++) {
      var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
      $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
+
+      //xhttp2.open("GET", "http://"+ipval+"/config.xml?"+Math.floor(Math.random()*10000), false);
+      //xhttp2.send();
+      //xmlDoc2 = xhttp2.responseXML;
+
       $(data).prependTo("#content").fadeIn("slow");
      });
     }

@@ -3,56 +3,23 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
+  <script type="text/javascript" src="/function.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Доп. настройки</title>
   <script>
-   var xmlHttp=createXmlHttpObject();
-   function createXmlHttpObject(){
-    if(window.XMLHttpRequest){
-     xmlHttp=new XMLHttpRequest();
-    }else{
-     xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');
-    }
-    return xmlHttp;
-   }
-   function load(){
-    if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
-     xmlHttp.open('PUT','config.xml',true);
-     xmlHttp.onreadystatechange=handleServerResponse;
-     xmlHttp.send(null);
-    }
-   }
    function handleServerResponse(){
     if(xmlHttp.readyState==4 && xmlHttp.status==200){
-     xmlResponse=xmlHttp.responseXML;
-
-     message = xmlResponse.getElementsByTagName('timezone')[0].firstChild.nodeValue;
-     document.getElementById('timezone').value=message;
-
-     message = xmlResponse.getElementsByTagName('time')[0].firstChild.nodeValue;
-     document.getElementById('time').innerHTML=message;
-
-     message = xmlResponse.getElementsByTagName('ssid')[0].firstChild.nodeValue;
-     document.getElementById('ssid').value=message;
-
-     message = xmlResponse.getElementsByTagName('password')[0].firstChild.nodeValue;
-     document.getElementById('password').value=message;
-
-     message = xmlResponse.getElementsByTagName('ssidAP')[0].firstChild.nodeValue;
-     document.getElementById('ssidap').value=message;
-
-     message = xmlResponse.getElementsByTagName('passwordAP')[0].firstChild.nodeValue;
-     document.getElementById('passwordAp').value=message;
-
-     message = xmlResponse.getElementsByTagName('onOffAP')[0].firstChild.nodeValue;
-     if (message=='0') {message=false;} else {message=true;}
-     document.getElementById('onOffAP').checked=message;
-
-     message = xmlResponse.getElementsByTagName('SSDP')[0].firstChild.nodeValue;
-     document.getElementById('ssdp').value=message;
-
-     message = xmlResponse.getElementsByTagName('kolibr')[0].firstChild.nodeValue;
-     document.getElementById('kolibr').value=message;
+     // XML, ID
+     xml_to_val('timezone','timezone');
+     xml_to_val('ssid','ssid');
+     xml_to_val('password','password');
+     xml_to_val('ssidAP','ssidap');
+     xml_to_val('passwordAP','passwordAp');
+     xml_to_val('SSDP','ssdp');
+     xml_to_val('kolibr','kolibr');
+     if (xml('onOffAP')=='0') {checkedAP=false;} else {checkedAP=true;}
+     document.getElementById('onOffAP').checked=checkedAP;
+     document.getElementById('time').innerHTML=xml('time');
     }
    }
    function load_time(submit){
@@ -60,38 +27,30 @@
     send_request(submit,server);
    }
    function Time_Zone(submit){
-    timezone = document.getElementById('timezone').value;
-    server = "/TimeZone?timezone="+timezone;
+    server = "/TimeZone?timezone="+val('timezone');
     send_request(submit,server);
    }
    function set_time_Zone(submit){
     var set_date = new Date();
     var gmtHours = -set_date.getTimezoneOffset()/60;
-    document.getElementById('timezone').value = gmtHours;
+    document.getElementById('timezone') = gmtHours;
     server = "/TimeZone?timezone="+gmtHours;
     send_request(submit,server);
    }
    function set_Ssid(submit){
-    ssid = document.getElementById('ssid').value;
-    password = document.getElementById('password').value;
-    server = "/ssid?ssid="+ssid+"&password="+password;
+    server = "/ssid?ssid="+val('ssid')+"&password="+val('password');
     send_request(submit,server);
    }
    function set_SsidAP(submit){
-    ssid = document.getElementById('ssidap').value;
-    password = document.getElementById('passwordAp').value;
-    onoff = document.getElementById('onOffAP').checked;
-    server = "/ssidap?ssidAP="+ssid+"&passwordAP="+password+"&onOffAP="+onoff;
+    server = "/ssidap?ssidAP="+val('ssidap')+"&passwordAP="+val('passwordAp')+"&onOffAP="+document.getElementById('onOffAP').checked;
     send_request(submit,server);
    }
    function kolibr(submit){
-    kolibr = document.getElementById('kolibr').value;
-    server = "/kolibr?kolibr="+kolibr;
+    server = "/kolibr?kolibr="+val('kolibr');
     send_request(submit,server);
    }
    function set_ssdp(submit){
-    ssdp = document.getElementById('ssdp').value;
-    server = "/ssdp?ssdp="+ssdp;
+    server = "/ssdp?ssdp="+val('ssdp');
     send_request(submit,server);
    }
    function restart(submit){
@@ -102,21 +61,6 @@
     } else {
      return false;
     }
-   }
-   function send_request(submit,server){
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
-    save_status(submit,request);
-   }
-   function save_status(submit,request){
-    old_submit = submit.value;
-    request.onreadystatechange = function() {
-     if (request.readyState != 4) return;
-     submit.value = request.responseText;
-     setTimeout(function(){submit.value=old_submit}, 1000);
-    }
-    submit.value = 'Подождите...';
    }
   </script>
  </head>

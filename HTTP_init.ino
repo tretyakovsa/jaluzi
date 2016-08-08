@@ -242,7 +242,7 @@ void handle_Block() {
  XML += "<div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
  XML += "<a class=\"btn btn-block btn-default\" href=\"http://";
  XML += WiFi.localIP().toString();
- XML += "./device.htm\">Страница управления</a>";
+ XML += "/device.htm\">Страница управления</a>";
  XML += "</div>";
  HTTP.send(200, "text/plain", XML);
 }
