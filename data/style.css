@@ -24,6 +24,11 @@ input:invalid + input[type=submit] {
  margin:20px;
  float:left;
 }
+@media (max-width:480px) {
+ .block {
+  margin:20px -15px;
+ }
+}
 .history {
  background-color:#fff;
  box-shadow:0 12px 15px rgba(0, 0, 0, 0.4);

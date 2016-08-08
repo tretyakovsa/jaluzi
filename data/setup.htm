@@ -26,41 +26,32 @@
     if(xmlHttp.readyState==4 && xmlHttp.status==200){
      xmlResponse=xmlHttp.responseXML;
 
-     xmldoc = xmlResponse.getElementsByTagName('timezone');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('timezone')[0].firstChild.nodeValue;
      document.getElementById('timezone').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('time');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('time')[0].firstChild.nodeValue;
      document.getElementById('time').innerHTML=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('ssid');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('ssid')[0].firstChild.nodeValue;
      document.getElementById('ssid').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('password');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('password')[0].firstChild.nodeValue;
      document.getElementById('password').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('ssidAP');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('ssidAP')[0].firstChild.nodeValue;
      document.getElementById('ssidap').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('passwordAP');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('passwordAP')[0].firstChild.nodeValue;
      document.getElementById('passwordAp').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('onOffAP');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('onOffAP')[0].firstChild.nodeValue;
      if (message=='0') {message=false;} else {message=true;}
      document.getElementById('onOffAP').checked=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('SSDP');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('SSDP')[0].firstChild.nodeValue;
      document.getElementById('ssdp').value=message;
 
-     xmldoc = xmlResponse.getElementsByTagName('kolibr');
-     message = xmldoc[0].firstChild.nodeValue;
+     message = xmlResponse.getElementsByTagName('kolibr')[0].firstChild.nodeValue;
      document.getElementById('kolibr').value=message;
     }
    }
@@ -103,6 +94,15 @@
     server = "/ssdp?ssdp="+ssdp;
     send_request(submit,server);
    }
+   function restart(submit){
+    if (confirm("Вы действительно хотите перезагрузить устройство?")) {
+     server = "/restart?device=ok";
+     send_request(submit,server);
+     return true;
+    } else {
+     return false;
+    }
+   }
    function send_request(submit,server){
     request = new XMLHttpRequest();
     request.open("GET", server, true);
@@ -125,7 +125,7 @@
    <div class="row" style="text-align:center;">
     <h1 style="margin:40px;">Доп. настройки</h1>
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
-     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
+     <a class="btn btn-block btn-danger" href="/">Страница устройств</a>
      <hr>
      <div class="alert alert-dismissible alert-warning">Пожалуйста подключитесь к своему роутеру и укажите ниже вашу GMT зону.
       Это позволит унавать время, которое будит синхранизируется 1 раз в сутки в 03:00 используя ваш роутер. Вы так же сможете управлять вашим устройством в локальной сети.</div>
@@ -178,7 +178,8 @@
       </div>
      </div>
      <hr>
-     <a class="btn btn-block btn-default" href="./">Страница управления</a>
+     <input class="btn btn-block btn-warning" value="Перезагрузить устройство" onclick="restart(this);" type="submit">
+     <a class="btn btn-block btn-default" href="/device.htm">Страница управления</a>
     </div>
    </div>
   </div>

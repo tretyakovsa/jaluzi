@@ -2,148 +2,76 @@
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="/bootstrap.min.css">
+  <script type="text/javascript" src="/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Страница управления</title>
+  <title>Страница устройств</title>
   <script>
-   var xmlHttp=createXmlHttpObject();
-   function createXmlHttpObject(){
-    if(window.XMLHttpRequest){
-     xmlHttp=new XMLHttpRequest();
-    }else{
-     xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');
-    }
-    return xmlHttp;
-   }
    function load(){
-    if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
-     xmlHttp.open('PUT','config.xml',true);
-     xmlHttp.onreadystatechange=handleServerResponse;
-     xmlHttp.send(null);
+    if (window.XMLHttpRequest) {
+     xhttp = new XMLHttpRequest();
+    } else {
+     xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    iplocation();
+    document.getElementById('date').innerHTML = new Date().toLocaleString("ru", {day:"numeric",weekday:"long"})+'<br><small>'+new Date().toLocaleString("ru", {year:"numeric",month:"long"})+'<\/small>';
+   }
+
+   function finddevice() {
+    $("#content").html('<div class="alert alert-dismissible alert-info"><strong>Пожалуйста подождите, идет сканирование сети.</strong></div>');
+    $.get("./devices?"+Math.floor(Math.random()*10000), function(data) {
+     setTimeout(function(){iplocation()}, 7000);
+    });
+   }
+
+   function iplocation() {
+    $("#content").html("");
+    xhttp.open("GET", "./iplocation.xml?"+Math.floor(Math.random()*10000), false);
+    xhttp.send();
+    xmlDoc = xhttp.responseXML;
+    var count=xmlDoc.getElementsByTagName("ip").length;
+    for (i = 0; i < count ;i++) {
+     var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
+     $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
+      $(data).prependTo("#content").fadeIn("slow");
+     });
     }
    }
-   function handleServerResponse(){
-    if(xmlHttp.readyState==4 && xmlHttp.status==200){
-     xmlResponse=xmlHttp.responseXML;
 
-     xmldoc = xmlResponse.getElementsByTagName('state');
-     message = xmldoc[0].firstChild.nodeValue;
-     if (message=='0') {message='Закрыть жалюзи';} else {message='Открыть жалюзи';}
-     document.getElementById('off-on').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('timeservo');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('motor').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('timeservo2');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('motor2').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('speed');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('speed').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('SSDP');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('ssdp').innerHTML=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('TimeUp');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('open').value=message;
-
-     xmldoc = xmlResponse.getElementsByTagName('TimeDown');
-     message = xmldoc[0].firstChild.nodeValue;
-     document.getElementById('close').value=message;
-    }
-   }
-   function motor(submit){
-    server = "/motor";
-    send_request(submit,server);
-   }
-   function set_time_servo(submit){
-    motor_time = document.getElementById('motor').value;
-    server = "/Timeservo?t="+motor_time;
-    send_request(submit,server);
-   }
-   function set_time_servo2(submit){
-    motor_time = document.getElementById('motor2').value;
-    server = "/Timeservo2?t="+motor_time;
-    send_request(submit,server);
-   }
-   function set_open(submit){
-    open_time = document.getElementById('open').value;
-    server = "/TimeUp?open="+open_time;
-    send_request(submit,server);
-   }
-   function set_close(submit){
-    close_time = document.getElementById('close').value;
-    server = "/TimeDown?close="+close_time;
-    send_request(submit,server);
-   }
-   function set_speed(submit){
-    speed = document.getElementById('speed').value;
-    server = "/speed?speed="+speed;
-    send_request(submit,server);
-   }
-   function send_request(submit,server){
-    request = new XMLHttpRequest();
-    request.open("GET", server, true);
-    request.send();
-    save_status(submit,request);
-   }
-   function save_status(submit,request){
+   function ajax(blockid, pagename, submit) {
     old_submit = submit.value;
-    request.onreadystatechange = function() {
-     if (request.readyState != 4) return;
-     submit.value = request.statusText;
-     setTimeout(function(){submit.value=old_submit;load();}, 1000);
-    }
+    var d = new Date(); // for now
+    datetext = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    $("#history").prepend('<li>'+datetext+'<span class="history">'+old_submit+'</span></li>');
+    //alert($(submit).parent().attr('class'));
+
     submit.value = 'Подождите...';
+    $.get("http://"+blockid+"/"+pagename, function(data) {
+     submit.value=data;
+     setTimeout(function(){
+      submit.value=old_submit;
+      $.get("http://"+blockid+"/block?"+Math.floor(Math.random()*10000), function(data2) {
+       $($(submit).parent()).remove();
+       $(data2).prependTo("#content").fadeIn("slow");
+      });
+     }, 1000);
+    });
    }
   </script>
  </head>
  <body onload="load();">
-  <div class="container">
-   <div class="row" style="text-align:center;">
-    <h1 style="margin:40px;" id="ssdp"></h1>
-    <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
-     <a class="btn btn-block btn-danger" href="./device.htm">Страница устройств</a>
-     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="открыть/закрыть жалюзи" onclick="motor(this);" type="submit">
-     <hr>
-     <div class="alert alert-dismissible alert-warning"><b>Обратите внимание</b> Настраивая время перед одиночными цифрами пишите 0. Пример: 03:09:10, с право в ячейках вы можете указать работу двигателя в секунах.</div>
-     <h2>Настройки времи</h2>
-     <div class="row">
-      <div class="col-sm-7">
-       <h4>Время закрытия:</h4>
-       <input id="open" value="" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control">
-       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_open(this);" type="submit">
-       <h4>Время открытия:</h4>
-       <input id="close" value="" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control">
-       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_close(this);" type="submit">
-      </div>
-      <div class="col-sm-5">
-       <h4>Время работы дв.:</h4>
-       <input id="motor2" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
-       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo2(this);" type="submit">
-       <h4>Время работы дв.:</h4>
-       <input id="motor" value="" class="form-control" pattern="[0-9]{1,2}[.]{1}[0-9]{1,2}">
-       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo(this);" type="submit">
-      </div>
-     </div>
-     <hr>
-     <h2>Скорость вращения мотора</h2>
-     <div class="row">
-      <div class="col-sm-8">
-       <div class="alert alert-dismissible alert-info">Как правило скорость мотора от 1 до 60. На больших скоростях ESP может некорректно работать.</div>
-      </div>
-      <div class="col-sm-4">
-       <input id="speed" value="" pattern="[0-9]{1,2}" class="form-control">
-       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_speed(this);" type="submit">
-      </div>
-     </div>
-     <hr>
-     <a class="btn btn-block btn-default" href="./setup.htm">Доп. настройки</a>
+  <div class="container device">
+   <div class="header">
+    <h4><small class="pull-right col-md-4 hidden-xs" style="padding:15px 0;">Здесь видны все ваши устройства, скачать прошивки для ESP8266 вы можете на <a href="https://github.com/tretyakovsa/jaluzi" target="_blank">github</a>. Если устройство не появляется попробуйте нажать <b><a href="#" onclick="finddevice();">Найти устройства</a></b>. Появились какие-то вопросы, пишите <a href="https://github.com/tretyakovsa/jaluzi/issues/new" target="_blank">сюда</a>.</small></h4>
+    <h1 id="date"><br><small></small></h1>
+   </div>
+   <div class="row">
+    <div class="col-sm-3">
+     <h5 style="background-color:#C0C7CA">История</h5>
+     <ul id="history">
+     </ul>
     </div>
+    <div class="col-sm-offset-0 col-sm-9" style="text-align:center;" id="content"></div>
    </div>
   </div>
  </body>
