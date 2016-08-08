@@ -1,3 +1,9 @@
+// Перезагрузка модуля
+void handle_Restart() {
+String restart=HTTP.arg("device");
+ if (restart=="ok") ESP.restart();
+}
+
 // Меняет флаг для запуска сервопривода
 void MotorActiv() {
  chaing = 1;
@@ -118,6 +124,7 @@ void HTTP_init(void) {
  HTTP.on("/iplocation.xml", handle_IplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/block", handle_Block);                 // Блок для device.htm
+ HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  // Запускаем HTTP сервер
  // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
  HTTP.on("/devices", inquirySSDP);         // Блок для
@@ -235,7 +242,7 @@ void handle_Block() {
  XML += "<div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
  XML += "<a class=\"btn btn-block btn-default\" href=\"http://";
  XML += WiFi.localIP().toString();
- XML += "device.htm\">Страница управления</a>";
+ XML += "./device.htm\">Страница управления</a>";
  XML += "</div>";
  HTTP.send(200, "text/plain", XML);
 }
