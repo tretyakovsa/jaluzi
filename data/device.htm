@@ -15,6 +15,7 @@
      xml_to_val('speed','speed');
      xml_to_val('TimeUp' ,'open');
      xml_to_val('TimeDown','close');
+     xml_to_val('kolibr','kolibr');
      if (xml('state')=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
      document.getElementById('off-on').value = blockval;
      document.getElementById('ssdp').innerHTML=xml('SSDP');
@@ -42,6 +43,10 @@
    }
    function set_speed(submit){
     server = "/speed?speed="+val('speed');
+    send_request(submit,server);
+   }
+   function set_kolibr(submit){
+    server = "/kolibr?kolibr="+val('kolibr');
     send_request(submit,server);
    }
   </script>
@@ -83,6 +88,17 @@
       <div class="col-sm-4">
        <input id="speed" value="" pattern="[0-9]{1,2}" class="form-control">
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_speed(this);" type="submit">
+      </div>
+     </div>
+     <hr>
+     <h2>Колибровка мотора</h2>
+     <div class="row">
+      <div class="col-sm-4">
+       <input id="kolibr" value="" pattern="[0-9]{1,2}" class="form-control">
+       <input class="btn btn-block btn-success" value="Сохранить" onclick="set_kolibr(this);" type="submit">
+      </div>
+      <div class="col-sm-8">
+       <div class="alert alert-dismissible alert-info">Если серво двигатель постоянно крутится его необходимо отколибровать. Поэксперементируйте здесь с цифрами. Как правило они калеблятся от 90 до 95.</div>
       </div>
      </div>
      <hr>
