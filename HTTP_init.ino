@@ -220,15 +220,15 @@ void handle_ConfigXML() {
 
 void handle_Block() {
  XML = "<div class=\"block col-md-5\">";
- XML += "<h5>";
+ XML += "<h5 class=\"alert-success\">";
  XML += SSDP_Name;
  XML += "</h5>";
- XML += "<div class=\"alert alert-dismissible alert-warning\"><b>Обратите внимание</b>";
- XML += "<br>Время закрытия: ";
+ XML += "<div class=\"alert alert-dismissible alert-warning\">";
+ XML += "Время закрытия: <b>";
  XML += TimeUp;
- XML += "<br>Время открытия: ";
+ XML += "</b><br>Время открытия: <b>";
  XML += TimeDown;
- XML += "</div>";
+ XML += "</b></div>";
  XML += "<input class=\"btn btn-block btn-lg btn-primary\" value=\"";
  if (state0 == 0) {
   XML += "Закрыть";
