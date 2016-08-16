@@ -15,4 +15,4 @@
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/breadboard.gif)
 
 ###schematic
-![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.gif)
+![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.png)
