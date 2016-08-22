@@ -32,14 +32,16 @@
     var count=xmlDoc.getElementsByTagName("ip").length;
     for (i = 0; i < count ;i++) {
      var ipval = xmlDoc.getElementsByTagName("ip")[i].childNodes[0].textContent;
-     $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
-
-      //xhttp2.open("GET", "http://"+ipval+"/config.xml?"+Math.floor(Math.random()*10000), false);
-      //xhttp2.send();
-      //xmlDoc2 = xhttp2.responseXML;
-
-      $(data).prependTo("#content").fadeIn("slow");
-     });
+     if (ipval == '0.0.0.0') {
+      location.href = "/setup.htm";
+     } else {
+      $.get("http://"+ipval+"/block?"+Math.floor(Math.random()*10000), function(data) {
+       //xhttp2.open("GET", "http://"+ipval+"/config.xml?"+Math.floor(Math.random()*10000), false);
+       //xhttp2.send();
+       //xmlDoc2 = xhttp2.responseXML;
+       $(data).prependTo("#content").fadeIn("slow");
+      });
+     }
     }
    }
 
