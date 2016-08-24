@@ -30,7 +30,7 @@ Ticker tickerAlert;
 
 String _ssid     = "WiFi"; // Для хранения SSID
 String _password = "Pass"; // Для хранения пароля сети
-String _ssidAP = "Zaluzi".random(500);   // SSID AP точки доступа
+String _ssidAP = "Zaluzi03";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
 String XML;              // формирование XML
 String _setAP ="1";           // AP включен
