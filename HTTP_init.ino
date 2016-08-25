@@ -123,7 +123,6 @@ void HTTP_init(void) {
  HTTP.on("/config.xml", handle_ConfigXML);  // формирование config_xml страницы для передачи данных в web интерфейс
  HTTP.on("/iplocation.xml", handle_IplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
- HTTP.on("/block", handle_Block);                 // Блок для device.htm
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  // Запускаем HTTP сервер
  // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
@@ -214,37 +213,12 @@ void handle_ConfigXML() {
  XML += "<state>";
  XML += state0;
  XML += "</state>";
+ // IP устройства
+ XML += "<ip>";
+ XML += WiFi.localIP().toString();
+ XML += "</ip>";
  XML += "</Donnees>";
  HTTP.send(200, "text/xml", XML);
-}
-
-void handle_Block() {
- XML = "<div class=\"block col-md-5\">";
- XML += "<h5 class=\"alert-success\">";
- XML += SSDP_Name;
- XML += "</h5>";
- XML += "<div class=\"alert alert-dismissible alert-warning\">";
- XML += "Время закрытия: <b>";
- XML += TimeUp;
- XML += "</b><br>Время открытия: <b>";
- XML += TimeDown;
- XML += "</b></div>";
- XML += "<input class=\"btn btn-block btn-lg btn-primary\" value=\"";
- if (state0 == 0) {
-  XML += "Закрыть";
- } else {
-  XML += "Открыть";
- }
- XML += " жалюзи\" onclick=\"ajax('";
- XML += WiFi.localIP().toString();
- XML += "', 'motor', this);\" type=\"submit\">";
- XML += "<hr>";
- XML += "<div class=\"alert alert-dismissible alert-info\">Изменить конфигурацию устройсва вы можете на странице управления</div>";
- XML += "<a class=\"btn btn-block btn-default\" href=\"http://";
- XML += WiFi.localIP().toString();
- XML += "/device.htm\">Страница управления</a>";
- XML += "</div>";
- HTTP.send(200, "text/plain", XML);
 }
 
 void handle_IplocationXML() {
