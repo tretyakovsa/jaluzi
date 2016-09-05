@@ -1,12 +1,13 @@
-<html>
+<!DOCTYPE html>
+<html lang="ru">
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script type="text/javascript" src="/function.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Страница управления</title>
-  <script>
+  <script type="text/javascript">
    function handleServerResponse(){
     if (xml('state')=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
     document.getElementById('off-on').value = blockval;
@@ -63,10 +64,16 @@
       </div>
       <div class="col-sm-5">
        <h4>Время работы дв.:</h4>
-       <input id="motor2" value="{{timeservo2}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
+       <div class="input-group">
+        <input id="motor2" value="{{timeservo2}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
+        <span class="input-group-addon">сек.</span>
+       </div>
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo2(this);" type="submit">
        <h4>Время работы дв.:</h4>
-       <input id="motor" value="{{timeservo}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
+       <div class="input-group">
+        <input id="motor" value="{{timeservo}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
+        <span class="input-group-addon">сек.</span>
+       </div>
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_time_servo(this);" type="submit">
       </div>
      </div>
