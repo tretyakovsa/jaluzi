@@ -1,4 +1,4 @@
-# Жалюзи на esp8266 Arduino)
+# Жалюзи на esp8266 (Arduino)
 
 - IDs 	# 	Component 	Footprint 	Properties
 - U1 	1 	ESP8266 (beta) 	ESP8266
