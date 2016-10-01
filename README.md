@@ -10,7 +10,7 @@
 
 ##Видео youtube
 
-[![Video](https://img.youtube.com/vi/LZI4Yu47LZI/0.jpg)](https://www.youtube.com/watch?v=LZI4Yu47LZI)
+[![Video](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)](https://www.youtube.com/watch?v=LZI4Yu47LZI)
 
 ##Схемы
 
