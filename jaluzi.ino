@@ -7,8 +7,12 @@
 #include <Ticker.h>             //Содержится в пакете
 #include <WiFiUdp.h>            //Содержится в пакете
 #include <ESP8266HTTPUpdateServer.h> //Содержится в пакете
+#include <DNSServer.h>          //Содержится в пакете
 #include <ArduinoJson.h>
-
+// Настройки DNS сервера и адреса точки в режиме AP
+const byte DNS_PORT = 53;
+IPAddress apIP(192, 168, 4, 1);
+DNSServer dnsServer;
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
 ESP8266HTTPUpdateServer httpUpdater;
