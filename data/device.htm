@@ -9,7 +9,7 @@
   <title>Страница управления</title>
   <script type="text/javascript">
    function handleServerResponse(){
-    if (xml('state')=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
+    if (jsonResponse.state=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
     document.getElementById('off-on').value = blockval;
    }
    function motor(submit){
