@@ -120,7 +120,7 @@ void HTTP_init(void) {
  HTTP.on("/ssidap", handle_Set_Ssidap);    // Установить имя и пароль для точки доступа
  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
  HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
- HTTP.on("/config.json", handle_ConfigXML);  // формирование config_xml страницы для передачи данных в web интерфейс
+ HTTP.on("/configs.json", handle_ConfigXML);  // формирование config_xml страницы для передачи данных в web интерфейс
  HTTP.on("/iplocation.xml", handle_IplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
