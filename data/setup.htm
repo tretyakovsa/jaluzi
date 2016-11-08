@@ -13,6 +13,7 @@
     clearTimeout(set_real_time);
     var res = jsonResponse.time.split(":");
     real_time(hours=res[0],min=res[1],sec=res[2]);
+    document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
    }
    function real_time(hours,min,sec) {
    sec=Number(sec)+1;
@@ -41,18 +42,20 @@
    function set_ssid(submit){
     server = "/ssid?ssid="+val('ssid')+"&password="+val('password');
     send_request(submit,server);
+    restart(this,"Измененя вступят в силу после перезагрузки.\nПерезагрузить?");
    }
    function set_ssid_ap(submit){
     server = "/ssidap?ssidAP="+val('ssidap')+"&passwordAP="+val('passwordAp');
     send_request(submit,server);
+    restart(this,"Измененя вступят в силу после перезагрузки.\nПерезагрузить?");
    }
    function set_ssdp(submit){
     server = "/ssdp?ssdp="+val('ssdp');
     send_request(submit,server);
     document.getElementById('ssdp_t').innerHTML = val('ssdp');
    }
-   function restart(submit){
-    if (confirm("Вы действительно хотите перезагрузить устройство?")) {
+   function restart(submit,texts){
+    if (confirm(texts)) {
      server = "/restart?device=ok";
      send_request(submit,server);
      return true;
@@ -106,11 +109,11 @@
        <input class="btn btn-block btn-success" value="Сохранить" onclick="set_ssid_ap(this);" type="submit">
       </div>
       <div class="col-sm-6">
-       <div class="alert alert-dismissible alert-warning">Здесь вы можете указать новое название WiFi жалюзи, пароль или отключить его. После сохранения необходимо перезагрузить ESP, имена WiFi не могут быть оденаковыми! </div>
+       <div class="alert alert-dismissible alert-warning">Здесь вы можете указать новое название WiFi жалюзи и пароль.</div>
       </div>
      </div>
      <hr>
-     <input class="btn btn-block btn-warning" value="Перезагрузить устройство" onclick="restart(this);" type="submit">
+     <input class="btn btn-block btn-warning" value="Перезагрузить устройство" onclick="restart(this,'Вы действительно хотите перезагрузить устройство?');" type="submit">
      <a class="btn btn-block btn-default" href="/device.htm">Страница управления</a>
     </div>
    </div>
