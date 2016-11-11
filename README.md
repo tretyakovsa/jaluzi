@@ -1,5 +1,7 @@
 # Жалюзи на esp8266 (Arduino)
 
+![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)
+
 - IDs 	# 	Component 	Footprint 	Properties
 - U1 	1 	ESP8266 (beta) 	ESP8266
 - M1 	1 	Servo Type of geared motor that can only rotate 180 degrees. It's controlled by electronic pulses that tell the motor to which position it should move. 	servo header
@@ -10,7 +12,14 @@
 
 ##Видео youtube
 
-[![Video](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)](https://www.youtube.com/watch?v=LZI4Yu47LZI)
+###Загрузка
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/1TAHlRqZ46k/0.jpg)](https://www.youtube.com/watch?v=1TAHlRqZ46k)
+
+###Пример работы
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LZI4Yu47LZI/0.jpg)](https://www.youtube.com/watch?v=LZI4Yu47LZI)
+
 
 ##Схемы
 
