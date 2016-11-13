@@ -29,3 +29,10 @@
 
 ###schematic
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.png)
+
+
+##Смотрите так же
+
+RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
+
+Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
