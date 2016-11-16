@@ -52,6 +52,8 @@ bool loadConfig() {
   TimeUp = _TimeUp;
   String _TimeDown = json["TimeDown"];
   TimeDown = _TimeDown;
+  String lang = json["lang"];
+  Language = lang;
   return true;
 }
 
@@ -69,6 +71,7 @@ bool saveConfig() {
   json["speed"] = speed;
   json["TimeUp"] = TimeUp;
   json["TimeDown"] = TimeDown;
+   json["Lang"] = Language;
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
     Serial.println("Failed to open config file for writing");

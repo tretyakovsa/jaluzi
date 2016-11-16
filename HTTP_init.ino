@@ -37,6 +37,12 @@ void handle_TimeZone() {
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
+// Установка языка
+void handle_SetLeng() {
+ Language = HTTP.arg("set");
+ saveConfig();
+ HTTP.send(200, "text/plain", "OK");
+}
 
 // Установка параметров сети
 void handle_Set_Ssid() {
@@ -124,6 +130,7 @@ void HTTP_init(void) {
  HTTP.on("/iplocation.xml", handle_IplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
+ HTTP.on("/lang", handle_SetLeng);               // Установить язык
  // Запускаем HTTP сервер
  // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
  HTTP.on("/devices", inquirySSDP);         // Блок для
@@ -197,6 +204,13 @@ void handle_ConfigXML() {
  // Статус
  XML += "\",\"state\":\"";
  XML += state0;
+ // Язык
+ XML += "\",\"lang\":\"";
+ if (Language == NULL) {
+  XML += "ru";
+ } else {
+  XML += Language;
+ }
  // IP устройства
  XML += "\",\"ip\":\"";
  XML += WiFi.localIP().toString();

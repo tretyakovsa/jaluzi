@@ -42,6 +42,7 @@ String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия
 String TimeDown = "21:00:00";    // время закрытия
 String Devices = "";    // IP адреса устройств в сети
+String Language ="ru";  // язык web интерфейса
 int timezone = 3;        // часовой пояс GTM
 int Led1 = 12;           // индикатор движения вверх
 int Led2 = 13;           // индикатор движения вниз
