@@ -52,7 +52,7 @@ bool loadConfig() {
   TimeUp = _TimeUp;
   String _TimeDown = json["TimeDown"];
   TimeDown = _TimeDown;
-  String lang = json["lang"];
+  String lang = json["Lang"];
   Language = lang;
   return true;
 }
