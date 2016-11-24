@@ -9,7 +9,7 @@
   <title>Options page</title>
   <script type="text/javascript">
    function handleServerResponse(){
-    if (jsonResponse.state=='0') {blockval='Закрыть жалюзи';} else {blockval='Открыть жалюзи';}
+    if (jsonResponse.state=='0') {blockval=jsonResponse.LangClose;} else {blockval=jsonResponse.LangOpen;}
     document.getElementById('off-on').value = blockval;
    }
    function motor(submit){
@@ -72,16 +72,16 @@
      <hr>
      <div class="alert alert-dismissible alert-info">{{LangIfttt1}}<span id="hide" class="hidden">{{LangIfttt2}}</span>
      </div>
-     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="открыть/закрыть жалюзи" onclick="motor(this);" type="submit">
+     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="{{LangCloseOpen}}" onclick="motor(this);" type="submit">
      <hr>
      <div class="alert alert-dismissible alert-warning">{{LangTime6}}</div>
-     <h2>Настройки времи</h2>
+     <h2>{{LangTime3}}</h2>
      <div class="row">
       <div class="col-sm-7">
-       <h4>Время закрытия:</h4>
+       <h4>{{LangTime4}}</h4>
        <input id="open" value="{{TimeUp}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
        <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="set_open(this);" type="submit">
-       <h4>Время открытия:</h4>
+       <h4>{{LangTime5}}</h4>
        <input id="close" value="{{TimeDown}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
        <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="set_close(this);" type="submit">
       </div>
