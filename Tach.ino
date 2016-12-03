@@ -10,6 +10,7 @@ void Tach_0() {
 
 void MotorUp() {
  if (state0 == 0) {
+  pinMode(servo_pin, OUTPUT);
   digitalWrite(Led1, HIGH);
   digitalWrite(Led2, LOW);
   tickerSetLow.attach(TimeServo2, setUp, 0);
@@ -23,6 +24,7 @@ void MotorUp() {
 
 void MotorDown() {
  if (state0 == 1) {
+  pinMode(servo_pin, OUTPUT);
   digitalWrite(Led2, HIGH);
   digitalWrite(Led1, LOW);
   tickerSetLow.attach(TimeServo, setDown, 0);
@@ -41,6 +43,8 @@ void setUp(int state) {
  chaing = LOW;
  chaing1 = 0;
  myservo.write(kolibr);
+ //digitalWrite(servo_pin, LOW);
+ pinMode(servo_pin, INPUT);
 }
 
 void setDown(int state) {
@@ -50,4 +54,6 @@ void setDown(int state) {
  chaing = LOW;
  chaing1 = 0;
  myservo.write(kolibr);
+ //digitalWrite(servo_pin, LOW);
+ pinMode(servo_pin, INPUT);
 }
