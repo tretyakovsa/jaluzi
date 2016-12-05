@@ -1,4 +1,4 @@
-# Жалюзи на esp8266 (Arduino)
+# Jalousie and esp8266 (Arduino)
 
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)
 
@@ -38,3 +38,6 @@
 RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
 
 Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
+
+
+###Themes you can download here: [http://bootswatch.com/](http://bootswatch.com/)
