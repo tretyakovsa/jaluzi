@@ -6,4 +6,3 @@ application.windows32
 application.windows64
 application.macosx
 /jaluzi.cpp.generic.bin
-/data/config.json

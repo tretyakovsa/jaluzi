@@ -1,6 +1,6 @@
 // Перезагрузка модуля
 void handle_Restart() {
-String restart=HTTP.arg("device");
+ String restart=HTTP.arg("device");
  if (restart=="ok") ESP.restart();
 }
 
@@ -113,7 +113,11 @@ void HTTP_init(void) {
   SSDP.schema(HTTP.client());
  });
  // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
-  httpUpdater.setup(&HTTP);
+ httpUpdater.setup(&HTTP);
+ HTTP.serveStatic("/css/", SPIFFS, "/css/", "max-age=31536000"); // кеширование на 1 год
+ HTTP.serveStatic("/js/", SPIFFS, "/js/", "max-age=31536000"); // кеширование на 1 год
+ HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
+ //HTTP.serveStatic("/lang/", SPIFFS, "/lang/", "max-age=31536000"); // кеширование на 1 год
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
  HTTP.on("/Timeservo", handle_TimeServo);  // установка времени вращения сервопривода
  HTTP.on("/Timeservo2", handle_TimeServo2);// установка времени вращения сервопривода
