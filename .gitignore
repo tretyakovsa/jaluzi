@@ -6,3 +6,4 @@ application.windows32
 application.windows64
 application.macosx
 /jaluzi.cpp.generic.bin
+/jaluzi.ino.generic.bin
