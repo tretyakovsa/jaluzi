@@ -7,6 +7,7 @@
 #include <Ticker.h>             //Содержится в пакете
 #include <WiFiUdp.h>            //Содержится в пакете
 #include <ESP8266HTTPUpdateServer.h> //Содержится в пакете
+#include <ESP8266httpUpdate.h>
 #include <DNSServer.h>          //Содержится в пакете
 #include <ArduinoJson.h>
 // Настройки DNS сервера и адреса точки в режиме AP
@@ -67,8 +68,6 @@ void setup() {
  pinMode(Led1, OUTPUT);
  pinMode(Led2, OUTPUT);
  Serial.println("");
- // Параметры памяти ESP справочно можно закаментировать
- CheckFlashConfig();
  // Включаем работу с файловой системой
  FS_init();
  // Загружаем настройки из файла
@@ -98,6 +97,8 @@ void setup() {
 }
 
 void loop() {
+ dnsServer.processNextRequest();
+ delay(1);
  HTTP.handleClient();
  delay(1);
  handleUDP();

@@ -1,7 +1,22 @@
+void webUpdateSpiffs() {
+  String refresh = "<html><head><meta http-equiv=\"refresh\" content=\"1;http://";
+  refresh += WiFi.localIP().toString();
+  refresh += "\"></head></html>";
+  HTTP.send(200, "text/html", refresh);
+  t_httpUpdate_return ret = ESPhttpUpdate.updateSpiffs("http://backup.privet.lv/rgb_spiffs_1m_256k.bin");
+}
+
+
 // Перезагрузка модуля
 void handle_Restart() {
- String restart=HTTP.arg("device");
- if (restart=="ok") ESP.restart();
+  String restart = HTTP.arg("device");
+  if (restart == "ok") {                         // Если значение равно Ок
+    HTTP.send(200, "text / plain", "Reset OK"); // Oтправляем ответ Reset OK
+    ESP.restart();                                // перезагружаем модуль
+  }
+  else {                                        // иначе
+    HTTP.send(200, "text / plain", "No Reset"); // Oтправляем ответ No Reset
+  }
 }
 
 // Меняет флаг для запуска сервопривода
@@ -114,6 +129,8 @@ void HTTP_init(void) {
  });
  // Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
  httpUpdater.setup(&HTTP);
+ HTTP.on("/webupdatespiffs", webUpdateSpiffs);                // Обнавление FS из интернет
+ HTTP.on("/restartWiFi", RestartWiFi);                // Переплдключение WiFi при первом старте
  HTTP.serveStatic("/css/", SPIFFS, "/css/", "max-age=31536000"); // кеширование на 1 год
  HTTP.serveStatic("/js/", SPIFFS, "/js/", "max-age=31536000"); // кеширование на 1 год
  HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
@@ -166,21 +183,13 @@ void handle_ConfigXML() {
  XML += _ssid;
  // Пароль сети
  XML += "\",\"password\":\"";
- if (_password == NULL) {
-  XML += " ";
- } else {
-  XML += _password;
- }
+ XML += _password;
  // Имя точки доступа
  XML += "\",\"ssidAP\":\"";
  XML += _ssidAP;
  // Пароль точки доступа
  XML += "\",\"passwordAP\":\"";
- if (_passwordAP == NULL) {
-  XML += " ";
- } else {
-  XML += _passwordAP;
- }
+ XML += _passwordAP;
  // Времянная зона
  XML += "\",\"timezone\":\"";
  XML += timezone;
