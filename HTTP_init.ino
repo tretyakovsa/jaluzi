@@ -1,3 +1,31 @@
+void handle_wifiScan() {
+  int n = WiFi.scanNetworks();
+  String wifiScan = "[";
+  if (n == 0)
+    wifiScan = "{\"ssid\":\"none\"}";
+  else
+  {
+    for (int i = 0; i < n - 1; ++i)
+    {
+      wifiScan += "{";
+      wifiScan += "\"ssid\":\"";
+      wifiScan += WiFi.SSID(i);
+      wifiScan += "\",";
+      wifiScan += "\"dbm\":";
+      wifiScan +=WiFi.RSSI(i);
+      wifiScan += ",";
+      wifiScan += "\"pass\":\"";
+      wifiScan += (WiFi.encryptionType(i) == ENC_TYPE_NONE)?"":"*";
+      //wifiScan += WiFi.encryptionType(i);
+      wifiScan += "\"}";
+      if (i != n - 2) wifiScan += ",";
+      delay(10);
+    }
+    wifiScan += "]";
+  }
+  HTTP.send(200, "text/json", wifiScan);
+}
+
 void webUpdateSpiffs() {
   String refresh = "<html><head><meta http-equiv=\"refresh\" content=\"1;http://";
   refresh += WiFi.localIP().toString();
@@ -138,6 +166,7 @@ void HTTP_init(void) {
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
  HTTP.on("/Timeservo", handle_TimeServo);  // установка времени вращения сервопривода
  HTTP.on("/Timeservo2", handle_TimeServo2);// установка времени вращения сервопривода
+ HTTP.on("/wifiscan.json", handle_wifiScan);      // сканирование ssid
  HTTP.on("/TimeZone", handle_TimeZone);    // Установка времянной зоны
  HTTP.on("/Time", handle_Time);            // Синхронизировать время из сети
  HTTP.on("/TimeUp", handle_Time_Up);       // Установить время открытия
