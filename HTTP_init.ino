@@ -181,6 +181,7 @@ void HTTP_init(void) {
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_SetLeng);               // Установить язык
+ HTTP.on("/lang.json", handle_Leng);               // Установить язык
  // Запускаем HTTP сервер
  // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
  HTTP.on("/devices", inquirySSDP);         // Блок для
@@ -271,4 +272,8 @@ void handle_IplocationXML() {
  XML += "</location>";
  XML += "</List>";
  HTTP.send(200, "text/xml", XML);
+}
+
+void handle_Leng(){
+  HTTP.send(200, "text/json", Lang);
 }
