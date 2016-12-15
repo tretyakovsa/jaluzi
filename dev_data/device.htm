@@ -9,7 +9,7 @@
   <title>Options page</title>
   <script type="text/javascript">
    function handleServerResponse(){
-    if (jsonResponse.state=='0') {blockval=jsonResponse.LangOff;} else {blockval=jsonResponse.LangOn;}
+    if (jsonResponse.state=='0') {blockval=jsonResponse.LangOn;} else {blockval=jsonResponse.LangOff;}
     document.getElementById('off-on').value = blockval;
     LoadLang(jsonResponse.lang);
    }
