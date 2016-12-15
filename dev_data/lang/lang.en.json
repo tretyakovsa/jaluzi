@@ -52,7 +52,7 @@
  "LangTime3":"Time setting",
  "LangTime4":"Closing time:",
  "LangTime5":"Opening time:",
- "LangCloseOpen":"Close / Open",
- "LangClose":"Closen",
- "LangOpen":"Open"
+ "LangOnOff":"Close / Open",
+ "LangOff":"Closen",
+ "LangOn":"Open"
 }

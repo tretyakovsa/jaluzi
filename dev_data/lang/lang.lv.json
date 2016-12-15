@@ -52,7 +52,7 @@
  "LangTime3":"Laika iestatījumi",
  "LangTime4":"Aizvēršanas laiks:",
  "LangTime5":"Atvēršanas laiks:",
- "LangCloseOpen":"Aizvert / Atvert",
- "LangClose":"Aizvert",
- "LangOpen":"Atvert"
+ "LangOnOff":"Aizvert / Atvert",
+ "LangOff":"Aizvert",
+ "LangOn":"Atvert"
 }

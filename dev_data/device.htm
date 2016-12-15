@@ -9,7 +9,7 @@
   <title>Options page</title>
   <script type="text/javascript">
    function handleServerResponse(){
-    if (jsonResponse.state=='0') {blockval=jsonResponse.LangClose;} else {blockval=jsonResponse.LangOpen;}
+    if (jsonResponse.state=='0') {blockval=jsonResponse.LangOff;} else {blockval=jsonResponse.LangOn;}
     document.getElementById('off-on').value = blockval;
     LoadLang(jsonResponse.lang);
    }
@@ -70,7 +70,7 @@
      <hr>
      <div class="alert alert-dismissible alert-info">{{LangIfttt1}}<span id="hide" class="hidden">{{LangIfttt2}}</span>
      </div>
-     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="{{LangCloseOpen}}" onclick="motor(this);" type="submit">
+     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="{{LangOnOff}}" onclick="motor(this);" type="submit">
      <hr>
      <div class="alert alert-dismissible alert-warning">{{LangTime6}}</div>
      <h2>{{LangTime3}}</h2>
