@@ -32,12 +32,15 @@ Ticker tickerAlert;
 #define servo_pin 2
 
 // Определяем переменные
+// Количество модулей в устройстве
+int a = 1;
+String module[]={"jalousie"};
+//,"sonoff","rbg"};
 
 String _ssid     = "WiFi"; // Для хранения SSID
 String _password = "Pass"; // Для хранения пароля сети
 String _ssidAP = "Zaluzi03";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
-String XML;              // формирование XML
 String _setAP ="1";           // AP включен
 String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия

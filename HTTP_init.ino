@@ -176,15 +176,13 @@ void HTTP_init(void) {
  HTTP.on("/ssidap", handle_Set_Ssidap);    // Установить имя и пароль для точки доступа
  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
  HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
- HTTP.on("/configs.json", handle_ConfigXML);  // формирование config_xml страницы для передачи данных в web интерфейс
- HTTP.on("/iplocation.xml", handle_IplocationXML);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
+ HTTP.on("/configs.json", handle_Configs);  // формирование config_xml страницы для передачи данных в web интерфейс
+ HTTP.on("/iplocation.json", handle_Iplocation);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_SetLeng);               // Установить язык
  HTTP.on("/lang.json", handle_Leng);               // Установить язык
- // Запускаем HTTP сервер
- // HTTP.sendHeader("Cache-Control","max-age=2592000, must-revalidate");
- HTTP.on("/devices", inquirySSDP);         // Блок для
+ HTTP.on("/mdules", handle_mdules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
  HTTP.begin();
 }
@@ -200,80 +198,100 @@ String XmlTime(void) {
  return Time; // Возврашаем полученное время
 }
 
-void handle_ConfigXML() {
- XML = "{";
+void handle_Configs() {
+ String json = "{";
  // Имя SSDP
- XML += "\"SSDP\":\"";
- XML += SSDP_Name;
+ json += "\"SSDP\":\"";
+ json += SSDP_Name;
  // Статус AP
- XML += "\",\"onOffAP\":\"";
- XML += _setAP;
+ json += "\",\"onOffAP\":\"";
+ json += _setAP;
  // Имя сети
- XML += "\",\"ssid\":\"";
- XML += _ssid;
+ json += "\",\"ssid\":\"";
+ json += _ssid;
  // Пароль сети
- XML += "\",\"password\":\"";
- XML += _password;
+ json += "\",\"password\":\"";
+ json += _password;
  // Имя точки доступа
- XML += "\",\"ssidAP\":\"";
- XML += _ssidAP;
+ json += "\",\"ssidAP\":\"";
+ json += _ssidAP;
  // Пароль точки доступа
- XML += "\",\"passwordAP\":\"";
- XML += _passwordAP;
+ json += "\",\"passwordAP\":\"";
+ json += _passwordAP;
  // Времянная зона
- XML += "\",\"timezone\":\"";
- XML += timezone;
+ json += "\",\"timezone\":\"";
+ json += timezone;
  // Скорость вращения
- XML += "\",\"speed\":\"";
- XML += speed;
+ json += "\",\"speed\":\"";
+ json += speed;
  //  Время врашения
- XML += "\",\"timeservo\":\"";
- XML += TimeServo;
+ json += "\",\"timeservo\":\"";
+ json += TimeServo;
  //  Время врашения
- XML += "\",\"timeservo2\":\"";
- XML += TimeServo2;
+ json += "\",\"timeservo2\":\"";
+ json += TimeServo2;
  // Время открытия
- XML += "\",\"TimeUp\":\"";
- XML += TimeUp;
+ json += "\",\"TimeUp\":\"";
+ json += TimeUp;
  // Время закрытия
- XML += "\",\"TimeDown\":\"";
- XML += TimeDown;
+ json += "\",\"TimeDown\":\"";
+ json += TimeDown;
  // Текущее время
- XML += "\",\"time\":\"";
- XML += XmlTime();
+ json += "\",\"time\":\"";
+ json += XmlTime();
  // Колибруе серву
- XML += "\",\"kolibr\":\"";
- XML += kolibr;
+ json += "\",\"kolibr\":\"";
+ json += kolibr;
  // Статус
- XML += "\",\"state\":\"";
- XML += state0;
+ json += "\",\"state\":\"";
+ json += state0;
  // Язык
- XML += "\",\"lang\":\"";
+ json += "\",\"lang\":\"";
  if (Language == NULL) {
-  XML += "ru";
+  json += "ru";
  } else {
-  XML += Language;
+  json += Language;
  }
- // IP устройства
- XML += "\",\"ip\":\"";
- XML += WiFi.localIP().toString();
- XML += "\"}";
- HTTP.send(200, "text/json", XML);
+ json += "\"}";
+ HTTP.send(200, "text/json", json);
 }
 
-void handle_IplocationXML() {
- XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
- XML += "<List>";
- XML += "<location>";
- XML += "<ip>";
- XML += WiFi.localIP().toString();
- XML += "</ip>";
- XML += Devices;
- XML += "</location>";
- XML += "</List>";
- HTTP.send(200, "text/xml", XML);
+void handle_Iplocation() {
+  inquirySSDP();
+  String json = "";
+  //Serial.println(Devices);
+  if (Devices != "") {
+    json = Devices;
+    //json += ",";
+  }
+  json +=mdules();
+
+  //Serial.println(json);
+  HTTP.send(200, "text/json", "[" + json + "]");
+  Devices="";
 }
 
-void handle_Leng(){
+void handle_mdules() {
+  HTTP.send(200, "text/json", mdules());
+}
+
+String mdules() {
+  String json = "";
+  int j = a - 1;
+  for (int i = 0; i <= j; i++) {
+    json += "{\"ip\":\"";
+    json += WiFi.localIP().toString();
+    json += "\",\"module\":\"";
+    json += module[i];
+    //Serial.println(module[i]);
+    json += "\"";
+    json += "}";
+    if (i != j) json += ",";
+  }
+  return json;
+}
+
+void handle_Leng() {
   HTTP.send(200, "text/json", Lang);
 }
+
