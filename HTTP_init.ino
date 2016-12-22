@@ -182,7 +182,7 @@ void HTTP_init(void) {
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_SetLeng);               // Установить язык
  HTTP.on("/lang.json", handle_Leng);               // Установить язык
- HTTP.on("/mdules", handle_mdules);               // Узнать какие модули есть в устройстве
+ HTTP.on("/modules", handle_modules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
  HTTP.begin();
 }
@@ -264,18 +264,18 @@ void handle_Iplocation() {
     json = Devices;
     //json += ",";
   }
-  json +=mdules();
+  json +=modules();
 
   //Serial.println(json);
   HTTP.send(200, "text/json", "[" + json + "]");
   Devices="";
 }
 
-void handle_mdules() {
-  HTTP.send(200, "text/json", mdules());
+void handle_modules() {
+  HTTP.send(200, "text/json", modules());
 }
 
-String mdules() {
+String modules() {
   String json = "";
   int j = a - 1;
   for (int i = 0; i <= j; i++) {
