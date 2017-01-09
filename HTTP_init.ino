@@ -177,7 +177,7 @@ void HTTP_init(void) {
  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
  HTTP.on("/Save", handle_saveConfig);      // Сохранить настройки в файл
  HTTP.on("/configs.json", handle_Configs);  // формирование config_xml страницы для передачи данных в web интерфейс
- HTTP.on("/iplocation.json", handle_Iplocation);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
+ HTTP.on("/devices.list.json", handle_Iplocation);   // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/kolibr", handle_Kolibr);         // колибруем серву
  HTTP.on("/restart", handle_Restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_SetLeng);               // Установить язык
