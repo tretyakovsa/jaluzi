@@ -45,7 +45,9 @@ String _setAP ="1";           // AP включен
 String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия
 String TimeDown = "21:00:00";    // время закрытия
-String Devices = "";    // IP адреса устройств в сети
+// Переменные для обнаружения модулей
+String Devices = "";            // Поиск IP адресов устройств в сети
+String DevicesList = "";            // IP адреса устройств в сети
 String Language ="ru";  // язык web интерфейса
 String Lang = "";  // файлы языка web интерфейса
 int timezone = 3;        // часовой пояс GTM
