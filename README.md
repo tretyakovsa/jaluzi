@@ -2,6 +2,8 @@
 
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)
 
+## Components
+
 - IDs 	# 	Component 	Footprint 	Properties
 - U1 	1 	ESP8266 (beta) 	ESP8266
 - M1 	1 	Servo Type of geared motor that can only rotate 180 degrees. It's controlled by electronic pulses that tell the motor to which position it should move. 	servo header
@@ -24,12 +26,13 @@
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LZI4Yu47LZI/0.jpg)](https://www.youtube.com/watch?v=LZI4Yu47LZI&index=3&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi)
 
+##Construction
 
-###breadboard
+###Breadboard
 
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/breadboard.gif)
 
-###schematic
+###Schematic
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.png)
 
 
