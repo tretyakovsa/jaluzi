@@ -34,7 +34,7 @@ Ticker tickerAlert;
 // Определяем переменные
 // Количество модулей в устройстве
 int a = 1;
-String module[]={"jalousie"};
+String module[]={"jalousie-motor"};
 //,"sonoff","rbg"};
 
 String _ssid     = "WiFi"; // Для хранения SSID

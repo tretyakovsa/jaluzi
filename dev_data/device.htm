@@ -53,10 +53,16 @@
       <div class="col-sm-7">
        <h4>{{LangTime4}}</h4>
        <input id="open" value="{{TimeUp}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
-       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/TimeUp?open='+val('open'));" type="button">
+       <div style="width:100%" class="btn-group">
+        <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/TimeUp?open='+val('open'));" type="button" style="width:70%">
+        <input type="button" onclick="val('open',' ');send_request(this,'/TimeUp?open='+val('open'));" value="{{LangOff.}}" style="width:30%" class="btn btn-default">
+       </div>
        <h4>{{LangTime5}}</h4>
        <input id="close" value="{{TimeDown}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
-       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/TimeDown?close='+val('close'));" type="button">
+       <div style="width:100%" class="btn-group">
+        <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/TimeDown?close='+val('close'));" type="button" style="width:70%">
+        <input type="button" onclick="close('close',' ');send_request(this,'/TimeDown?close='+val('close'));" value="{{LangOff.}}" style="width:30%" class="btn btn-default">
+       </div>
       </div>
       <div class="col-sm-5">
        <h4>Время работы дв.:</h4>
