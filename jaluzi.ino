@@ -41,7 +41,6 @@ String _ssid     = "WiFi"; // Для хранения SSID
 String _password = "Pass"; // Для хранения пароля сети
 String _ssidAP = "Zaluzi03";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
-String _setAP ="1";           // AP включен
 String SSDP_Name = "jalousie";      // SSDP
 String TimeUp = "08:00:00";      // время открытия
 String TimeDown = "21:00:00";    // время закрытия
