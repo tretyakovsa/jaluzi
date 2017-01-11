@@ -61,7 +61,7 @@ void handle_save_config() {
 
 // Время вращения сервопривода
 void handle_time_servo1() {
- TimeServo = HTTP.arg("t").toInt();
+ TimeServo1 = HTTP.arg("t").toInt();
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
@@ -117,6 +117,13 @@ void handle_time() {
  HTTP.send(200, "text/plain", "Время синхронизовано: " + Time);
 }
 
+//Установка количество оборотов
+void handle_turn() {
+ turn = HTTP.arg("turn").toInt();
+ saveConfig();
+ HTTP.send(200, "text/plain", "OK");
+}
+
 //Установка скорости вращения
 void handle_speed() {
  speed = HTTP.arg("speed").toInt();
@@ -139,8 +146,8 @@ void handle_time_down() {
 }
 
 //Задать время закрытия
-void handle_kolibr() {
- kolibr = HTTP.arg("kolibr").toInt();
+void handle_calibration() {
+ calibration = HTTP.arg("calibration").toInt();
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
@@ -159,7 +166,7 @@ void HTTP_init(void) {
  HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
  //HTTP.serveStatic("/lang/", SPIFFS, "/lang/", "max-age=31536000"); // кеширование на 1 год
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
- HTTP.on("/Timeservo", handle_time_servo1);  // установка времени вращения сервопривода
+ HTTP.on("/Timeservo1", handle_time_servo1);  // установка времени вращения сервопривода
  HTTP.on("/Timeservo2", handle_time_servo2);// установка времени вращения сервопривода
  HTTP.on("/wifi.scan.json", handle_wifi_scan);      // сканирование ssid
  HTTP.on("/TimeZone", handle_time_zone);    // Установка времянной зоны
@@ -170,11 +177,12 @@ void HTTP_init(void) {
  HTTP.on("/ssid", handle_ssid);        // Установить имя и пароль роутера
  HTTP.on("/ssidap", handle_ssidap);    // Установить имя и пароль для точки доступа
  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
+ HTTP.on("/turn", handle_turn);          // Установить оборотов
  HTTP.on("/Save", handle_save_config);      // Сохранить настройки в файл
  HTTP.on("/configs.json", handle_config);  // формирование config_xml страницы для передачи данных в web интерфейс
  HTTP.on("/devices.scan.json", inquirySSDP);  // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/devices.list.json", handle_ip_list);  // формирование iplocation_xml страницы для передачи данных в web интерфейс
- HTTP.on("/kolibr", handle_kolibr);         // колибруем серву
+ HTTP.on("/calibration", handle_calibration);         // колибруем серву
  HTTP.on("/restart", handle_restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_leng);               // Установить язык
  HTTP.on("/lang.list.json", handle_leng_list);               // Установить язык
@@ -217,9 +225,12 @@ void handle_config() {
  // Скорость вращения
  json += "\",\"speed\":\"";
  json += speed;
+ // Обороты
+ json += "\",\"turn\":\"";
+ json += turn;
  //  Время врашения
- json += "\",\"timeservo\":\"";
- json += TimeServo;
+ json += "\",\"timeservo1\":\"";
+ json += TimeServo1;
  //  Время врашения
  json += "\",\"timeservo2\":\"";
  json += TimeServo2;
@@ -233,8 +244,8 @@ void handle_config() {
  json += "\",\"time\":\"";
  json += XmlTime();
  // Колибруе серву
- json += "\",\"kolibr\":\"";
- json += kolibr;
+ json += "\",\"calibration\":\"";
+ json += calibration;
  // Статус
  json += "\",\"state\":\"";
  json += state0;

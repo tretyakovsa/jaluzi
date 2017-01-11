@@ -73,10 +73,21 @@
        <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/Timeservo2?t='+val('motor2'));" type="button">
        <h4>Время работы дв.:</h4>
        <div class="input-group">
-        <input id="motor" value="{{timeservo}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
+        <input id="motor" value="{{timeservo1}}" class="form-control" pattern="[0-9]*[.,]?[0-9]+">
         <span class="input-group-addon">{{LangSec}}</span>
        </div>
-       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/Timeservo?t='+val('motor'));" type="button">
+       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/Timeservo1?t='+val('motor'));" type="button">
+      </div>
+     </div>
+     <hr>
+     <h2>Обороты мотора</h2>
+     <div class="row">
+      <div class="col-sm-4">
+       <input id="turn" value="{{turn}}" pattern="[0-9]{1,2}" class="form-control">
+       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/turn?turn='+val('turn'));" type="button">
+      </div>
+      <div class="col-sm-8">
+       <div class="alert alert-dismissible alert-info">Количество оборотов двигателя</div>
       </div>
      </div>
      <hr>
@@ -94,8 +105,8 @@
      <h2>Колибровка мотора</h2>
      <div class="row">
       <div class="col-sm-4">
-       <input id="kolibr" value="{{kolibr}}" pattern="[0-9]{1,2}" class="form-control">
-       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/kolibr?kolibr='+val('kolibr'));" type="button">
+       <input id="calibration" value="{{calibration}}" pattern="[0-9]{1,2}" class="form-control">
+       <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/calibration?calibration='+val('calibration'));" type="button">
       </div>
       <div class="col-sm-8">
        <div class="alert alert-dismissible alert-info">Если серво двигатель постоянно крутится его необходимо отколибровать. Поэксперементируйте здесь с цифрами. Как правило они калеблятся от 90 до 95.</div>

@@ -31,11 +31,17 @@ Ticker tickerAlert;
 // Сервопривод на ноге
 #define servo_pin 2
 
+//Сенсор вращения
+#define turnSensor_pin 14
+
 // Определяем переменные
 // Количество модулей в устройстве
 int a = 1;
 String module[]={"jalousie-motor"};
 //,"sonoff","rbg"};
+
+// Определяем строку для json config
+String jsonConfig = "";
 
 String _ssid     = "WiFi"; // Для хранения SSID
 String _password = "Pass"; // Для хранения пароля сети
@@ -52,10 +58,13 @@ String Lang = "";  // файлы языка web интерфейса
 int timezone = 3;        // часовой пояс GTM
 int Led1 = 12;           // индикатор движения вверх
 int Led2 = 13;           // индикатор движения вниз
-float TimeServo = 10.0;  // Время вращения
+float TimeServo1 = 10.0;  // Время вращения
 float TimeServo2 = 10.0;  // Время вращения
 int speed = 90;    // Скорость вращения
-int kolibr = 90; // Колибруем серву
+int calibration = 90; // Колибруем серву
+int turn = 7; //Количество оборотов
+int turnSensor = 0;
+
 String kolibrTime = "03:00:00"; // Время колибровки часов
 volatile int chaingtime = LOW;
 volatile int chaing = LOW;
@@ -69,6 +78,7 @@ WiFiUDP udp;
 
 void setup() {
  Serial.begin(115200);
+ pinMode(turnSensor_pin, INPUT);
  pinMode(Tach0, INPUT);
  pinMode(Led1, OUTPUT);
  pinMode(Led2, OUTPUT);
@@ -79,9 +89,11 @@ void setup() {
  loadConfig();
  // Подключаем сервомотор
  myservo.attach(servo_pin);
- //myservo.write(kolibr);
+ //myservo.write(calibration);
  // Кнопка будет работать по прерыванию
  attachInterrupt(Tach0, Tach_0, FALLING);
+ // Сенсор будет работать по прерыванию
+ attachInterrupt(turnSensor_pin, turn_0, FALLING);
  //Запускаем WIFI
  WIFIAP_Client();
  // Закускаем UDP

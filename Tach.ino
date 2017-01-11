@@ -8,6 +8,25 @@ void Tach_0() {
   millis_prev = millis();
 }
 
+// Выполняется при вращение сенсора
+void turn_0() {
+  static unsigned long millis_prev;
+  // Устроняем дребезг контакта
+  if (millis() - 100 > millis_prev) {
+    turnSensor++; // счетчик поличества оборотов
+    if (turnSensor == turn) {     //Останавливаем
+      turnSensor=0;
+      digitalWrite(Led2, LOW);
+      digitalWrite(Led1, LOW);
+      pinMode(servo_pin, INPUT);
+    }
+  }
+  millis_prev = millis();
+
+
+
+}
+
 void MotorUp() {
   if (state0 == 0) {
     pinMode(servo_pin, OUTPUT);
@@ -15,7 +34,7 @@ void MotorUp() {
     digitalWrite(Led2, LOW);
     tickerSetLow.attach(TimeServo2, setUp, 0);
     Serial.println("Up");
-    myservo.write(kolibr + speed);
+    myservo.write(calibration + speed);
     state0 = 1;
     chaing = LOW;
     chaing1 = 1;
@@ -27,9 +46,9 @@ void MotorDown() {
     pinMode(servo_pin, OUTPUT);
     digitalWrite(Led2, HIGH);
     digitalWrite(Led1, LOW);
-    tickerSetLow.attach(TimeServo, setDown, 0);
+    tickerSetLow.attach(TimeServo1, setDown, 0);
     Serial.println("Down");
-    myservo.write(kolibr - speed);
+    myservo.write(calibration - speed);
     state0 = 0;
     chaing = LOW;
     chaing1 = 1;
@@ -42,7 +61,7 @@ void setUp(int state) {
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
-  myservo.write(kolibr);
+  myservo.write(calibration);
   //digitalWrite(servo_pin, LOW);
   pinMode(servo_pin, INPUT);
 }
@@ -53,7 +72,7 @@ void setDown(int state) {
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
-  myservo.write(kolibr);
+  myservo.write(calibration);
   //digitalWrite(servo_pin, LOW);
   pinMode(servo_pin, INPUT);
 }

@@ -19,7 +19,7 @@ bool loadConfig() {
   // использование configFile.readString вместо этого.
   configFile.readBytes(buf.get(), size);
 
-  StaticJsonBuffer<300> jsonBuffer;
+  StaticJsonBuffer<400> jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(buf.get());
 
   if (!json.success()) {
@@ -34,7 +34,8 @@ bool loadConfig() {
   timezone = json["timezone"];
 
   speed = json["speed"];
-  kolibr = json["kolibr"];
+  calibration = json["calibration"];
+  turn = json["turn"];
 
   String SSDPName = json["SSDPName"];
   SSDP_Name = SSDPName;
@@ -47,7 +48,7 @@ bool loadConfig() {
   String _TimeDown = json["TimeDown"];
   TimeDown = _TimeDown;
 
-  TimeServo = json["TimeServo"];
+  TimeServo1 = json["TimeServo1"];
   TimeServo2 = json["TimeServo2"];
 
   String lang = json["Lang"];
@@ -59,16 +60,17 @@ bool saveConfig() {
   StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
   json["SSDPName"] = SSDP_Name;
-  json["kolibr"] = kolibr;
+  json["calibration"] = calibration;
   json["ssidAPName"] = _ssidAP;
   json["ssidAPPassword"] = _passwordAP;
   json["ssidName"] = _ssid;
   json["ssidPassword"] = _password;
   json["timezone"] = timezone;
   json["speed"] = speed;
+  json["turn"] = turn;
   json["TimeUp"] = TimeUp;
   json["TimeDown"] = TimeDown;
-  json["TimeServo"] = TimeServo;
+  json["TimeServo1"] = TimeServo1;
   json["TimeServo2"] = TimeServo2;
   json["Lang"] = Language;
   File configFile = SPIFFS.open("/config.json", "w");
