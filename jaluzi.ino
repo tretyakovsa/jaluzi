@@ -93,7 +93,7 @@ void setup() {
  // Кнопка будет работать по прерыванию
  attachInterrupt(Tach0, Tach_0, FALLING);
  // Сенсор будет работать по прерыванию
- attachInterrupt(turnSensor_pin, turn_0, RISING);
+ attachInterrupt(turnSensor_pin, turn_0, FALLING );
  //Запускаем WIFI
  WIFIAP_Client();
  // Закускаем UDP

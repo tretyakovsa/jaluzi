@@ -16,15 +16,20 @@ void turn_0() {
     turnSensor++; // счетчик поличества оборотов
     if (turnSensor == turn) {     //Останавливаем
       turnSensor=0;
-      if (state0 == 1) {
-        tickerSetLow.attach(1, setUp, 0); //через 1 секунду останавливаем void setDown
-      }
-      if (state0 == 0) {
-        tickerSetLow.attach(1, setDown, 0); //через 1 секунду останавливаем void setUp
-      }
+      digitalWrite(Led2, LOW);
+      digitalWrite(Led1, LOW);
+      pinMode(servo_pin, INPUT);
+    }
+    if (turnSensor == turn-1) {     //замедляем скорость
+
+      analoglWrite(Led1, 512);
+
     }
   }
   millis_prev = millis();
+
+
+
 }
 
 void MotorUp() {
