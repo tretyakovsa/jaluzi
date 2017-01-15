@@ -16,15 +16,15 @@ void turn_0() {
     turnSensor++; // счетчик поличества оборотов
     if (turnSensor == turn) {     //Останавливаем
       turnSensor=0;
-      digitalWrite(Led2, LOW);
-      digitalWrite(Led1, LOW);
-      pinMode(servo_pin, INPUT);
+      if (state0 == 1) {
+        tickerSetLow.attach(1, setUp, 0); //через 1 секунду останавливаем void setDown
+      }
+      if (state0 == 0) {
+        tickerSetLow.attach(1, setDown, 0); //через 1 секунду останавливаем void setUp
+      }
     }
   }
   millis_prev = millis();
-
-
-
 }
 
 void MotorUp() {
@@ -57,7 +57,7 @@ void MotorDown() {
 
 void setUp(int state) {
   tickerSetLow.detach();
-  digitalWrite(Led1, state);
+  digitalWrite(Led1, LOW);
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
@@ -68,7 +68,7 @@ void setUp(int state) {
 
 void setDown(int state) {
   tickerSetLow.detach();
-  digitalWrite(Led2, state);
+  digitalWrite(Led2, LOW);
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
