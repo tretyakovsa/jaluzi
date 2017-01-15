@@ -8,22 +8,29 @@ void Tach_0() {
   millis_prev = millis();
 }
 
+void turn_01() {}
 // Выполняется при вращение сенсора
 void turn_0() {
   static unsigned long millis_prev;
   // Устроняем дребезг контакта
   if (millis() - 100 > millis_prev) {
     turnSensor++; // счетчик поличества оборотов
-    if (turnSensor == turn) {     //Останавливаем
+    if (turnSensor >= turn) {     //Останавливаем
       turnSensor=0;
-      digitalWrite(Led2, LOW);
-      digitalWrite(Led1, LOW);
-      pinMode(servo_pin, INPUT);
+      if (state0){
+        setUp(0);
+        }
+        else{
+        setDown(0);
+         }
     }
     if (turnSensor == turn-1) {     //замедляем скорость
-
-      analoglWrite(Led1, 512);
-
+      if (state0){
+        analogWrite(Led1, 256);
+      }
+      else{
+      analogWrite(Led2, 256);
+      }
     }
   }
   millis_prev = millis();
@@ -39,6 +46,7 @@ void MotorUp() {
     digitalWrite(Led2, LOW);
     tickerSetLow.attach(TimeServo2, setUp, 0);
     Serial.println("Up");
+     attachInterrupt(turnSensor_pin, turn_0, FALLING );
     myservo.write(calibration + speed);
     state0 = 1;
     chaing = LOW;
@@ -53,6 +61,7 @@ void MotorDown() {
     digitalWrite(Led1, LOW);
     tickerSetLow.attach(TimeServo1, setDown, 0);
     Serial.println("Down");
+     attachInterrupt(turnSensor_pin, turn_0, FALLING );
     myservo.write(calibration - speed);
     state0 = 0;
     chaing = LOW;
@@ -62,22 +71,26 @@ void MotorDown() {
 
 void setUp(int state) {
   tickerSetLow.detach();
+  detachInterrupt(turnSensor_pin);
+  analogWrite(Led1, 0);
   digitalWrite(Led1, LOW);
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
   myservo.write(calibration);
-  //digitalWrite(servo_pin, LOW);
+  digitalWrite(servo_pin, LOW);
   pinMode(servo_pin, INPUT);
 }
 
 void setDown(int state) {
   tickerSetLow.detach();
+  detachInterrupt(turnSensor_pin);
+  analogWrite(Led2, 0);
   digitalWrite(Led2, LOW);
   //state0 = !state0;
   chaing = LOW;
   chaing1 = 0;
   myservo.write(calibration);
-  //digitalWrite(servo_pin, LOW);
+  digitalWrite(servo_pin, LOW);
   pinMode(servo_pin, INPUT);
 }

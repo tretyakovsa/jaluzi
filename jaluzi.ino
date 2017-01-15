@@ -78,7 +78,7 @@ WiFiUDP udp;
 
 void setup() {
  Serial.begin(115200);
- pinMode(turnSensor_pin, INPUT);
+ pinMode(turnSensor_pin, INPUT_PULLUP);
  pinMode(Tach0, INPUT);
  pinMode(Led1, OUTPUT);
  pinMode(Led2, OUTPUT);
@@ -93,7 +93,7 @@ void setup() {
  // Кнопка будет работать по прерыванию
  attachInterrupt(Tach0, Tach_0, FALLING);
  // Сенсор будет работать по прерыванию
- attachInterrupt(turnSensor_pin, turn_0, FALLING );
+ //attachInterrupt(turnSensor_pin, turn_0, FALLING );
  //Запускаем WIFI
  WIFIAP_Client();
  // Закускаем UDP
@@ -116,6 +116,7 @@ void setup() {
 void loop() {
  dnsServer.processNextRequest();
  delay(1);
+ Serial.println(turnSensor);
  HTTP.handleClient();
  delay(1);
  handleUDP();
