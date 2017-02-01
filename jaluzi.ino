@@ -68,7 +68,7 @@ int turnSensor = 0;
 String kolibrTime = "03:00:00"; // Время колибровки часов
 volatile int chaingtime = LOW;
 volatile int chaing = LOW;
-volatile int chaing1 = LOW;
+//volatile int chaing1 = LOW;
 int state0 = 0;
 unsigned int localPort = 2390;
 unsigned int ssdpPort = 1900;
@@ -93,7 +93,7 @@ void setup() {
  // Кнопка будет работать по прерыванию
  attachInterrupt(Tach0, Tach_0, FALLING);
  // Сенсор будет работать по прерыванию
- //attachInterrupt(turnSensor_pin, turn_0, FALLING );
+ attachInterrupt(turnSensor_pin, turn_0, FALLING );
  //Запускаем WIFI
  WIFIAP_Client();
  // Закускаем UDP
@@ -120,7 +120,8 @@ void loop() {
  HTTP.handleClient();
  delay(1);
  handleUDP();
- if (chaing && !chaing1) {
+// if (chaing && !chaing1) {
+ if (chaing) {
   noInterrupts();
   switch (state0) {
    case 0:
