@@ -12,7 +12,7 @@
 - S1 	1 	Pushbutton Momentary switches that close a circuit when pressed. 	TACTILE-PTH
 - P1 	1 	Power Supply This is the component used to represent the power supply in the Electronics Workbench (the breadboard simulator). There are multiple footprints so if you are designing a PCB be sure to choose which footprint works best for your design. 	Power Header 0.1" through hole 2 	5 , 5
 
-###[Upload from NodeMCU Flasher](tree/master/build)
+###[Upload from NodeMCU Flasher](https://github.com/tretyakovsa/jaluzi/tree/master/build)
 
 ##Video youtube
 
