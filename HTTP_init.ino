@@ -114,7 +114,7 @@ void handle_ssidap() {
 void handle_time() {
  Time_init(timezone);
  String Time = XmlTime();
- HTTP.send(200, "text/plain", "Время синхронизовано: " + Time);
+ HTTP.send(200, "text/plain", "OK: " + Time);
 }
 
 //Установка количество оборотов
@@ -203,61 +203,34 @@ String XmlTime(void) {
 }
 
 void handle_config() {
- String json = "{";
- // Имя SSDP
- json += "\"SSDP\":\"";
- json += SSDP_Name;
- // Имя сети
- json += "\",\"ssid\":\"";
- json += _ssid;
- // Пароль сети
- json += "\",\"password\":\"";
- json += _password;
- // Имя точки доступа
- json += "\",\"ssidAP\":\"";
- json += _ssidAP;
- // Пароль точки доступа
- json += "\",\"passwordAP\":\"";
- json += _passwordAP;
- // Времянная зона
- json += "\",\"timezone\":\"";
- json += timezone;
- // Скорость вращения
- json += "\",\"speed\":\"";
- json += speed;
- // Обороты
- json += "\",\"turn\":\"";
- json += turn;
- //  Время врашения
- json += "\",\"timeservo1\":\"";
- json += TimeServo1;
- //  Время врашения
- json += "\",\"timeservo2\":\"";
- json += TimeServo2;
- // Время открытия
- json += "\",\"TimeUp\":\"";
- json += TimeUp;
- // Время закрытия
- json += "\",\"TimeDown\":\"";
- json += TimeDown;
- // Текущее время
- json += "\",\"time\":\"";
- json += XmlTime();
- // Колибруе серву
- json += "\",\"calibration\":\"";
- json += calibration;
- // Статус
- json += "\",\"state\":\"";
- json += state0;
- // Язык
- json += "\",\"lang\":\"";
- if (Language == NULL) {
-  json += "ru";
+ String root = "{}";  // Формировать строку для отправки в браузер json формат
+ DynamicJsonBuffer jsonBuffer;
+ //  вызовите парсер JSON через экземпляр jsonBuffer
+ JsonObject& json = jsonBuffer.parseObject(root);
+ // Заполняем поля json
+ json["SSDP"] = SSDP_Name; // Имя SSDP
+ json["ssid"] = _ssid; // Имя сети
+ json["password"] = _password; // Пароль сети
+ json["ssidAP"] = _ssidAP; // Имя точки доступа
+ json["passwordAP"] = _passwordAP; // Пароль точки доступа
+ json["timezone"] = timezone; // Времянная зона
+ json["speed"] = speed; // Скорость вращения
+ json["turn"] = turn; // Обороты
+ json["timeservo1"] = TimeServo1; //  Время врашения
+ json["timeservo2"] = TimeServo2; //  Время врашения
+ json["TimeUp"] = TimeUp; // Время открытия
+ json["TimeDown"] = TimeDown; // Время закрытия
+ json["time"] = XmlTime(); // Текущее время
+ json["calibration"] = calibration; // Колибруе серву
+ json["state"] = state0; // Статус
+ if (Language == NULL) { // Язык
+  json["lang"] = "ru";
  } else {
-  json += Language;
+  json["lang"] = Language;
  }
- json += "\"}";
- HTTP.send(200, "text/json", json);
+ root="";
+ json.printTo(root);
+ HTTP.send(200, "text/json", root);
 }
 
 void handle_ip_list() {
