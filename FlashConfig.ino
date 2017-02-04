@@ -11,54 +11,38 @@ bool loadConfig() {
     return false;
   }
 
-  // Выделим буфер для хранения содержимого файла.
-  std::unique_ptr<char[]> buf(new char[size]);
+  // загружаем файл конфигурации в глобальную переменную
+  jsonConfig = configFile.readString();
+  Serial.println(jsonConfig);
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(jsonConfig);
+  _ssidAP = root["ssidAPName"].as<String>();
+  _passwordAP = root["ssidAPPassword"].as<String>();
+  timezone = root["timezone"];
+  SSDP_Name = root["SSDPName"].as<String>();
+  _ssid = root["ssidName"].as<String>();
+  _password = root["ssidPassword"].as<String>();
+  Language = root["Lang"].as<String>();
+  DDNS = root["DDNS"].as<String>();
+  DDNSName = root["DDNSName"].as<String>();
 
-  // Мы не используем строку здесь, потому что библиотека Arduino Json требует ввода
-  // буфер, чтобы быть изменчивым. Если вы не используете ArduinoJson, вы можете также
-  // использование configFile.readString вместо этого.
-  configFile.readBytes(buf.get(), size);
-
-  StaticJsonBuffer<400> jsonBuffer;
-  JsonObject& json = jsonBuffer.parseObject(buf.get());
-
-  if (!json.success()) {
-    Serial.println("Failed to parse config file");
-    return false;
-  }
-  String ssidAP = json["ssidAPName"];
-  _ssidAP = ssidAP;
-  String passwordAP = json["ssidAPPassword"];
-  _passwordAP = passwordAP;
-
-  timezone = json["timezone"];
-
-  speed = json["speed"];
-  calibration = json["calibration"];
-  turn = json["turn"];
-
-  String SSDPName = json["SSDPName"];
-  SSDP_Name = SSDPName;
-  String ssid = json["ssidName"];
-  _ssid = ssid;
-  String password = json["ssidPassword"];
-  _password = password;
-  String _TimeUp = json["TimeUp"];
-  TimeUp = _TimeUp;
-  String _TimeDown = json["TimeDown"];
-  TimeDown = _TimeDown;
-
-  TimeServo1 = json["TimeServo1"];
-  TimeServo2 = json["TimeServo2"];
-
-  String lang = json["Lang"];
-  Language = lang;
+  speed = root["speed"];
+  calibration = root["calibration"];
+  turn = root["turn"];
+  TimeUp = root["TimeUp"].as<String>();
+  TimeDown = root["TimeDown"].as<String>();
+  TimeServo1 = root["TimeServo1"];
+  TimeServo2 = root["TimeServo2"];
   return true;
 }
 
+
+
+
+
 bool saveConfig() {
-  StaticJsonBuffer<300> jsonBuffer;
-  JsonObject& json = jsonBuffer.createObject();
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& json = jsonBuffer.parseObject(jsonConfig);
   json["SSDPName"] = SSDP_Name;
   json["calibration"] = calibration;
   json["ssidAPName"] = _ssidAP;
@@ -66,19 +50,28 @@ bool saveConfig() {
   json["ssidName"] = _ssid;
   json["ssidPassword"] = _password;
   json["timezone"] = timezone;
+  json["DDNSName"] = DDNSName;
+  json["DDNSPort"] = DDNSPort;
+  json["Lang"] = Language;
   json["speed"] = speed;
   json["turn"] = turn;
   json["TimeUp"] = TimeUp;
   json["TimeDown"] = TimeDown;
   json["TimeServo1"] = TimeServo1;
   json["TimeServo2"] = TimeServo2;
-  json["Lang"] = Language;
+  json["DDNS"] = DDNS;
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
-    Serial.println("Failed to open config file for writing");
+    //Serial.println("Failed to open config file for writing");
     return false;
   }
 
   json.printTo(configFile);
   return true;
 }
+
+
+
+
+
+

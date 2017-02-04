@@ -10,10 +10,12 @@
 #include <ESP8266httpUpdate.h>
 #include <DNSServer.h>          //Содержится в пакете
 #include <ArduinoJson.h>
+
 // Настройки DNS сервера и адреса точки в режиме AP
 const byte DNS_PORT = 53;
 IPAddress apIP(192, 168, 4, 1);
 DNSServer dnsServer;
+int DDNSPort = 8080; // порт для обращение к устройству с wan
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -34,14 +36,12 @@ Ticker tickerAlert;
 //Сенсор вращения
 #define turnSensor_pin 14
 
-// Определяем переменные
-// Количество модулей в устройстве
-int a = 1;
-String module[]={"jalousie-motor"};
-//,"sonoff","rbg"};
-
 // Определяем строку для json config
 String jsonConfig = "";
+
+// Определяем переменные
+String module[]={"jalousie-motor"};
+//,"sonoff","rbg"};
 
 String _ssid     = "WiFi"; // Для хранения SSID
 String _password = "Pass"; // Для хранения пароля сети
@@ -64,6 +64,9 @@ int speed = 90;    // Скорость вращения
 int calibration = 90; // Колибруем серву
 int turn = 7; //Количество оборотов
 int turnSensor = 0;
+// Переменные для DDNS
+String DDNS = "";               // url страницы тестирования WanIP
+String DDNSName = "";           // адрес сайта DDNS
 
 String kolibrTime = "03:00:00"; // Время колибровки часов
 volatile int chaingtime = LOW;
@@ -111,6 +114,7 @@ void setup() {
  Time_init(timezone);
  // Будет выполняться каждую секунду проверяя будильники
  tickerAlert.attach(1, alert);
+ ip_wan();
 }
 
 void loop() {
@@ -147,6 +151,10 @@ void alert() {
  }
  if (TimeDown.compareTo(Time) == 0) {
   MotorDown();
+ }
+ // В 15, 30, 45 минут каждого часа идет запрос на сервер DDNS
+ if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && DDNS != "") {
+   ip_wan();
  }
  if (kolibrTime.compareTo(Time) == 0) {
   chaingtime=1;

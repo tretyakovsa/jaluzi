@@ -1,50 +1,39 @@
 void handle_wifi_scan() {
-  int n = WiFi.scanNetworks();
-  String wifiScan = "[";
-  if (n == 0)
-    wifiScan = "{\"ssid\":\"none\"}";
-  else
-  {
-    for (int i = 0; i < n - 1; ++i)
-    {
-      wifiScan += "{";
-      wifiScan += "\"ssid\":\"";
-      wifiScan += WiFi.SSID(i);
-      wifiScan += "\",";
-      wifiScan += "\"dbm\":";
-      wifiScan +=WiFi.RSSI(i);
-      wifiScan += ",";
-      wifiScan += "\"pass\":\"";
-      wifiScan += (WiFi.encryptionType(i) == ENC_TYPE_NONE)?"":"*";
-      //wifiScan += WiFi.encryptionType(i);
-      wifiScan += "\"}";
-      if (i != n - 2) wifiScan += ",";
-      delay(10);
-    }
-    wifiScan += "]";
-  }
-  HTTP.send(200, "text/json", wifiScan);
+ int n = WiFi.scanNetworks();
+ DynamicJsonBuffer jsonBuffer;
+ JsonObject& json = jsonBuffer.createObject();
+ JsonArray& networks = json.createNestedArray("networks");
+ for(int i=0;i<n;i++) {
+  JsonObject& data = networks.createNestedObject();
+  data["ssid"] = WiFi.SSID(i);
+  data["pass"] = (WiFi.encryptionType(i) == ENC_TYPE_NONE) ? "" : "*";
+  data["dbm"] = WiFi.RSSI(i);
+  //data["bssid"] = WiFi.BSSIDstr(i);
+  //data["channel"] = WiFi.channel(i);
+  //data["isHidden"] = WiFi.isHidden(i);
+ }
+ String root;
+ json.printTo(root);
+ HTTP.send(200, "text/json", root);
 }
 
 void webUpdateSpiffs() {
-  String refresh = "<html><head><meta http-equiv=\"refresh\" content=\"1;http://";
-  refresh += WiFi.localIP().toString();
-  refresh += "\"></head></html>";
-  HTTP.send(200, "text/html", refresh);
-  t_httpUpdate_return ret = ESPhttpUpdate.updateSpiffs("http://backup.privet.lv/rgb_spiffs_1m_256k.bin");
+ String refresh = "<html><head><meta http-equiv=\"refresh\" content=\"1;http://";
+ refresh += WiFi.localIP().toString();
+ refresh += "\"></head></html>";
+ HTTP.send(200, "text/html", refresh);
+ // t_httpUpdate_return ret = ESPhttpUpdate.updateSpiffs("http://backup.privet.lv/rgb_spiffs_1m_256k.bin");
 }
-
 
 // Перезагрузка модуля
 void handle_restart() {
-  String restart = HTTP.arg("device");
-  if (restart == "ok") {                         // Если значение равно Ок
-    HTTP.send(200, "text / plain", "Reset OK"); // Oтправляем ответ Reset OK
-    ESP.restart();                                // перезагружаем модуль
-  }
-  else {                                        // иначе
-    HTTP.send(200, "text / plain", "No Reset"); // Oтправляем ответ No Reset
-  }
+ String restart = HTTP.arg("device");
+ if (restart == "ok") {                         // Если значение равно Ок
+  HTTP.send(200, "text/plain", "Reset OK"); // Oтправляем ответ Reset OK
+  ESP.restart();                                // перезагружаем модуль
+ } else {                                        // иначе
+  HTTP.send(200, "text/plain", "No Reset"); // Oтправляем ответ No Reset
+ }
 }
 
 // Меняет флаг для запуска сервопривода
@@ -91,6 +80,18 @@ void handle_leng() {
 void handle_ssid() {
  _ssid = HTTP.arg("ssid");
  _password = HTTP.arg("password");
+ saveConfig();
+ HTTP.send(200, "text/plain", "OK");
+}
+
+// Установка параметров сети
+void handle_ddns() {
+ DDNS = HTTP.arg("url");
+ DDNSName = HTTP.arg("wanurl");
+ DDNSPort = HTTP.arg("wanport").toInt();
+ //Serial.println(HTTP.arg("url"));
+ //Serial.println(HTTP.arg("wanurl"));
+ ip_wan();
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
@@ -185,6 +186,7 @@ void HTTP_init(void) {
  HTTP.on("/calibration", handle_calibration);         // колибруем серву
  HTTP.on("/restart", handle_restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_leng);               // Установить язык
+ HTTP.on("/ddns", handle_ddns);               // Установить DDNS
  HTTP.on("/lang.list.json", handle_leng_list);               // Установить язык
  HTTP.on("/modules.json", handle_modules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
@@ -208,6 +210,9 @@ void handle_config() {
  //  вызовите парсер JSON через экземпляр jsonBuffer
  JsonObject& json = jsonBuffer.parseObject(root);
  // Заполняем поля json
+ json["DDNS"] = DDNS;  // Имя DDNS
+ json["DDNSName"] = DDNSName;  // Имя DDNSName
+ json["DDNSPort"] = DDNSPort;  // Имя DDNSPort
  json["SSDP"] = SSDP_Name; // Имя SSDP
  json["ssid"] = _ssid; // Имя сети
  json["password"] = _password; // Пароль сети
@@ -234,45 +239,54 @@ void handle_config() {
 }
 
 void handle_ip_list() {
-  HTTP.send(200, "text/json", "[{\"ip\":\""+WiFi.localIP().toString()+"\"}"+Devices+"]");
+ HTTP.send(200, "text/json", "[{\"ip\":\""+WiFi.localIP().toString()+"\"}"+Devices+"]");
 }
 
 void handle_ip_scan() {
-  inquirySSDP();
-  String json = "";
-  //Serial.println(Devices);
-  if (Devices != "") {
-    json = Devices;
-    //json += ",";
-  }
-  json +=modules();
-  DevicesList = "["+json+"]";
-  //Serial.println(json);
-  HTTP.send(200, "text/json", "[" + json + "]");
-  Devices="";
+ inquirySSDP();
+ String json = "";
+ //Serial.println(Devices);
+ if (Devices != "") {
+  json = Devices;
+  //json += ",";
+ }
+ json +=modules();
+ DevicesList = "["+json+"]";
+ //Serial.println(json);
+ HTTP.send(200, "text/json", "[" + json + "]");
+ Devices="";
 }
 
 void handle_modules() {
-  HTTP.send(200, "text/json", modules());
+ DynamicJsonBuffer jsonBuffer;
+ JsonObject& json = jsonBuffer.createObject();
+ json["SSDP"] = SSDP_Name;
+ json["state"] = state0;
+ JsonArray& data = json.createNestedArray("module");
+ for (int i = 0; i < sizeof(module) / sizeof(module[0]); i++) {
+  data.add(module[i]);
+ }
+ String root;
+ json.printTo(root);
+ HTTP.send(200, "text/json", root);
 }
 
 String modules() {
-  String json = "";
-  int j = a - 1;
-  for (int i = 0; i <= j; i++) {
-    json += "{\"ip\":\"";
-    json += WiFi.localIP().toString();
-    json += "\",\"module\":\"";
-    json += module[i];
-    //Serial.println(module[i]);
-    json += "\"";
-    json += "}";
-    if (i != j) json += ",";
-  }
-  return json;
+ String json = "";
+ for (int i = 0; i <= sizeof(module) / sizeof(module[0]); i++) {
+  json += "{\"ip\":\"";
+  json += WiFi.localIP().toString();
+  json += "\",\"module\":\"";
+  json += module[i];
+  //Serial.println(module[i]);
+  json += "\"";
+  json += "}";
+  if (i != sizeof(module) / sizeof(module[0])) json += ",";
+ }
+ return json;
 }
 
 void handle_leng_list() {
-  HTTP.send(200, "text/json", Lang);
+ HTTP.send(200, "text/json", Lang);
 }
 
