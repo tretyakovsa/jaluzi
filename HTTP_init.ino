@@ -167,6 +167,7 @@ void HTTP_init(void) {
  HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
  //HTTP.serveStatic("/lang/", SPIFFS, "/lang/", "max-age=31536000"); // кеширование на 1 год
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
+ HTTPWAN.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
  HTTP.on("/Timeservo1", handle_time_servo1);  // установка времени вращения сервопривода
  HTTP.on("/Timeservo2", handle_time_servo2);// установка времени вращения сервопривода
  HTTP.on("/wifi.scan.json", handle_wifi_scan);      // сканирование ssid
@@ -191,6 +192,7 @@ void HTTP_init(void) {
  HTTP.on("/modules.json", handle_modules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
  HTTP.begin();
+ HTTPWAN.begin();
 }
 
 // Получение текущего времени

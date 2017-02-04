@@ -18,6 +18,7 @@ DNSServer dnsServer;
 int DDNSPort = 8080; // порт для обращение к устройству с wan
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
+ESP8266WebServer HTTPWAN(DDNSPort);
 ESP8266HTTPUpdateServer httpUpdater;
 // Для файловой системы
 File fsUploadFile;
@@ -27,14 +28,9 @@ Servo myservo;
 Ticker tickerSetLow;
 Ticker tickerAlert;
 
-// Кнопка управления
-#define Tach0 0
-
-// Сервопривод на ноге
-#define servo_pin 2
-
-//Сенсор вращения
-#define turnSensor_pin 14
+#define Tach0 0           // Кнопка управления
+#define servo_pin 2       // Сервопривод на ноге
+#define turnSensor_pin 14 // Сенсор вращения
 
 // Определяем строку для json config
 String jsonConfig = "";
@@ -43,32 +39,32 @@ String jsonConfig = "";
 String module[]={"jalousie-motor"};
 //,"sonoff","rbg"};
 
-String _ssid     = "WiFi"; // Для хранения SSID
-String _password = "Pass"; // Для хранения пароля сети
+String _ssid     = "WiFi";     // Для хранения SSID
+String _password = "Pass";     // Для хранения пароля сети
 String _ssidAP = "Zaluzi03";   // SSID AP точки доступа
-String _passwordAP = ""; // пароль точки доступа
-String SSDP_Name = "jalousie";      // SSDP
-String TimeUp = "08:00:00";      // время открытия
-String TimeDown = "21:00:00";    // время закрытия
+String _passwordAP = "";       // пароль точки доступа
+String SSDP_Name = "jalousie"; // SSDP
+String TimeUp = "08:00:00";    // время открытия
+String TimeDown = "21:00:00";  // время закрытия
 // Переменные для обнаружения модулей
-String Devices = "";            // Поиск IP адресов устройств в сети
-String DevicesList = "";            // IP адреса устройств в сети
-String Language ="ru";  // язык web интерфейса
-String Lang = "";  // файлы языка web интерфейса
-int timezone = 3;        // часовой пояс GTM
-int Led1 = 12;           // индикатор движения вверх
-int Led2 = 13;           // индикатор движения вниз
-float TimeServo1 = 10.0;  // Время вращения
-float TimeServo2 = 10.0;  // Время вращения
-int speed = 90;    // Скорость вращения
-int calibration = 90; // Колибруем серву
-int turn = 7; //Количество оборотов
+String Devices = "";           // Поиск IP адресов устройств в сети
+String DevicesList = "";       // IP адреса устройств в сети
+String Language ="ru";         // язык web интерфейса
+String Lang = "";              // файлы языка web интерфейса
+int timezone = 3;              // часовой пояс GTM
+int Led1 = 12;                 // индикатор движения вверх
+int Led2 = 13;                 // индикатор движения вниз
+float TimeServo1 = 10.0;       // Время вращения
+float TimeServo2 = 10.0;       // Время вращения
+int speed = 90;                // Скорость вращения
+int calibration = 90;          // Колибруем серву
+int turn = 7;                  //Количество оборотов
 int turnSensor = 0;
 // Переменные для DDNS
-String DDNS = "";               // url страницы тестирования WanIP
-String DDNSName = "";           // адрес сайта DDNS
+String DDNS = "";              // url страницы тестирования WanIP
+String DDNSName = "";          // адрес сайта DDNS
 
-String kolibrTime = "03:00:00"; // Время колибровки часов
+String kolibrTime = "03:00:00";// Время колибровки часов
 volatile int chaingtime = LOW;
 volatile int chaing = LOW;
 //volatile int chaing1 = LOW;
@@ -120,11 +116,13 @@ void setup() {
 void loop() {
  dnsServer.processNextRequest();
  delay(1);
- Serial.println(turnSensor);
  HTTP.handleClient();
  delay(1);
+ HTTPWAN.handleClient();
+ delay(1);
  handleUDP();
-// if (chaing && !chaing1) {
+
+ // if (chaing && !chaing1) {
  if (chaing) {
   noInterrupts();
   switch (state0) {
@@ -154,7 +152,7 @@ void alert() {
  }
  // В 15, 30, 45 минут каждого часа идет запрос на сервер DDNS
  if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && DDNS != "") {
-   ip_wan();
+  ip_wan();
  }
  if (kolibrTime.compareTo(Time) == 0) {
   chaingtime=1;
