@@ -22,7 +22,7 @@ bool loadConfig() {
   ssdpName = root["ssdpName"].as<String>();
   ssidName = root["ssidName"].as<String>();
   ssidPass = root["ssidPass"].as<String>();
-  Language = root["Lang"].as<String>();
+  Language = root["lang"].as<String>();
   ddns = root["ddns"].as<String>();
   ddnsName = root["ddnsName"].as<String>();
   ddnsPort = root["ddnsPort"];
@@ -49,7 +49,7 @@ bool saveConfig() {
   json["ssidName"] = ssidName;
   json["ssidPass"] = ssidPass;
   json["timeZone"] = timeZone;
-  json["Lang"] = Language;
+  json["lang"] = Language;
   json["ddns"] = ddns;
   json["ddnsName"] = ddnsName;
   json["ddnsPort"] = ddnsPort;

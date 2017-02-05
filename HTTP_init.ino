@@ -230,11 +230,7 @@ void handle_config() {
  json["time"] = XmlTime(); // Текущее время
  json["calibration"] = calibration; // Колибруе серву
  json["state"] = state0; // Статус
- if (Language == NULL) { // Язык
-  json["lang"] = "ru";
- } else {
-  json["lang"] = Language;
- }
+ json["lang"] = Language;  // Язык
  root="";
  json.printTo(root);
  HTTP.send(200, "text/json", root);
