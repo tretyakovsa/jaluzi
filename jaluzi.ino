@@ -15,10 +15,10 @@
 const byte DNS_PORT = 53;
 IPAddress apIP(192, 168, 4, 1);
 DNSServer dnsServer;
-int DDNSPort = 8080; // порт для обращение к устройству с wan
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
-ESP8266WebServer HTTPWAN(DDNSPort);
+//ESP8266WebServer HTTPWAN(ddnsPort);
+ESP8266WebServer *HTTPWAN;
 ESP8266HTTPUpdateServer httpUpdater;
 // Для файловой системы
 File fsUploadFile;
@@ -39,30 +39,31 @@ String jsonConfig = "";
 String module[]={"jalousie-motor"};
 //,"sonoff","rbg"};
 
-String _ssid     = "WiFi";     // Для хранения SSID
-String _password = "Pass";     // Для хранения пароля сети
-String _ssidAP = "Zaluzi03";   // SSID AP точки доступа
-String _passwordAP = "";       // пароль точки доступа
-String SSDP_Name = "jalousie"; // SSDP
-String TimeUp = "08:00:00";    // время открытия
-String TimeDown = "21:00:00";  // время закрытия
+String ssidName     = "WiFi";     // Для хранения SSID
+String ssidPass = "Pass";     // Для хранения пароля сети
+String ssidApName = "Zaluzi03";   // SSID AP точки доступа
+String ssidApPass = "";       // пароль точки доступа
+String ssdpName = "jalousie"; // SSDP
+String timeUp = "08:00:00";    // время открытия
+String timeDown = "21:00:00";  // время закрытия
 // Переменные для обнаружения модулей
 String Devices = "";           // Поиск IP адресов устройств в сети
 String DevicesList = "";       // IP адреса устройств в сети
 String Language ="ru";         // язык web интерфейса
 String Lang = "";              // файлы языка web интерфейса
-int timezone = 3;              // часовой пояс GTM
+int timeZone = 3;              // часовой пояс GTM
 int Led1 = 12;                 // индикатор движения вверх
 int Led2 = 13;                 // индикатор движения вниз
-float TimeServo1 = 10.0;       // Время вращения
-float TimeServo2 = 10.0;       // Время вращения
+float timeServo1 = 10.0;       // Время вращения
+float timeServo2 = 10.0;       // Время вращения
 int speed = 90;                // Скорость вращения
 int calibration = 90;          // Колибруем серву
 int turn = 7;                  //Количество оборотов
 int turnSensor = 0;
-// Переменные для DDNS
-String DDNS = "";              // url страницы тестирования WanIP
-String DDNSName = "";          // адрес сайта DDNS
+// Переменные для ddns
+String ddns = "";              // url страницы тестирования WanIP
+String ddnsName = "";          // адрес сайта ddns
+int ddnsPort = 8080; // порт для обращение к устройству с wan
 
 String kolibrTime = "03:00:00";// Время колибровки часов
 volatile int chaingtime = LOW;
@@ -86,6 +87,7 @@ void setup() {
  FS_init();
  // Загружаем настройки из файла
  loadConfig();
+ HTTPWAN = new ESP8266WebServer(ddnsPort);
  // Подключаем сервомотор
  myservo.attach(servo_pin);
  //myservo.write(calibration);
@@ -107,7 +109,7 @@ void setup() {
  SSDP_init();
  Serial.println("SSDP Ready!");
  // Включаем время из сети
- Time_init(timezone);
+ Time_init(timeZone);
  // Будет выполняться каждую секунду проверяя будильники
  tickerAlert.attach(1, alert);
  ip_wan();
@@ -118,7 +120,7 @@ void loop() {
  delay(1);
  HTTP.handleClient();
  delay(1);
- HTTPWAN.handleClient();
+ HTTPWAN->handleClient();
  delay(1);
  handleUDP();
 
@@ -136,7 +138,7 @@ void loop() {
   interrupts();
  }
  if (chaingtime) {
-  Time_init(timezone);
+  Time_init(timeZone);
   chaingtime=0;
  }
 }
@@ -144,17 +146,17 @@ void loop() {
 // Вызывается каждую секунду в обход основного циклу.
 void alert() {
  String Time=XmlTime();
- if (TimeUp.compareTo(Time) == 0) {
+ if (timeUp.compareTo(Time) == 0) {
   MotorUp();
  }
- if (TimeDown.compareTo(Time) == 0) {
+ if (timeDown.compareTo(Time) == 0) {
   MotorDown();
- }
- // В 15, 30, 45 минут каждого часа идет запрос на сервер DDNS
- if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && DDNS != "") {
-  ip_wan();
  }
  if (kolibrTime.compareTo(Time) == 0) {
   chaingtime=1;
+ }
+ // В 15, 30, 45 минут каждого часа идет запрос на сервер ddns
+ if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && ddns != "") {
+  ip_wan();
  }
 }

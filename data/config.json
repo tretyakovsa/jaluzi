@@ -1,1 +1,1 @@
-{"SSDPName":"Zaluzi","calibration":91,"ssidAPName":"Zaluzi01","ssidAPPassword":"","ssidName":"Wifi","ssidPassword":"pass","timezone":2,"speed":5,"turn":7,"TimeUp":"21:30:00","TimeDown":"08:00:00"}
+{"ssdpName":"Zaluzi","calibration":91,"ssidAPName":"Zaluzi01","ssidApPass":"","ssidName":"Wifi","ssidPass":"","timeZone":2,"speed":5,"turn":7,"timeUp":"21:30:00","timeDown":"08:00:00","ddns":"","ddnsPort":8080,"lang":"ru"}

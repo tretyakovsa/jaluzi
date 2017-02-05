@@ -16,23 +16,23 @@ bool loadConfig() {
   Serial.println(jsonConfig);
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(jsonConfig);
-  _ssidAP = root["ssidAPName"].as<String>();
-  _passwordAP = root["ssidAPPassword"].as<String>();
-  timezone = root["timezone"];
-  SSDP_Name = root["SSDPName"].as<String>();
-  _ssid = root["ssidName"].as<String>();
-  _password = root["ssidPassword"].as<String>();
+  ssidApName = root["ssidAPName"].as<String>();
+  ssidApPass = root["ssidApPass"].as<String>();
+  timeZone = root["timeZone"];
+  ssdpName = root["ssdpName"].as<String>();
+  ssidName = root["ssidName"].as<String>();
+  ssidPass = root["ssidPass"].as<String>();
   Language = root["Lang"].as<String>();
-  DDNS = root["DDNS"].as<String>();
-  DDNSName = root["DDNSName"].as<String>();
-
+  ddns = root["ddns"].as<String>();
+  ddnsName = root["ddnsName"].as<String>();
+  ddnsPort = root["ddnsPort"];
   speed = root["speed"];
   calibration = root["calibration"];
   turn = root["turn"];
-  TimeUp = root["TimeUp"].as<String>();
-  TimeDown = root["TimeDown"].as<String>();
-  TimeServo1 = root["TimeServo1"];
-  TimeServo2 = root["TimeServo2"];
+  timeUp = root["timeUp"].as<String>();
+  timeDown = root["timeDown"].as<String>();
+  timeServo1 = root["timeServo1"];
+  timeServo2 = root["timeServo2"];
   return true;
 }
 
@@ -43,23 +43,23 @@ bool loadConfig() {
 bool saveConfig() {
   DynamicJsonBuffer jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(jsonConfig);
-  json["SSDPName"] = SSDP_Name;
-  json["calibration"] = calibration;
-  json["ssidAPName"] = _ssidAP;
-  json["ssidAPPassword"] = _passwordAP;
-  json["ssidName"] = _ssid;
-  json["ssidPassword"] = _password;
-  json["timezone"] = timezone;
-  json["DDNSName"] = DDNSName;
-  json["DDNSPort"] = DDNSPort;
+  json["ssdpName"] = ssdpName;
+  json["ssidAPName"] = ssidApName;
+  json["ssidApPass"] = ssidApPass;
+  json["ssidName"] = ssidName;
+  json["ssidPass"] = ssidPass;
+  json["timeZone"] = timeZone;
   json["Lang"] = Language;
+  json["ddns"] = ddns;
+  json["ddnsName"] = ddnsName;
+  json["ddnsPort"] = ddnsPort;
+  json["calibration"] = calibration;
   json["speed"] = speed;
   json["turn"] = turn;
-  json["TimeUp"] = TimeUp;
-  json["TimeDown"] = TimeDown;
-  json["TimeServo1"] = TimeServo1;
-  json["TimeServo2"] = TimeServo2;
-  json["DDNS"] = DDNS;
+  json["timeUp"] = timeUp;
+  json["timeDown"] = timeDown;
+  json["timeServo1"] = timeServo1;
+  json["timeServo2"] = timeServo2;
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
     //Serial.println("Failed to open config file for writing");

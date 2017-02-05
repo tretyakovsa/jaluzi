@@ -39,7 +39,7 @@ void MotorUp() {
     pinMode(servo_pin, OUTPUT);
     digitalWrite(Led1, HIGH);
     digitalWrite(Led2, LOW);
-   // tickerSetLow.attach(TimeServo2, setUp, 0);
+   // tickerSetLow.attach(timeServo2, setUp, 0);
     Serial.println("Up");
    // attachInterrupt(turnSensor_pin, turn_0, FALLING );
     myservo.write(calibration + speed);
@@ -55,7 +55,7 @@ void MotorDown() {
     pinMode(servo_pin, OUTPUT);
     digitalWrite(Led2, HIGH);
     digitalWrite(Led1, LOW);
-   // tickerSetLow.attach(TimeServo1, setDown, 0);
+   // tickerSetLow.attach(timeServo1, setDown, 0);
     Serial.println("Down");
    // attachInterrupt(turnSensor_pin, turn_0, FALLING );
     myservo.write(calibration - speed);

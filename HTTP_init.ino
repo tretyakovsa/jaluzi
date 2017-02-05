@@ -50,22 +50,22 @@ void handle_save_config() {
 
 // Время вращения сервопривода
 void handle_time_servo1() {
- TimeServo1 = HTTP.arg("t").toInt();
+ timeServo1 = HTTP.arg("t").toInt();
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 // Время вращения сервопривода
 void handle_time_servo2() {
- TimeServo2 = HTTP.arg("t").toInt();
+ timeServo2 = HTTP.arg("t").toInt();
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 // Установка времянной зоны
 void handle_time_zone() {
- timezone = HTTP.arg("timezone").toInt();
- Time_init(timezone);
+ timeZone = HTTP.arg("timeZone").toInt();
+ Time_init(timeZone);
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
@@ -78,17 +78,17 @@ void handle_leng() {
 
 // Установка параметров сети
 void handle_ssid() {
- _ssid = HTTP.arg("ssid");
- _password = HTTP.arg("password");
+ ssidName = HTTP.arg("ssid");
+ ssidPass = HTTP.arg("ssidPass");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 // Установка параметров сети
 void handle_ddns() {
- DDNS = HTTP.arg("url");
- DDNSName = HTTP.arg("wanurl");
- DDNSPort = HTTP.arg("wanport").toInt();
+ ddns = HTTP.arg("url");
+ ddnsName = HTTP.arg("wanurl");
+ ddnsPort = HTTP.arg("wanport").toInt();
  //Serial.println(HTTP.arg("url"));
  //Serial.println(HTTP.arg("wanurl"));
  ip_wan();
@@ -98,22 +98,22 @@ void handle_ddns() {
 
 // Установка параметров сети
 void handle_ssdp() {
- SSDP_Name = HTTP.arg("ssdp");
+ ssdpName = HTTP.arg("ssdp");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 //Установка параметров точки доступа
 void handle_ssidap() {
- _ssidAP = HTTP.arg("ssidAP");
- _passwordAP = HTTP.arg("passwordAP");
+ ssidApName = HTTP.arg("ssidAP");
+ ssidApPass = HTTP.arg("ssidApPass");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 //Время из сети
 void handle_time() {
- Time_init(timezone);
+ Time_init(timeZone);
  String Time = XmlTime();
  HTTP.send(200, "text/plain", "OK: " + Time);
 }
@@ -134,14 +134,14 @@ void handle_speed() {
 
 //Задать время открытия
 void handle_time_up() {
- TimeUp = HTTP.arg("open");
+ timeUp = HTTP.arg("open");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 //Задать время закрытия
 void handle_time_down() {
- TimeDown = HTTP.arg("close");
+ timeDown = HTTP.arg("close");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
@@ -167,32 +167,32 @@ void HTTP_init(void) {
  HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
  //HTTP.serveStatic("/lang/", SPIFFS, "/lang/", "max-age=31536000"); // кеширование на 1 год
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
- HTTPWAN.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
- HTTP.on("/Timeservo1", handle_time_servo1);  // установка времени вращения сервопривода
- HTTP.on("/Timeservo2", handle_time_servo2);// установка времени вращения сервопривода
+ HTTPWAN->on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
+ HTTP.on("/timeServo1", handle_time_servo1);  // установка времени вращения сервопривода
+ HTTP.on("/timeServo2", handle_time_servo2);// установка времени вращения сервопривода
  HTTP.on("/wifi.scan.json", handle_wifi_scan);      // сканирование ssid
- HTTP.on("/TimeZone", handle_time_zone);    // Установка времянной зоны
+ HTTP.on("/timeZone", handle_time_zone);    // Установка времянной зоны
  HTTP.on("/Time", handle_time);            // Синхронизировать время из сети
- HTTP.on("/TimeUp", handle_time_up);       // Установить время открытия
- HTTP.on("/TimeDown", handle_time_down);   // Установить время закрытия
+ HTTP.on("/timeUp", handle_time_up);       // Установить время открытия
+ HTTP.on("/timeDown", handle_time_down);   // Установить время закрытия
  HTTP.on("/ssdp", handle_ssdp);        // Установить имя устройства
  HTTP.on("/ssid", handle_ssid);        // Установить имя и пароль роутера
  HTTP.on("/ssidap", handle_ssidap);    // Установить имя и пароль для точки доступа
  HTTP.on("/speed", handle_speed);          // Установить скорость вращения сервопривода
  HTTP.on("/turn", handle_turn);          // Установить оборотов
- HTTP.on("/Save", handle_save_config);      // Сохранить настройки в файл
+ HTTP.on("/save", handle_save_config);      // Сохранить настройки в файл
  HTTP.on("/configs.json", handle_config);  // формирование config_xml страницы для передачи данных в web интерфейс
  HTTP.on("/devices.scan.json", inquirySSDP);  // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/devices.list.json", handle_ip_list);  // формирование iplocation_xml страницы для передачи данных в web интерфейс
  HTTP.on("/calibration", handle_calibration);         // колибруем серву
  HTTP.on("/restart", handle_restart);                 // Перезагрузка модуля
  HTTP.on("/lang", handle_leng);               // Установить язык
- HTTP.on("/ddns", handle_ddns);               // Установить DDNS
+ HTTP.on("/ddns", handle_ddns);               // Установить ddns
  HTTP.on("/lang.list.json", handle_leng_list);               // Установить язык
  HTTP.on("/modules.json", handle_modules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
  HTTP.begin();
- HTTPWAN.begin();
+ HTTPWAN->begin();
 }
 
 // Получение текущего времени
@@ -212,21 +212,21 @@ void handle_config() {
  //  вызовите парсер JSON через экземпляр jsonBuffer
  JsonObject& json = jsonBuffer.parseObject(root);
  // Заполняем поля json
- json["DDNS"] = DDNS;  // Имя DDNS
- json["DDNSName"] = DDNSName;  // Имя DDNSName
- json["DDNSPort"] = DDNSPort;  // Имя DDNSPort
- json["SSDP"] = SSDP_Name; // Имя SSDP
- json["ssid"] = _ssid; // Имя сети
- json["password"] = _password; // Пароль сети
- json["ssidAP"] = _ssidAP; // Имя точки доступа
- json["passwordAP"] = _passwordAP; // Пароль точки доступа
- json["timezone"] = timezone; // Времянная зона
+ json["ddns"] = ddns;  // Имя ddns
+ json["ddnsName"] = ddnsName;  // Имя ddnsName
+ json["ddnsPort"] = ddnsPort;  // Имя ddnsPort
+ json["SSDP"] = ssdpName; // Имя SSDP
+ json["ssid"] = ssidName; // Имя сети
+ json["ssidPass"] = ssidPass; // Пароль сети
+ json["ssidAP"] = ssidApName; // Имя точки доступа
+ json["ssidApPass"] = ssidApPass; // Пароль точки доступа
+ json["timeZone"] = timeZone; // Времянная зона
  json["speed"] = speed; // Скорость вращения
  json["turn"] = turn; // Обороты
- json["timeservo1"] = TimeServo1; //  Время врашения
- json["timeservo2"] = TimeServo2; //  Время врашения
- json["TimeUp"] = TimeUp; // Время открытия
- json["TimeDown"] = TimeDown; // Время закрытия
+ json["timeServo1"] = timeServo1; //  Время врашения
+ json["timeServo2"] = timeServo2; //  Время врашения
+ json["timeUp"] = timeUp; // Время открытия
+ json["timeDown"] = timeDown; // Время закрытия
  json["time"] = XmlTime(); // Текущее время
  json["calibration"] = calibration; // Колибруе серву
  json["state"] = state0; // Статус
@@ -262,7 +262,7 @@ void handle_ip_scan() {
 void handle_modules() {
  DynamicJsonBuffer jsonBuffer;
  JsonObject& json = jsonBuffer.createObject();
- json["SSDP"] = SSDP_Name;
+ json["SSDP"] = ssdpName;
  json["state"] = state0;
  JsonArray& data = json.createNestedArray("module");
  for (int i = 0; i < sizeof(module) / sizeof(module[0]); i++) {
