@@ -1,5 +1,5 @@
 bool loadConfig() {
-  File configFile = SPIFFS.open("/config.json", "r");
+  File configFile = SPIFFS.open("/config.save.json", "r");
   if (!configFile) {
     Serial.println("Failed to open config file");
     return false;
@@ -16,7 +16,7 @@ bool loadConfig() {
   Serial.println(jsonConfig);
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(jsonConfig);
-  ssidApName = root["ssidAPName"].as<String>();
+  ssidApName = root["ssidApName"].as<String>();
   ssidApPass = root["ssidApPass"].as<String>();
   timeZone = root["timeZone"];
   ssdpName = root["ssdpName"].as<String>();
@@ -44,7 +44,7 @@ bool saveConfig() {
   DynamicJsonBuffer jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(jsonConfig);
   json["ssdpName"] = ssdpName;
-  json["ssidAPName"] = ssidApName;
+  json["ssidApName"] = ssidApName;
   json["ssidApPass"] = ssidApPass;
   json["ssidName"] = ssidName;
   json["ssidPass"] = ssidPass;
@@ -60,7 +60,7 @@ bool saveConfig() {
   json["timeDown"] = timeDown;
   json["timeServo1"] = timeServo1;
   json["timeServo2"] = timeServo2;
-  File configFile = SPIFFS.open("/config.json", "w");
+  File configFile = SPIFFS.open("/config.save.json", "w");
   if (!configFile) {
     //Serial.println("Failed to open config file for writing");
     return false;
