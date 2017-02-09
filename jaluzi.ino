@@ -28,9 +28,12 @@ Servo myservo;
 Ticker tickerSetLow;
 Ticker tickerAlert;
 
-#define Tach0 0           // Кнопка управления
-#define servo_pin 2       // Сервопривод на ноге
-#define turnSensor_pin 14 // Сенсор вращения
+#define TACH_PIN 0        // Кнопка управления
+#define SERVO_PIN 2       // Сервопривод
+// If you use ESP8266 12 you can add
+#define TURNSENSOR_PIN 14 // Сенсор оборотов
+#define LED1_PIN 12       // индикатор движения вверх (Сюда можно подключить модуль управления мотором)
+#define LED2_PIN 13       // индикатор движения вниз (Сюда можно подключить модуль управления мотором)
 
 // Определяем строку для json config
 String jsonConfig = "";
@@ -52,8 +55,6 @@ String DevicesList = "";       // IP адреса устройств в сети
 String Language ="ru";         // язык web интерфейса
 String Lang = "";              // файлы языка web интерфейса
 int timeZone = 3;              // часовой пояс GTM
-int Led1 = 12;                 // индикатор движения вверх
-int Led2 = 13;                 // индикатор движения вниз
 float timeServo1 = 10.0;       // Время вращения
 float timeServo2 = 10.0;       // Время вращения
 int speed = 90;                // Скорость вращения
@@ -78,10 +79,10 @@ WiFiUDP udp;
 
 void setup() {
  Serial.begin(115200);
- pinMode(turnSensor_pin, INPUT_PULLUP);
- pinMode(Tach0, INPUT);
- pinMode(Led1, OUTPUT);
- pinMode(Led2, OUTPUT);
+ pinMode(TURNSENSOR_PIN, INPUT_PULLUP);
+ pinMode(TACH_PIN, INPUT);
+ pinMode(LED1_PIN, OUTPUT);
+ pinMode(LED2_PIN, OUTPUT);
  Serial.println("");
  // Включаем работу с файловой системой
  FS_init();
@@ -89,12 +90,12 @@ void setup() {
  loadConfig();
  HTTPWAN = new ESP8266WebServer(ddnsPort);
  // Подключаем сервомотор
- myservo.attach(servo_pin);
+ myservo.attach(SERVO_PIN);
  //myservo.write(calibration);
  // Кнопка будет работать по прерыванию
- attachInterrupt(Tach0, Tach_0, FALLING);
+ attachInterrupt(TACH_PIN, Tach_0, FALLING);
  // Сенсор будет работать по прерыванию
- attachInterrupt(turnSensor_pin, turn_0, FALLING );
+ attachInterrupt(TURNSENSOR_PIN, turn_0, FALLING );
  //Запускаем WIFI
  WIFIAP_Client();
  // Закускаем UDP

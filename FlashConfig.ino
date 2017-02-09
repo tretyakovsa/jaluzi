@@ -26,6 +26,7 @@ bool loadConfig() {
   ddns = root["ddns"].as<String>();
   ddnsName = root["ddnsName"].as<String>();
   ddnsPort = root["ddnsPort"];
+
   speed = root["speed"];
   calibration = root["calibration"];
   turn = root["turn"];
@@ -53,6 +54,7 @@ bool saveConfig() {
   json["ddns"] = ddns;
   json["ddnsName"] = ddnsName;
   json["ddnsPort"] = ddnsPort;
+
   json["calibration"] = calibration;
   json["speed"] = speed;
   json["turn"] = turn;

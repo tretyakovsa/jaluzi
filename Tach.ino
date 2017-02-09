@@ -25,9 +25,9 @@ void turn_0() {
     }
   //  if (turnSensor == turn-1) {     //замедляем скорость
   //    if (state0){
-  //      analogWrite(Led1, 256);
+  //      analogWrite(LED1_PIN, 256);
   //    } else{
-  //      analogWrite(Led2, 256);
+  //      analogWrite(LED2_PIN, 256);
   //    }
   //  }
   }
@@ -36,12 +36,12 @@ void turn_0() {
 
 void MotorUp() {
   if (state0 == 0) {
-    pinMode(servo_pin, OUTPUT);
-    digitalWrite(Led1, HIGH);
-    digitalWrite(Led2, LOW);
+    pinMode(SERVO_PIN, OUTPUT);
+    digitalWrite(LED1_PIN, HIGH);
+    digitalWrite(LED2_PIN, LOW);
    // tickerSetLow.attach(timeServo2, setUp, 0);
     Serial.println("Up");
-   // attachInterrupt(turnSensor_pin, turn_0, FALLING );
+   // attachInterrupt(TURNSENSOR_PIN, turn_0, FALLING );
     myservo.write(calibration + speed);
    // state0 = 1;
     turnSensor=0;
@@ -52,12 +52,12 @@ void MotorUp() {
 
 void MotorDown() {
   if (state0 == 1) {
-    pinMode(servo_pin, OUTPUT);
-    digitalWrite(Led2, HIGH);
-    digitalWrite(Led1, LOW);
+    pinMode(SERVO_PIN, OUTPUT);
+    digitalWrite(LED2_PIN, HIGH);
+    digitalWrite(LED1_PIN, LOW);
    // tickerSetLow.attach(timeServo1, setDown, 0);
     Serial.println("Down");
-   // attachInterrupt(turnSensor_pin, turn_0, FALLING );
+   // attachInterrupt(TURNSENSOR_PIN, turn_0, FALLING );
     myservo.write(calibration - speed);
     //state0 = 0;
     turnSensor=0;
@@ -68,28 +68,28 @@ void MotorDown() {
 
 void setUp(int state) {
   tickerSetLow.detach();
- // detachInterrupt(turnSensor_pin);
-  //analogWrite(Led1, 0);
-  digitalWrite(Led2, LOW);
-  digitalWrite(Led1, LOW);
+ // detachInterrupt(TURNSENSOR_PIN);
+  //analogWrite(LED1_PIN, 0);
+  digitalWrite(LED2_PIN, LOW);
+  digitalWrite(LED1_PIN, LOW);
   state0 = !state0;
  // chaing = 0;
  // chaing1 = 0;
   myservo.write(calibration);
-  digitalWrite(servo_pin, LOW);
-  pinMode(servo_pin, INPUT);
+  digitalWrite(SERVO_PIN, LOW);
+  pinMode(SERVO_PIN, INPUT);
 }
 
 void setDown(int state) {
   tickerSetLow.detach();
- // detachInterrupt(turnSensor_pin);
-  //analogWrite(Led2, 0);
-  digitalWrite(Led2, LOW);
-  digitalWrite(Led1, LOW);
+ // detachInterrupt(TURNSENSOR_PIN);
+  //analogWrite(LED2_PIN, 0);
+  digitalWrite(LED2_PIN, LOW);
+  digitalWrite(LED1_PIN, LOW);
   state0 = !state0;
   //chaing = 0;
   //chaing1 = 0;
   myservo.write(calibration);
-  digitalWrite(servo_pin, LOW);
-  pinMode(servo_pin, INPUT);
+  digitalWrite(SERVO_PIN, LOW);
+  pinMode(SERVO_PIN, INPUT);
 }
