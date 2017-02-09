@@ -227,6 +227,7 @@ void handle_config() {
  json["timeServo2"] = timeServo2; //  Время врашения
  json["timeUp"] = timeUp; // Время открытия
  json["timeDown"] = timeDown; // Время закрытия
+ json["ip"] = WiFi.localIP().toString();
  json["time"] = XmlTime(); // Текущее время
  json["calibration"] = calibration; // Колибруе серву
  json["state"] = state0; // Статус
