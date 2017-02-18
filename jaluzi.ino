@@ -1,15 +1,21 @@
-#include <ESP8266WiFi.h>        //Содержится в пакете
-#include <ESP8266WebServer.h>   //Содержится в пакете
-#include <ESP8266SSDP.h>        //Содержится в пакете
-#include <FS.h>                 //Содержится в пакете
-#include <time.h>               //Содержится в пакете
-#include <Servo.h>              //Содержится в пакете
-#include <Ticker.h>             //Содержится в пакете
-#include <WiFiUdp.h>            //Содержится в пакете
+/*
+ * Jalousie and esp8266 (Arduino) https://github.com/tretyakovsa/jaluzi
+ * Arduino core for ESP8266 WiFi chip https://github.com/esp8266/Arduino
+ * Arduino ESP8266 filesystem uploader https://github.com/esp8266/arduino-esp8266fs-plugin
+ */
+#include <ESP8266WiFi.h>             //Содержится в пакете
+#include <ESP8266WebServer.h>        //Содержится в пакете
+#include <ESP8266SSDP.h>             //Содержится в пакете
+#include <FS.h>                      //Содержится в пакете
+#include <time.h>                    //Содержится в пакете
+#include <Ticker.h>                  //Содержится в пакете
+#include <WiFiUdp.h>                 //Содержится в пакете
 #include <ESP8266HTTPUpdateServer.h> //Содержится в пакете
-#include <ESP8266httpUpdate.h>
-#include <DNSServer.h>          //Содержится в пакете
-#include <ArduinoJson.h>
+#include <ESP8266httpUpdate.h>       //Содержится в пакете
+#include <DNSServer.h>               //Содержится в пакете
+#include <Servo.h>                   //Содержится в пакете
+
+#include <ArduinoJson.h>             //https://github.com/bblanchon/ArduinoJson
 
 // Настройки DNS сервера и адреса точки в режиме AP
 const byte DNS_PORT = 53;

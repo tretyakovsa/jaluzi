@@ -134,14 +134,14 @@ void handle_speed() {
 
 //Задать время открытия
 void handle_time_up() {
- timeUp = HTTP.arg("open");
+ timeUp = HTTP.arg("t");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
 
 //Задать время закрытия
 void handle_time_down() {
- timeDown = HTTP.arg("close");
+ timeDown = HTTP.arg("t");
  saveConfig();
  HTTP.send(200, "text/plain", "OK");
 }
