@@ -45,7 +45,7 @@ Ticker tickerAlert;
 String jsonConfig = "";
 
 // Определяем переменные
-String module[]={"jalousie-motor"};
+String module[]={"jalousie"};
 //,"sonoff","rbg"};
 
 String ssidName     = "WiFi";     // Для хранения SSID
