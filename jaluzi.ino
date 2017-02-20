@@ -50,9 +50,9 @@ String module[]={"jalousie-motor"};
 
 String ssidName     = "WiFi";     // Для хранения SSID
 String ssidPass = "Pass";     // Для хранения пароля сети
-String ssidApName = "Zaluzi03";   // SSID AP точки доступа
+String ssidApName = "Jalousie";   // SSID AP точки доступа
 String ssidApPass = "";       // пароль точки доступа
-String ssdpName = "jalousie"; // SSDP
+String ssdpName = "Jalousie"; // SSDP
 String timeUp = "08:00:00";    // время открытия
 String timeDown = "21:00:00";  // время закрытия
 // Переменные для обнаружения модулей
