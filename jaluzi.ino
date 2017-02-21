@@ -61,22 +61,23 @@ String DevicesList = "";       // IP адреса устройств в сети
 String Language ="ru";         // язык web интерфейса
 String Lang = "";              // файлы языка web интерфейса
 int timeZone = 3;              // часовой пояс GTM
+String calibrationTime = "03:00:00";// Время колибровки часов
 float timeServo1 = 10.0;       // Время вращения
 float timeServo2 = 10.0;       // Время вращения
 int speed = 90;                // Скорость вращения
 int calibration = 90;          // Колибруем серву
 int turn = 7;                  //Количество оборотов
 int turnSensor = 0;
+int state0 = 0;
+int task = 0;
 // Переменные для ddns
 String ddns = "";              // url страницы тестирования WanIP
 String ddnsName = "";          // адрес сайта ddns
 int ddnsPort = 8080; // порт для обращение к устройству с wan
 
-String kolibrTime = "03:00:00";// Время колибровки часов
 volatile int chaingtime = LOW;
 volatile int chaing = LOW;
 //volatile int chaing1 = LOW;
-int state0 = 0;
 unsigned int localPort = 2390;
 unsigned int ssdpPort = 1900;
 
@@ -144,10 +145,18 @@ void loop() {
   }
   interrupts();
  }
- if (chaingtime) {
-  Time_init(timeZone);
-  chaingtime=0;
+
+ switch (task) {
+  case 1:
+   Time_init(timeZone);
+   task = 0;
+   break;
+  case 2:
+   ip_wan();
+   task = 0;
+   break;
  }
+
 }
 
 // Вызывается каждую секунду в обход основного циклу.
@@ -159,11 +168,11 @@ void alert() {
  if (timeDown.compareTo(Time) == 0) {
   MotorDown();
  }
- if (kolibrTime.compareTo(Time) == 0) {
-  chaingtime=1;
+ if (calibrationTime.compareTo(Time) == 0) {
+  task=1;
  }
  // В 15, 30, 45 минут каждого часа идет запрос на сервер ddns
  if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && ddns != "") {
-  ip_wan();
+  task=2;
  }
 }
