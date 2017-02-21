@@ -41,6 +41,10 @@ void MotorActiv() {
  chaing = 1;
  HTTP.send(200, "text/plain", "OK");
 }
+void MotorActivWan() {
+ chaing = 1;
+ HTTPWAN.send(200, "text/plain", "OK");
+}
 
 // Сохраняет все настройки в файле
 void handle_save_config() {
@@ -154,6 +158,7 @@ void handle_calibration() {
 }
 
 void HTTP_init(void) {
+ HTTPWAN = ESP8266WebServer (ddnsPort);
  // SSDP дескриптор
  HTTP.on("/description.xml", HTTP_GET, []() {
   SSDP.schema(HTTP.client());
@@ -167,7 +172,7 @@ void HTTP_init(void) {
  HTTP.serveStatic("/img/", SPIFFS, "/img/", "max-age=31536000"); // кеширование на 1 год
  //HTTP.serveStatic("/lang/", SPIFFS, "/lang/", "max-age=31536000"); // кеширование на 1 год
  HTTP.on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
- HTTPWAN->on("/motor", MotorActiv);            // запуск мотора напровление храниться в переменной
+ HTTPWAN.on("/motor", MotorActivWan);            // запуск мотора напровление храниться в переменной
  HTTP.on("/timeServo1", handle_time_servo1);  // установка времени вращения сервопривода
  HTTP.on("/timeServo2", handle_time_servo2);// установка времени вращения сервопривода
  HTTP.on("/wifi.scan.json", handle_wifi_scan);      // сканирование ssid
@@ -192,7 +197,7 @@ void HTTP_init(void) {
  HTTP.on("/modules.json", handle_modules);               // Узнать какие модули есть в устройстве
  // Запускаем HTTP сервер
  HTTP.begin();
- HTTPWAN->begin();
+ HTTPWAN.begin();
 }
 
 // Получение текущего времени
