@@ -86,6 +86,7 @@ WiFiUDP udp;
 
 void setup() {
  Serial.begin(115200);
+ sensor_init();
  pinMode(TURNSENSOR_PIN, INPUT_PULLUP);
  pinMode(TACH_PIN, INPUT);
  pinMode(LED1_PIN, OUTPUT);
