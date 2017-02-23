@@ -39,8 +39,8 @@
 #define TURNSENSOR_PIN 14 // Сенсор оборотов
 #define LED1_PIN 12       // индикатор движения вверх (Сюда можно подключить модуль управления мотором)
 #define LED2_PIN 13       // индикатор движения вниз (Сюда можно подключить модуль управления мотором)
+#define A0            // /analog.json or /chart.htm#analog
 ```
-
 [https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino](https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino)
 
 ###Breadboard
