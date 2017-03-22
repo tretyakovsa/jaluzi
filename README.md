@@ -14,24 +14,24 @@
 
 
 
-##Upload instruction
+## Upload instruction
 
-###[NodeMCU Flasher (Easy)](https://github.com/tretyakovsa/jaluzi/tree/master/build)
+### [NodeMCU Flasher (Easy)](https://github.com/tretyakovsa/jaluzi/tree/master/build)
 
-###[Arduino Windows (Video)](https://www.youtube.com/watch?v=jMK9mySGHio)
+### [Arduino Windows (Video)](https://www.youtube.com/watch?v=jMK9mySGHio)
 
-###[Arduino Linux (Video)](https://www.youtube.com/watch?v=1TAHlRqZ46k)
+### [Arduino Linux (Video)](https://www.youtube.com/watch?v=1TAHlRqZ46k)
 
-####Used Libraries
+#### Used Libraries
 - Arduino core for ESP8266 WiFi chip https://github.com/esp8266/Arduino
 - Arduino ESP8266 filesystem uploader https://github.com/esp8266/arduino-esp8266fs-plugin
 - C++ JSON library for IoT. Simple and efficient. https://github.com/bblanchon/ArduinoJson
 
-##Work example (Video)
+## Work example (Video)
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/NrIrLw1rOdk/0.jpg)](https://www.youtube.com/watch?v=NrIrLw1rOdk&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi)
 
-##Construction
+## Construction
 ```
 #define TACH_PIN 0        // Кнопка управления
 #define SERVO_PIN 2       // Сервопривод
@@ -43,25 +43,25 @@
 ```
 [https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino](https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino)
 
-###Breadboard
+### Breadboard
 
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/breadboard.gif)
 
-###Schematic
+### Schematic
 ![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.png)
 
 
-##Othe...
+## Othe...
 
-####RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
+#### RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
 
-####Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
-
-
-####Themes you can download here: [http://bootswatch.com/](http://bootswatch.com/)
+#### Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
 
 
-##Donation
+#### Themes you can download here: [http://bootswatch.com/](http://bootswatch.com/)
+
+
+## Donation
 
 If you like this project, you can give me a cup of coffee :)
 
