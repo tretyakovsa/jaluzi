@@ -14,7 +14,7 @@
   <title>Options page</title>
   <script type="text/javascript">
    function handleServerResponse(stage,jsonResponse){
-    val('off-on',(jsonResponse.state=='0'?jsonResponse.LangOn:jsonResponse.LangOff));
+    val('off-on',(jsonResponse.state=='0'?jsonResponse.LangOn1:jsonResponse.LangOff1));
     if (stage != 'next') {
      if (!jsonResponse.g85723) loadChart('ct-analog','analog');
     }
@@ -52,19 +52,19 @@
      <a class="btn btn-block btn-default" href="/setup.htm">{{LangSetting3}}</a>
      <hr>
      <div class="alert alert-dismissible alert-info {{g2342}}"><button class="close" onclick="hide('g2342',this);" type="button">×</button>{{LangIfttt1}}<span id="hide" class="hidden">{{LangIfttt2}}</span></div>
-     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="{{LangOnOff}}" onclick="motor(this);" type="button">
+     <input class="btn btn-block btn-lg btn-primary" id="off-on" value="{{LangOn1Off1}}" onclick="motor(this);" type="button">
      <hr>
      <div class="alert alert-dismissible alert-warning {{g57234}}"><button class="close" onclick="hide('g57234',this);" type="button">×</button>{{LangTime6}}</div>
      <h2>{{LangTime3}}</h2>
      <div class="row">
       <div class="col-sm-7">
-       <h4>{{LangTime4}}</h4>
+       <h4>{{LangTime10}}</h4>
        <input id="open" value="{{timeUp}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
        <div style="width:100%" class="btn-group">
         <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/timeUp?t='+val('open'));" type="button" style="width:70%">
         <input type="button" onclick="val('open',' ');send_request(this,'/timeUp?t=');" value="{{LangOff.}}" style="width:30%" class="btn btn-default">
        </div>
-       <h4>{{LangTime5}}</h4>
+       <h4>{{LangTime11}}</h4>
        <input id="close" value="{{timeDown}}" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" class="form-control" placeholder="{{LangExample}}: 07:10:30">
        <div style="width:100%" class="btn-group">
         <input class="btn btn-block btn-success" value="{{LangSave}}" onclick="send_request(this,'/timeDown?t='+val('close'));" type="button" style="width:70%">
