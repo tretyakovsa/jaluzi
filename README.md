@@ -1,61 +1,62 @@
 # Jalousie and esp8266 (Arduino)
 
-![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/screen.png)
-
-## Components
-
-- IDs 	# 	Component 	Footprint 	Properties
-- U1 	1 	ESP8266 (beta) 	ESP8266
-- M1 	1 	Servo Type of geared motor that can only rotate 180 degrees. It's controlled by electronic pulses that tell the motor to which position it should move. 	servo header
-- U2 	1 	3.3V Regulator [LD1117V33] 	TO220
-- R1, R2 	2 	Resistor Resist the flow of electrical energy in a circuit, changing the voltage and current as a result. 	0617/17 	10 kohm
-- S1 	1 	Pushbutton Momentary switches that close a circuit when pressed. 	TACTILE-PTH
-- P1 	1 	Power Supply This is the component used to represent the power supply in the Electronics Workbench (the breadboard simulator). There are multiple footprints so if you are designing a PCB be sure to choose which footprint works best for your design. 	Power Header 0.1" through hole 2 	5 , 5
-
+<a href="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen1.png"><img src="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen1.png" align="left" height="220" width="400" ></a>
+<a href="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen2.png"><img src="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen2.png" align="left" height="220" width="400" ></a>
+<a href="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen3.png"><img src="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen3.png" align="left" height="220" width="400" ></a>
+<a href="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen4.png"><img src="https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/screen4.png" align="left" height="220" width="400" ></a>
 
 
 ## Upload instruction
 
-### [NodeMCU Flasher (Easy)](https://github.com/tretyakovsa/jaluzi/tree/master/build)
+### [NodeMCU Flasher (Quick start / Easy)](https://github.com/tretyakovsa/Sonoff_WiFi_switch/tree/master/build)
 
 ### [Arduino Windows (Video)](https://www.youtube.com/watch?v=jMK9mySGHio)
 
 ### [Arduino Linux (Video)](https://www.youtube.com/watch?v=1TAHlRqZ46k)
 
 #### Used Libraries
-- Arduino core for ESP8266 WiFi chip https://github.com/esp8266/Arduino
-- Arduino ESP8266 filesystem uploader https://github.com/esp8266/arduino-esp8266fs-plugin
-- C++ JSON library for IoT. Simple and efficient. https://github.com/bblanchon/ArduinoJson
+ - ESP8266WiFi.h
+ - ESP8266WebServer.h
+ - ESP8266SSDP.h
+ - FS.h
+ - time.h
+ - Ticker.h
+ - WiFiUdp.h
+ - ESP8266HTTPUpdateServer.h
+ - ESP8266httpUpdate.h
+ - ESP8266HTTPClient.h
+ - DNSServer.h
+ - StringCommand.h           https://github.com/tretyakovsa/ESP8266-StringCommand
+ - ArduinoJson.h             Ставим через менеджер библиотек
+ - DHT.h                     https://github.com/markruys/arduino-DHT
+ - OneWire.h                 Ставим через менеджер библиотек
+ - DallasTemperature.h       Ставим через менеджер библиотек
+ - PubSubClient.h            https://github.com/Imroy/pubsubclient
+ - Adafruit_NeoPixel.h       https://github.com/adafruit/Adafruit_NeoPixel
+ - WS2812FX.h                https://github.com/MTJoker/WS2812FX
 
 ## Work example (Video)
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/NrIrLw1rOdk/0.jpg)](https://www.youtube.com/watch?v=NrIrLw1rOdk&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi)
 
-## Construction
-```
-#define TACH_PIN 0        // Кнопка управления
-#define SERVO_PIN 2       // Сервопривод
-// If you use ESP8266 12 you can add
-#define TURNSENSOR_PIN 14 // Сенсор оборотов
-#define LED1_PIN 12       // индикатор движения вверх (Сюда можно подключить модуль управления мотором)
-#define LED2_PIN 13       // индикатор движения вниз (Сюда можно подключить модуль управления мотором)
-// PIN ADC (A0)           // URL: /analog.json or /chart.htm#analog
-```
-[https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino](https://circuits.io/circuits/2522119-jalousie-and-esp8266-arduino)
+## [Construction PIN and Modules](https://github.com/tretyakovsa/Sonoff_WiFi_switch/blob/master/data/config.modules.json)
 
-### Breadboard
 
-![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/breadboard.gif)
+You can change here
+```
+/data/config.modules.json
+```
+
 
 ### Schematic
-![alt](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/schematic.png)
 
+![alt](https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/sonoff.jpg)
 
 ## Othe...
 
-#### RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
+#### Jalousie: [https://github.com/tretyakovsa/jaluzi](https://github.com/tretyakovsa/jaluzi)
 
-#### Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
+#### RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
 
 
 #### Themes you can download here: [http://bootswatch.com/](http://bootswatch.com/)
@@ -65,4 +66,33 @@
 
 If you like this project, you can give me a cup of coffee :)
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=W4PURUNKWMRJW&lc=AU&item_name=esp8266&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+
+### Web Developer
+#### AdvCash
+
+    U 0586 7862 1354
+    E 8788 6352 1126
+    R 7705 0208 6566
+
+#### PayPal
+
+    wul@inbox.lv
+
+#### WebMoney
+
+- Z242847016348
+- R466173026928
+- E555861976545
+
+### Arduino Developer
+
+#### YandexMoney
+
+- 410011740665305
+
+#### WebMoney
+
+- Z343206590467
+- R124424038680
+- U883416626152
+- E211342115147

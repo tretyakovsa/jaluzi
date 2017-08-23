@@ -1,178 +1,114 @@
-/*
- * Jalousie and esp8266 (Arduino) https://github.com/tretyakovsa/jaluzi
- * Arduino core for ESP8266 WiFi chip https://github.com/esp8266/Arduino
- * Arduino ESP8266 filesystem uploader https://github.com/esp8266/arduino-esp8266fs-plugin
- */
 #include <ESP8266WiFi.h>             //Содержится в пакете
 #include <ESP8266WebServer.h>        //Содержится в пакете
 #include <ESP8266SSDP.h>             //Содержится в пакете
 #include <FS.h>                      //Содержится в пакете
 #include <time.h>                    //Содержится в пакете
-#include <Ticker.h>                  //Содержится в пакете
+//#include <Ticker.h>                  //Содержится в пакете
 #include <WiFiUdp.h>                 //Содержится в пакете
 #include <ESP8266HTTPUpdateServer.h> //Содержится в пакете
 #include <ESP8266httpUpdate.h>       //Содержится в пакете
+#include <ESP8266HTTPClient.h>       //Содержится в пакете
 #include <DNSServer.h>               //Содержится в пакете
-#include <Servo.h>                   //Содержится в пакете
+#include <ArduinoJson.h>             //Ставим через менеджер библиотек
+#include <PubSubClient.h>           //https://github.com/Imroy/pubsubclient
+//#include <ESP8266LLMNR.h>
+//#include <ESP8266NetBIOS.h>
+#include <TickerScheduler.h>         //https://github.com/Toshik/TickerScheduler
+#include <StringCommand.h>           //https://github.com/tretyakovsa/ESP8266-StringCommand
+// Библиотеки устройств
+#include <DHT.h>                     //https://github.com/markruys/arduino-DHT
+#include <OneWire.h>                 //Ставим через менеджер библиотек
+#include <DallasTemperature.h>       //Ставим через менеджер библиотек
+#include <Adafruit_NeoPixel.h>       //https://github.com/adafruit/Adafruit_NeoPixel
+#include <WS2812FX.h>                //https://github.com/MTJoker/WS2812FX
+#include <RCSwitch.h>                //Ставим через менеджер библиотек
 
-#include <ArduinoJson.h>             //https://github.com/bblanchon/ArduinoJson
+#define d18b20PIN 14
+DHT dht;
+RCSwitch mySwitch = RCSwitch();
 
-// Настройки DNS сервера и адреса точки в режиме AP
-const byte DNS_PORT = 53;
-IPAddress apIP(192, 168, 4, 1);
+// DNSServer для режима AP
 DNSServer dnsServer;
-// Web интерфейс для устройства
+
+// Web интерфейсы для устройства
 ESP8266WebServer HTTP(80);
-//ESP8266WebServer HTTPWAN(ddnsPort);
-ESP8266WebServer HTTPWAN;
+
+// Обнавление прошивки
 ESP8266HTTPUpdateServer httpUpdater;
+ESP8266WebServer HTTPWAN;
+
 // Для файловой системы
 File fsUploadFile;
-// Для сервопривода
-Servo myservo;
+
 // Для тикера
-Ticker tickerSetLow;
-Ticker tickerAlert;
+Ticker motion;
 
-#define TACH_PIN 0        // Кнопка управления
-#define SERVO_PIN 2       // Сервопривод
-// If you use ESP8266 12 you can add
-#define TURNSENSOR_PIN 14 // Сенсор оборотов
-#define LED1_PIN 12       // индикатор движения вверх (Сюда можно подключить модуль управления мотором)
-#define LED2_PIN 13       // индикатор движения вниз (Сюда можно подключить модуль управления мотором)
-
-// Определяем строку для json config
-String jsonConfig = "";
-
-// Определяем переменные
-String module[]={"jalousie"};
-//,"sonoff","rbg"};
-
-String ssidName     = "WiFi";     // Для хранения SSID
-String ssidPass = "Pass";     // Для хранения пароля сети
-String ssidApName = "Jalousie";   // SSID AP точки доступа
-String ssidApPass = "";       // пароль точки доступа
-String ssdpName = "Jalousie"; // SSDP
-String timeUp = "08:00:00";    // время открытия
-String timeDown = "21:00:00";  // время закрытия
-// Переменные для обнаружения модулей
-String Devices = "";           // Поиск IP адресов устройств в сети
-String DevicesList = "";       // IP адреса устройств в сети
-String Language ="ru";         // язык web интерфейса
-String Lang = "";              // файлы языка web интерфейса
-int timeZone = 3;              // часовой пояс GTM
-String calibrationTime = "03:00:00";// Время колибровки часов
-float timeServo1 = 10.0;       // Время вращения
-float timeServo2 = 10.0;       // Время вращения
-int speed = 90;                // Скорость вращения
-int calibration = 90;          // Колибруем серву
-int turn = 7;                  //Количество оборотов
-int turnSensor = 0;
-int state0 = 0;
-int task = 0;
-// Переменные для ddns
-String ddns = "";              // url страницы тестирования WanIP
-String ddnsName = "";          // адрес сайта ddns
-int ddnsPort = 8080; // порт для обращение к устройству с wan
-
-volatile int chaingtime = LOW;
-volatile int chaing = LOW;
-//volatile int chaing1 = LOW;
-unsigned int localPort = 2390;
-unsigned int ssdpPort = 1900;
-
-// A UDP instance to let us send and receive packets over UDP
+// Для поиска других устройств по протоколу SSDP
 WiFiUDP udp;
+WiFiClient wclient;
+PubSubClient client(wclient);
+// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(d18b20PIN);
+
+// Pass our oneWire reference to Dallas Temperature.
+DallasTemperature d18b20(&oneWire);
+
+WS2812FX ws2812fx = WS2812FX();
+
+
+TickerScheduler ts(5);
+
+boolean secTest = true;
+StringCommand sCmd;     // The demo StringCommand object
+String command = "";
+
+String Lang = "";                    // файлы языка web интерфейса
+String chipID = "";
+String configJson = "";
+String configLive = "{}";
+String jsonTimer = "{}";
+String Timerset = "";
+String modules = "{\"ip\":\"\",\"SSDP\":\"\",\"space\":\"\",\"module\":[]}";
+String addressList = "{\"ssdpList\":[]}";
+String sensorsList = "{}";
+String prefix   = "/IoTmanager";
+//boolean ddnsTest = true;
+
 
 void setup() {
- Serial.begin(115200);
- sensor_init();
- pinMode(TURNSENSOR_PIN, INPUT_PULLUP);
- pinMode(TACH_PIN, INPUT);
- pinMode(LED1_PIN, OUTPUT);
- pinMode(LED2_PIN, OUTPUT);
- Serial.println("");
- // Включаем работу с файловой системой
- FS_init();
- // Загружаем настройки из файла
- loadConfig();
- // Подключаем сервомотор
- myservo.attach(SERVO_PIN);
- //myservo.write(calibration);
- // Кнопка будет работать по прерыванию
- attachInterrupt(TACH_PIN, Tach_0, FALLING);
- // Сенсор будет работать по прерыванию
- attachInterrupt(TURNSENSOR_PIN, turn_0, FALLING );
- //Запускаем WIFI
- WIFIAP_Client();
- // Закускаем UDP
- udp.begin(localPort);
- //udp.beginMulticast(WiFi.localIP(), ssdpAdress1, ssdpPort);
- Serial.print("Local port: ");
- Serial.println(udp.localPort());
- //настраиваем HTTP интерфейс
- HTTP_init();
- Serial.println("HTTP Ready!");
- //запускаем SSDP сервис
- SSDP_init();
- Serial.println("SSDP Ready!");
- // Включаем время из сети
- Time_init(timeZone);
- // Будет выполняться каждую секунду проверяя будильники
- tickerAlert.attach(1, alert);
- ip_wan();
+
+  //Serial.println (ESP.getResetReason());
+
+  TickerScheduler(1);
+  Serial.println ("Load");
+  initCMD();
+  chipID = String( ESP.getChipId() ) + "-" + String( ESP.getFlashChipId() );
+  FS_init();         // Включаем работу с файловой системой
+  configJson = readFile("config.save.json", 1024);
+  String init = readFile("config.modules.json", 4096);
+  String configs = jsonRead(configJson, "configs");
+
+  if (configs == "") {
+    sCmd.readStr("Serial 115200");
+    sCmd.readStr("wifi 12");
+    sCmd.readStr("Upgrade");
+    sCmd.readStr("HTTP");
+    //configs = "Basic";
+  }
+
+  Serial.println(modulesInit(init, configs));
+  Serial.println (configLive);
+  Serial.println ("Start");
 }
 
 void loop() {
- dnsServer.processNextRequest();
- delay(1);
- HTTP.handleClient();
- delay(1);
- HTTPWAN.handleClient();
- delay(1);
- handleUDP();
-
- // if (chaing && !chaing1) {
- if (chaing) {
-  noInterrupts();
-  switch (state0) {
-   case 0:
-    MotorUp();
-    break;
-   case 1:
-    MotorDown();
-    break;
-  }
-  interrupts();
- }
-
- switch (task) {
-  case 1:
-   Time_init(timeZone);
-   task = 0;
-   break;
-  case 2:
-   ip_wan();
-   task = 0;
-   break;
- }
-
-}
-
-// Вызывается каждую секунду в обход основного циклу.
-void alert() {
- String Time=XmlTime();
- if (timeUp.compareTo(Time) == 0) {
-  MotorUp();
- }
- if (timeDown.compareTo(Time) == 0) {
-  MotorDown();
- }
- if (calibrationTime.compareTo(Time) == 0) {
-  task=1;
- }
- // В 15, 30, 45 минут каждого часа идет запрос на сервер ddns
- if ((Time == "00:00" || Time == "15:00" || Time == "30:00" || Time == "45:00") && ddns != "") {
-  task=2;
- }
+  ts.update();
+  sCmd.readStr(command);     // We don't do much, just process serial commands
+  command = "";
+  dnsServer.processNextRequest();
+  HTTP.handleClient();
+  delay(1);
+  handleUDP();
+  handleMQTT();
+  ws2812fx.service();
 }

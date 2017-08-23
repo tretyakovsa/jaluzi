@@ -2,48 +2,21 @@
 <html>
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" type="text/css" href="css/build.css">
+  <link rel="stylesheet" type="text/css" href="css/build.css?v31.07.2017">
   <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css"> -->
-  <link rel="stylesheet" type="text/css" href="css/prism.css">
-  <script type="text/javascript" src="js/function.js"></script>
-  <script type="text/javascript" src="js/prism.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-json.min.js"></script>
+  <script type="text/javascript" src="js/function.js?v31.07.2017"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Помощь</title>
  </head>
  <body>
   <div class="container">
    <div class="row" id="content">
-    <h1 id="title">Помощь</h1>
-    <h3>Вывод данных в JS, HTML</h3>
-    <p>Можно загружать данные с config.live.json, Cookies, lang.*.json</p>
-    <pre><code class="language-js">
-jsonResponse.ssid;
-// В данном случае мы получим имя WiFi сети к которой мы подключены
-// Пример:
-alert(jsonResponse.ssid);
-
-// Если вы хотите вывести эти данные в HTML это необходимо сделать следующим способом:
-{{ssid}}
-// Пример:
-&lt;h3>{{ssid}}&lt;/h3>
-        </code></pre>
-    <h3>Ajax GET запросы</h3>
-    <pre><code class="language-js">
-send_request(this,'/test');
-// В данном случае мы отправим GET на /test
-// Пример:
-&lt;input class="btn btn-block btn-success" value="button" onclick="send_request(this,'/test');" type="button">
-        </code></pre>
-    <h3>Работы с input полями</h3>
-    <pre><code class="language-js">
-val('ID_name');
-
-// Пример:
-&lt;input class="form-control" value="" id="param">
-&lt;input class="btn btn-block btn-success" value="button" onclick="send_request(this,'/test='+val('param'));" type="button">
-// Нажав на кнопку мы отпрваим ajax get запрос на /test=значение_с_поля_param
-        </code></pre>
+    <h1 id="title">Wiki</h1>
+    <h3><a href="https://github.com/tretyakovsa/Sonoff_WiFi_switch/wiki">Sonoff WiFi switch</a>, <a href="https://github.com/renat2985/rgb/wiki">RGB</a>, <a href="https://github.com/tretyakovsa/jaluzi/wiki">Jalousie</a></h3>
     <hr>
     <h2>GET JSON</h2>
     <h3>GET <a href="/config.live.json">/config.live.json</a></h3>
@@ -52,20 +25,14 @@ val('ID_name');
     <h3>GET <a href="/config.save.json">/config.save.json</a></h3>
     <p>Здесь хранятся основные настройки устройсва (Эти настройки восстанавливаются посте рестарта)</p>
     <pre><code class="language-json" id="configs-save-json">Loading...</code></pre>
-    <h3>GET <a href="/devices.list.json">/devices.list.json</a></h3>
-    <p>Количество устройст найденых в локальной сети, обновляются через GET /devices.scan.json</p>
+    <h3>GET <a href="/ip.list.json">/ip.list.json</a></h3>
+    <p>Количество устройст найденых в локальной сети.</p>
     <pre><code class="language-json" id="devices-list-json">Loading...</code></pre>
     <h3>GET <a href="/modules.json">/modules.json</a></h3>
     <pre><code class="language-json" id="modules-json">Loading...</code></pre>
     <h3>GET <a href="/timer.save.json">/timer.save.json</a></h3>
     <p>Таймеры включения\выключения устройсва</p>
     <pre><code class="language-json" id="timer-save-json">Loading...</code></pre>
-    <h3>GET <a href="/lang.list.json">/lang.list.json</a></h3>
-    <p>Список языковых файлов в папке lang</p>
-    <pre><code class="language-json" id="lang-list-json">Loading...</code></pre>
-    <h3>GET <a href="/wifi.scan.json">/wifi.scan.json</a></h3>
-    <p>Список доступных WiFi сетей</p>
-    <pre><code class="language-json" id="wifi-scan-json">Loading...</code></pre>
     <h3>GET <a href="/lang/lang.ru.json">/lang/lang.ru.json</a></h3>
     <p>Изменить язык можно GET запросом /lang?set=en </p>
     <pre><code class="language-json" id="lang-json">Loading...</code></pre>
@@ -87,12 +54,10 @@ val('ID_name');
   }
   setTimeout(function(){load_request('configs-live-json','/config.live.json');},1000);
   setTimeout(function(){load_request('configs-save-json','/config.save.json');},2000);
-  setTimeout(function(){load_request('lang-list-json','/lang.list.json');},3000);
   setTimeout(function(){load_request('lang-json','/lang/lang.ru.json');},4000);
-  setTimeout(function(){load_request('devices-list-json','/devices.list.json');},5000);
+  setTimeout(function(){load_request('devices-list-json','/ip.list.json');},5000);
   setTimeout(function(){load_request('modules-json','/modules.json');},6000);
   setTimeout(function(){load_request('timer-save-json','/timer.save.json');},7000);
-  setTimeout(function(){load_request('wifi-scan-json','/wifi.scan.json');},8000);
 
   function listCookies() {
    var theCookies = document.cookie.split(';');
@@ -104,4 +69,5 @@ val('ID_name');
   }
   listCookies();
  </script>
+
 </html>
