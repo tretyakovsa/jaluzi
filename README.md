@@ -48,10 +48,6 @@ You can change here
 ```
 
 
-### Schematic
-
-![alt](https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/sonoff.jpg)
-
 ## Othe...
 
 #### Jalousie: [https://github.com/tretyakovsa/jaluzi](https://github.com/tretyakovsa/jaluzi)
