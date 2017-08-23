@@ -8,7 +8,7 @@
 
 ## Upload instruction
 
-### [NodeMCU Flasher (Quick start / Easy)](https://github.com/tretyakovsa/Sonoff_WiFi_switch/tree/master/build)
+### [NodeMCU Flasher (Quick start / Easy)](https://github.com/tretyakovsa/jaluzi/tree/master/build)
 
 ### [Arduino Windows (Video)](https://www.youtube.com/watch?v=jMK9mySGHio)
 
@@ -50,7 +50,7 @@ You can change here
 
 ## Othe...
 
-#### Jalousie: [https://github.com/tretyakovsa/jaluzi](https://github.com/tretyakovsa/jaluzi)
+#### Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
 
 #### RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
 
