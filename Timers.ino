@@ -14,7 +14,7 @@ void handle_timer_Save() {
   JsonObject& Timers = jsonBuffer.parseObject(jsonTimer);
   JsonArray& arrays = Timers["timer"].asArray();
   JsonObject& record = arrays.createNestedObject();
-  record["id"]  = HTTP.arg("id").toInt();
+  record["id"]  = HTTP.arg("id");
   record["trigger"]  = HTTP.arg("trigger");
   record["module"]  = HTTP.arg("module");
   record["day"]  = HTTP.arg("day");
@@ -25,8 +25,21 @@ void handle_timer_Save() {
   writeFile("timer.save.json", jsonTimer );
 
   loadTimer();
-  HTTP.send(200, "text/plain", "OK");
+  HTTP.send(200, "text/plain", responsTimer());
 }
+
+String responsTimer(){
+  String responsA="{\"state\": \"timer.save.json\",\"title\":";
+  String responsB ="{}";
+  responsB= jsonWrite(responsB, "module", "");
+  responsB= jsonWrite(responsB, "trigger", "{{LangOn.}}/{{LangOff.}}");
+  responsB= jsonWrite(responsB, "day", "{{LangDay}}");
+  responsB= jsonWrite(responsB, "time", "{{LangTime4}}");
+  responsB= jsonWrite(responsB, "work", "{{LangWorkTime}}");
+  responsB= jsonWrite(responsB, "id", "{{LangDel}}");
+  return responsA +=responsB +="}";
+}
+
 
 void handle_timer_Del() {
   DynamicJsonBuffer jsonBuffer;
@@ -43,7 +56,7 @@ void handle_timer_Del() {
   Timers.printTo(jsonTimer);
   writeFile("timer.save.json", jsonTimer );
   loadTimer();
-  HTTP.send(200, "text/plain", "OK");
+  HTTP.send(200, "text/plain", responsTimer());
 }
 
 
@@ -51,6 +64,7 @@ bool loadTimer() {
   Timerset = "";
   jsonTimer = readFile("timer.save.json", 4096);
   String Weekday = GetWeekday();
+  configJson = jsonWrite(configJson, "Weekday", Weekday);
   DynamicJsonBuffer jsonBuffer;
   JsonObject& Timers = jsonBuffer.parseObject(jsonTimer);
   JsonArray& nestedArray = Timers["timer"].asArray();
@@ -61,7 +75,7 @@ bool loadTimer() {
 
         Timerset += Timers["timer"][i]["time"].as<String>() + ",";
         Timerset += Timers["timer"][i]["module"].as<String>() + ",";
-        Timerset += Timers["timer"][i]["trigger"].as<String>()+ ",";
+        Timerset += Timers["timer"][i]["trigger"].as<String>() + ",";
         Timerset += Timers["timer"][i]["work"].as<String>() + ",";
         Timerset += Timers["timer"][i]["id"].as<String>();
         Timerset += "\r\n";
@@ -76,6 +90,11 @@ void runTimers() {
   // Список текущих таймеров во временную переменную
   String timers = Timerset;
   String now = GetTime();
+  String Weekday = GetWeekday();
+  if (jsonRead(configJson, "Weekday")!=Weekday){
+  configJson = jsonWrite(configJson, "Weekday", Weekday);
+  loadTimer();
+  }
   configJson = jsonWrite(configJson, "time", now);
   int i;
   // Будем повторять проверку для каждого установленного таймера
@@ -104,9 +123,8 @@ void runTimers() {
         String id = selectToMarker (timer, "\r\n");
         // выполняем необходимое действие
 
-          command = module+com + " " + interval+" "+id;
-          Serial.println(command);
-
+        command = module + com + " " + interval + " " + id;
+        Serial.println(command);
 
       }
       timers = timers.substring(timers.indexOf("\r\n") + 2);

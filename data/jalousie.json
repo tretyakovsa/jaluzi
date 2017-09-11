@@ -52,7 +52,7 @@
 
   {
    "type": "button",
-   "title": "{{LangOpenClose}}",
+   "title": "('{{LangOpenClose}}'==0?'{{LangOpen}}':'{{LangClose}}')",
    "name":"motor",
    "module":"jalousie",
    "response":"[[motor]]",
@@ -107,7 +107,7 @@
    "state": "timer.save.json",
    "title": {
     "module":"",
-    "trigger":"On/Off",
+    "trigger":"{{LangOn.}}/{{LangOff.}}",
     "day":"{{LangDay}}",
     "time":"{{LangTime4}}",
     "work":"{{LangWorkTime}}"
@@ -119,7 +119,7 @@
    "type": "link",
    "module":"timers",
    "title": "{{LangTimer}}",
-   "action": "timer.htm",
+   "action": "page.htm?timer",
    "class": "btn btn-block btn-default"
   },
 
@@ -137,7 +137,22 @@
    "action": "/page.htm?chart&analog",
    "style": "height:200px;margin-left:-20px"
   },
-
+  {
+   "type": "chart",
+   "title":"{{LangTemperature}}",
+   "state": "temperature.json",
+   "module":"temperature",
+   "action": "/page.htm?chart&analog",
+   "style": "height:200px;margin-left:-20px"
+  },
+  {
+   "type": "chart",
+   "title":"{{LangHumidity}}",
+   "state": "humidity.json",
+   "module":"humidity",
+   "action": "/page.htm?chart&analog",
+   "style": "height:200px;margin-left:-20px"
+  },
 
 
   {

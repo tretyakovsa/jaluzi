@@ -24,24 +24,34 @@ void initRelay() {
   HTTP.on("/relayon", relayon);        // реакция на запрос
   HTTP.on("/relayoff", relayoff);        // реакция на запрос
   HTTP.on("/sonoff", relay);        // реакция на запрос
+  HTTPWAN.on("/relay", relayddns);        // реакция на запрос
+  HTTPWAN.on("/relayon", relayonddns);        // реакция на запрос
+  HTTPWAN.on("/relayoff", relayoffddns);        // реакция на запрос
+  HTTPWAN.on("/sonoff", relayddns);        // реакция на запрос
   modulesReg("relay");
 }
-void relay() {
-
+void relayddns() {
   sCmd.readStr("relaynot");
-
+  HTTPWAN.send(200, "text/json", relayStatus(configJson, "state"));
+}
+void relayonddns() {
+  sCmd.readStr("relayon");
+  HTTPWAN.send(200, "text/json", relayStatus(configJson, "state"));
+}
+void relayoffddns() {
+  sCmd.readStr("relayoff");
+  HTTPWAN.send(200, "text/json", relayStatus(configJson, "state"));
+}
+void relay() {
+  sCmd.readStr("relaynot");
   HTTP.send(200, "text/json", relayStatus(configJson, "state"));
 }
 void relayon() {
-
   sCmd.readStr("relayon");
-
   HTTP.send(200, "text/json", relayStatus(configJson, "state"));
 }
 void relayoff() {
-
   sCmd.readStr("relayoff");
-
   HTTP.send(200, "text/json", relayStatus(configJson, "state"));
 }
 
@@ -118,15 +128,43 @@ void initJalousie() {
   configJson = jsonWrite(configJson, "stateJalousie", 1);
   pinMode(pinMotor1, OUTPUT);
   pinMode(pinMotor2, OUTPUT);
-  digitalWrite(pinMotor1, LOW);
-  digitalWrite(pinMotor2, LOW);
+  digitalWrite(pinMotor1, HIGH);
+  digitalWrite(pinMotor2, HIGH);
   sCmd.addCommand("jalousieopen",     jalousieOpen);
   sCmd.addCommand("jalousieclose",    jalousieClose);
   sCmd.addCommand("jalousienot",    jalousieNot);
   sCmd.addCommand("jalousiestop",    jalousieStop);
   sCmd.addCommand("jalousieturn",    jalousieTurn);
+  HTTPWAN.on("/jalousie", jalousieddns);        // реакция на запрос
+  HTTPWAN.on("/jalousieopen", jalousieopenddns);        // реакция на запрос
+  HTTPWAN.on("/jalousieclose", jalousiecloseddns);        // реакция на запрос
   modulesReg("jalousie");
 }
+
+void jalousieddns(){
+  jalousieNot();
+  HTTPWAN.send(200, "text/plain", "Ok");
+  }
+  void jalousieopenddns(){
+  jalousieOpen();
+  HTTPWAN.send(200, "text/plain", "Ok");
+  }
+  void jalousiecloseddns(){
+  jalousieClose();
+  HTTPWAN.send(200, "text/plain", "Ok");
+  }
+void jalousie(){
+  jalousieNot();
+  HTTP.send(200, "text/plain", "Ok");
+  }
+  void jalousieopen(){
+  jalousieOpen();
+  HTTP.send(200, "text/plain", "Ok");
+  }
+  void jalousieclose(){
+  jalousieClose();
+  HTTP.send(200, "text/plain", "Ok");
+  }
 
 
 // Выполняется при вращение сенсора
@@ -170,8 +208,8 @@ void jalousieClose() {
 
 void jalousieStop() {
 
-  digitalWrite(jsonReadtoInt(configLive, "pinMotor2"), LOW);
-  digitalWrite(jsonReadtoInt(configLive, "pinMotor1"), LOW);
+  digitalWrite(jsonReadtoInt(configLive, "pinMotor2"), HIGH);
+  digitalWrite(jsonReadtoInt(configLive, "pinMotor1"), HIGH);
 
 }
 
@@ -210,3 +248,84 @@ String jalousieStatus(String json, String state) {
   return out;
 }
 
+void initLeakage() {
+  int pinMotor1A = readArgsInt();
+  int pinMotor2A = readArgsInt();
+  int pinMotor3A = readArgsInt();
+  int pinMotor4A = readArgsInt();
+  int pinMotor1B = readArgsInt();
+  int pinMotor2B = readArgsInt();
+  int pinMotor3B = readArgsInt();
+  int pinMotor4B = readArgsInt();
+  configLive = jsonWrite(configLive, "pinMotor1A", pinMotor1A);
+  configLive = jsonWrite(configLive, "pinMotor2A", pinMotor2A);
+  configLive = jsonWrite(configLive, "pinMotor3A", pinMotor3A);
+  configLive = jsonWrite(configLive, "pinMotor4A", pinMotor4A);
+  configLive = jsonWrite(configLive, "pinMotor1B", pinMotor1B);
+  configLive = jsonWrite(configLive, "pinMotor2B", pinMotor2B);
+  configLive = jsonWrite(configLive, "pinMotor3B", pinMotor3B);
+  configLive = jsonWrite(configLive, "pinMotor4B", pinMotor4B);
+  configJson = jsonWrite(configJson, "stateLeakageA", 1);
+  configJson = jsonWrite(configJson, "stateLeakageB", 1);
+  initMotor(pinMotor1A, pinMotor2A, pinMotor3A, pinMotor4A);
+  initMotor(pinMotor1B, pinMotor2B, pinMotor3B, pinMotor4B);
+  //sCmd.addCommand("leakageopen",     leakageOpen);
+  //sCmd.addCommand("leakageclose",    leakageClose);
+  //sCmd.addCommand("leakagenot",    leakageNot);
+  //sCmd.addCommand("leakagestop",    leakageStop);
+  modulesReg("leakage");
+
+}
+
+void initMotor(int pinMotor1, int pinMotor2, int pinMotor3, int pinMotor4) {
+  pinMode(pinMotor1, OUTPUT);
+  pinMode(pinMotor2, OUTPUT);
+  pinMode(pinMotor3, OUTPUT);
+  pinMode(pinMotor4, OUTPUT);
+}
+
+void steperTurn(String motor, int steps, boolean ) {
+
+}
+
+void leakageMotor() {
+  configLive = jsonWrite(configLive, "A", 250);
+  configLive = jsonWrite(configLive, "B", 250);
+  motion.attach(10, motionOff);
+  command = jsonRead(configJson, "Command") + "on";
+
+}
+void leakageOff() {
+  motion.detach();
+  command = jsonRead(configJson, "Command") + "off";
+
+}
+
+void stepMotor(int thisStep, String motor) {
+  switch (thisStep) {
+    case 0:  // 1010
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor1" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor2" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor3" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor4" + motor), LOW);
+      break;
+    case 1:  // 0110
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor1" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor2" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor3" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor4" + motor), LOW);
+      break;
+    case 2:  //0101
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor1" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor2" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor3" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor4" + motor), HIGH);
+      break;
+    case 3:  //1001
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor1" + motor), HIGH);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor2" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor3" + motor), LOW);
+      digitalWrite(jsonReadtoInt(configLive, "pinMotor4" + motor), HIGH);
+      break;
+  }
+}

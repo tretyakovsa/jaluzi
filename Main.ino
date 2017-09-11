@@ -27,7 +27,7 @@ void unrecognized(const char *command) {
   Serial.println("What?");
 }
 
-
+// Переводит время в строке в формате 00:00:00 в секунды
 unsigned int timeToSec(String inTime) {
   String secstr = selectToMarker (inTime, ":"); // часы
   unsigned int  sec = secstr.toInt() * 3600;
@@ -39,19 +39,21 @@ unsigned int timeToSec(String inTime) {
   return sec;
 }
 
+// Настраивает Serial по команде sCmd.addCommand("Serial",       uart);
 void uart() {
   Serial.end();
   Serial.begin(readArgsInt());
   delay(100);
 }
 
+// Читает аргументы из команд каждый слежующий вызов читает следующий аргумент возвращает String
 String readArgsString() {
   String arg;
   arg = sCmd.next();    // Get the next argument from the SerialCommand object buffer
   if (arg == "") arg = "";
   return arg;
 }
-
+// Читает аргументы из команд каждый слежующий вызов читает следующий аргумент возвращает Int
 int readArgsInt() {
   char *arg;
   arg = sCmd.next();    // Get the next argument from the SerialCommand object buffer
@@ -67,12 +69,12 @@ int readArgsInt() {
 String readFile(String fileName, size_t len ) {
   File configFile = SPIFFS.open("/" + fileName, "r");
   if (!configFile) {
-    return "Failed to open config file";
+    return "Failed";
   }
   size_t size = configFile.size();
   if (size > len) {
     configFile.close();
-    return "Config file size is too large";
+    return "Large";
   }
   String temp = configFile.readString();
   configFile.close();
@@ -114,7 +116,6 @@ String jsonWrite(String json, String name, String volume) {
   root.printTo(json);
   return json;
 }
-
 
 // ------------- Запись значения json int
 String jsonWrite(String json, String name, int volume) {
@@ -167,10 +168,6 @@ String graf(int datas, int points, int refresh) {
   return root;
 }
 
-// --------------Добавить данные в масивв json
-
-
-
 //------------------Запуск конфигурации в соответствии с разделом строки
 String modulesInit(String json, String nameArray) {
   DynamicJsonBuffer jsonBuffer;
@@ -185,14 +182,29 @@ String modulesInit(String json, String nameArray) {
   return "OK";
 }
 
-
+//------------------Выполнить все команды по порядку из строки разделитель \r\n
+String goCommands(String inits) {
+  String temp = "";
+  String rn = "\n";
+  inits += rn;
+  do {
+    temp = selectToMarker (inits, rn);
+    Serial.print("command=");
+    Serial.println(temp);
+    sCmd.readStr(temp);
+    inits = deleteBeforeDelimiter(inits, rn);
+  } while (inits.indexOf(rn) != 0);
+  return "OK";
+}
 
 // ------------- Данные статистики
 void statistics() {
-  String urls = "http://backup.privet.lv/visitors.php?";
+  String urls = "http://backup.privet.lv/visitors/?";
   urls += WiFi.macAddress().c_str();
   urls += "&";
   urls += jsonRead(configJson, "configs");
+  urls += "&";
+  urls += ESP.getResetReason();
   getURL(urls);
 }
 
@@ -240,44 +252,4 @@ String deleteBeforeDelimiter(String str, String found) {
   return str.substring(p);
 }
 
-// -------------------
 
-
-// ------------------- Проверка доступности pin
-int pinOk(int pin) {
-  if ((pin > 5 && pin < 12) || pin > 16) return 32;
-  return pin;
-}
-
-String jsonFilterArray(String jsonArray, String value){
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& Timers = jsonBuffer.parseObject(jsonArray);
-  JsonArray& nestedArray = Timers[value].asArray();
-  String root = "";
-  nestedArray.printTo(root);
-  return root;
-  }
-
-// /json?file=test.json&id=module&search=relay
-// Фильтр на json фаил
-String jsonFilter(String jsonString, String column, String value) {
-  DynamicJsonBuffer jsonBuffer;
-  JsonArray& nestedArray = jsonBuffer.parseArray(jsonString);
-  int j = nestedArray.size();
-  Serial.println(value+" "+column);
-  jsonString = "[";
-  if (j != 0) {
-    for (int i = 0; i <= j - 1; i++) {
-      boolean pFind = (value == nestedArray[i][column].as<String>());
-      if (pFind) {
-       //nestedArray.removeAt(i);
-       jsonString += nestedArray[i].as<String>();
-       if (i<=j-1) jsonString += ",";
-       //i--;
-      }
-    }
-  }
-jsonString += "]";
-  //nestedArray.printTo(jsonString);
-  return jsonString;
-}
