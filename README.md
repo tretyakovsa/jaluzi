@@ -47,7 +47,7 @@ You can change here
 /data/configs/*.txt
 ```
 
-##How does it work? (Video)
+## How does it work? (Video)
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/I2lZExMvrtA/0.jpg)](https://www.youtube.com/watch?v=I2lZExMvrtA&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi&t=1s&index=9)
 
