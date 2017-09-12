@@ -48,6 +48,12 @@ You can change here
 ```
 
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/I2lZExMvrtA/0.jpg)](https://www.youtube.com/watch?v=I2lZExMvrtA&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi&t=1s&index=9)
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/oTfA9c2-ztM/0.jpg)](https://www.youtube.com/watch?v=oTfA9c2-ztM&list=PL6NJTNxbvy-IPTDQk8XjTV41oRrFafrRi&index=13)
+
+
+
 ## Othe...
 
 #### Sonoff: [https://github.com/tretyakovsa/Sonoff_WiFi_switch](https://github.com/tretyakovsa/Sonoff_WiFi_switch)
