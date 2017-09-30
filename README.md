@@ -42,8 +42,8 @@ Download Release: [Win32](https://github.com/nodemcu/nodemcu-flasher/blob/master
 - MOTION
 - RC Switch
 
-
-[![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/jalousie.png)](https://raw.githubusercontent.com/tretyakovsa/Sonoff_WiFi_switch/master/tutorial/jalousie.png)
+### Breadboard
+[![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/jalousie.png)](https://raw.githubusercontent.com/tretyakovsa/jaluzi/master/tutorial/jalousie.png)
 
 
 ## [Construction PIN and Modules](https://github.com/tretyakovsa/Sonoff_WiFi_switch/blob/master/data/configs)
