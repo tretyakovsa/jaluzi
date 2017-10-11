@@ -77,7 +77,7 @@ You can change here
 If you like this project, you can give me a cup of coffee :)
 
 
-### Web Developer
+### Web Developer (Ренат К.)
 #### AdvCash
 
 - U 0586 7862 1354
@@ -94,7 +94,7 @@ If you like this project, you can give me a cup of coffee :)
 - R466173026928
 - E555861976545
 
-### Arduino Developer
+### Arduino Developer (Сергей Т.)
 
 #### YandexMoney
 
