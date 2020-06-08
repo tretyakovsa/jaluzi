@@ -69,7 +69,7 @@ You can change here
 #### RGB: [https://github.com/renat2985/rgb](https://github.com/renat2985/rgb)
 
 
-#### Themes you can download here: [http://bootswatch.com/](http://bootswatch.com/)
+#### Themes you can download here: [https://bootswatch.com/3/](https://bootswatch.com/3/)
 
 
 ## Donation
